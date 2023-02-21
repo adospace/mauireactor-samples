@@ -53,7 +53,7 @@
     <EmbeddedResource Include="Resources\Images\menu_side.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj" />
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.105" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.105" />
   </ItemGroup>
 </Project>
