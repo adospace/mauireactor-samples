@@ -1,5 +1,5 @@
 # MauiReactor Samples
-Demo apps built using MauiReactor
+Sample apps built using MauiReactor (https://github.com/adospace/reactorui-maui)
 
 ## DODO Pizza - Ordering App
 
