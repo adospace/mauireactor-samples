@@ -107,8 +107,8 @@ class MainPage : Component<MainPageState>
         .StrokeShape(new RoundRectangle().CornerRadius(13))
         .Background(new MauiControls.LinearGradientBrush(new MauiControls.GradientStopCollection
             {
-                new MauiControls.GradientStop(Theme.PrimaryLightColor, 0.537f),
-                new MauiControls.GradientStop(Colors.Transparent, 0.9738f)
+                new MauiControls.GradientStop(Theme.PrimaryLightColor, 0.0537f),
+                new MauiControls.GradientStop(Colors.White, 0.9738f)
             },
             new Point(0, 0.5),
             new Point(1, 0.5)))
@@ -396,6 +396,7 @@ class Cart : Component<CartState>
             .BackgroundColor(Colors.White)
         }
         .BackgroundColor(_item != null ? Colors.Black.WithAlpha(0.8f) : Colors.Transparent)
+        .IsVisible(_item != null)
         ;
     }
 
@@ -513,9 +514,8 @@ class CartItemGroup : Component
                     .VStart()
                 ,
                 new Image(_optional ? "optional" : "required.png")
-                    .Aspect(Aspect.AspectFill)
+                    .Aspect(Aspect.AspectFit)
                     .GridColumn(1)
-                    .VStart()
             },
 
             new VStack(spacing: 0)
@@ -602,7 +602,8 @@ class CartItem : Component
                 .VCenter()
                 .GridColumn(2)
                 .IsVisible(_cost > 0)
-        };
+        }
+        .OnTapped(_selectedAction);
     }
 
     private VisualNode RenderRadio()
@@ -623,7 +624,6 @@ class CartItem : Component
                 }
             }
         }
-        .OnTapped(_selectedAction)
         .BackgroundColor(Colors.Transparent)
         .HeightRequest(24)
         .WidthRequest(24);
