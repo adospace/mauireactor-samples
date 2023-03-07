@@ -116,6 +116,13 @@ class RecipeItemComponent : Component<RecipeItemComponentState>
         base.OnMounted();
     }
 
+    protected override void OnPropsChanged()
+    {
+        State.RotationX = _distance * 10;
+        MauiControls.Application.Current.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(60), () => SetState(s => s.RotationX = 0.0));
+        base.OnPropsChanged();
+    }
+
     public override VisualNode Render()
     {
         return new CanvasView()
