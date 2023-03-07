@@ -119,7 +119,7 @@ class RecipeComponent : Component<RecipeComponentState>
                 .HStart()
                 .VStart()
             }
-            .HeightRequest(42)
+            .HeightRequest(52)
             .VStart()
             .BackgroundColor(Colors.Transparent)
             .OnTapped(_backAction),
