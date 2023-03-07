@@ -52,7 +52,7 @@
     <EmbeddedResource Include="Resources\Images\menu_side.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.105" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.105" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.109" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.109" />
   </ItemGroup>
 </Project>
