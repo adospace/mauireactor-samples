@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Marvelous</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <Nullable>enable</Nullable>
+    <!-- Display name -->
+    <ApplicationTitle>Marvelous</ApplicationTitle>
+    <!-- App Identifier -->
+    <ApplicationId>com.companyname.marvelous</ApplicationId>
+    <ApplicationIdGuid>25f39401-8c74-4bc9-abeb-61c13bdb1fd7</ApplicationIdGuid>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Splash Screen -->
+    <MauiSplashScreen Include="Resources\Splash\marvelous_maui_splash.svg" Color="#252621" BaseSize="128,128" />
+    <!-- Images -->
+    <MauiImage Include="Resources\Images\*svg" />
+    <MauiImage Include="Resources\Images\*png" />
+    <MauiImage Include="Resources\Images\*jpg" />
+    <!-- Custom Fonts -->
+    <MauiFont Include="Resources\Fonts\*" />
+    <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- App Icon -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg_android.svg" Color="#252621" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg_ios.svg" Color="#252621" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg_ios.svg" Color="#252621" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Reactor.Maui" Version="1.0.116" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.116" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Marvelous.Services\Marvelous.Services.csproj" />
+  </ItemGroup>
+</Project>
