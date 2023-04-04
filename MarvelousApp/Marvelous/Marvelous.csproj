@@ -51,7 +51,4 @@
     <PackageReference Include="Reactor.Maui" Version="1.0.116" />
     <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.116" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Marvelous.Services\Marvelous.Services.csproj" />
-  </ItemGroup>
 </Project>
