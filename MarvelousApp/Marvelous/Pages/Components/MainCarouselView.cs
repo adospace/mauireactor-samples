@@ -1,6 +1,8 @@
 ﻿using Marvelous.Models;
 using Marvelous.Services;
 using MauiReactor;
+using MauiReactor.Animations;
+using MauiReactor.Canvas;
 using MauiReactor.Shapes;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Marvelous.Pages.Components;
 class MainCarouselViewState
 {
     public WonderType CurrentType { get; set; }
+    public DateTime? StartDrag { get; set; }
     public double PanX { get; set; }
     public Size ContainerSize { get; set; }
     public bool IsDragging { get; set; }
@@ -27,11 +30,26 @@ class MainCarouselView : Component<MainCarouselViewState>
             Enum.GetValues<WonderType>().Select(RenderNextViewItem),
 
             new Rectangle()
-                .Background(Illustration.Config[State.CurrentType].ForegroundBrush)
+                .Background(Illustration.Config[State.CurrentType].ForegroundBrush),
+
+            new MainCarouselViewIndicator()
+                .CurrentType(State.CurrentType)
         }
+        .OnSizeChanged(OnMainContainerSizeChanged)
         .OnPanUpdated(OnPan)
         .Background(Illustration.Config[State.CurrentType].BackgroundBrush)
         ;
+    }
+
+    void OnMainContainerSizeChanged(object? sender, EventArgs args)
+    {
+        var container = (MauiControls.Grid?)sender;
+        if (container == null)
+        {
+            return;
+        }
+
+        SetState(s => s.ContainerSize = container.Bounds.Size);
     }
 
     MainCarouselViewItem? RenderNextViewItem(WonderType wonderType)
@@ -40,8 +58,7 @@ class MainCarouselView : Component<MainCarouselViewState>
             .Type(wonderType)
             .RelativePan(State.PanX)
             .CurrentType(State.CurrentType)
-            .ContainerSize(State.ContainerSize)
-            .IsDragging(State.IsDragging);
+            .ContainerSize(State.ContainerSize);
     }
 
     void OnPan(object? sender, MauiControls.PanUpdatedEventArgs args)
@@ -50,6 +67,11 @@ class MainCarouselView : Component<MainCarouselViewState>
         if (container == null)
         {
             return;
+        }
+
+        if (args.StatusType == GestureStatus.Started)
+        {
+            State.StartDrag = DateTime.Now;
         }
 
         if (args.StatusType == GestureStatus.Running || args.StatusType == GestureStatus.Started)
@@ -61,7 +83,7 @@ class MainCarouselView : Component<MainCarouselViewState>
                 s.IsDragging = true;
             });
         }
-        else if (args.StatusType == GestureStatus.Canceled || Math.Abs(State.PanX) < container.Bounds.Width / 3.0)
+        else if (args.StatusType == GestureStatus.Canceled)
         {
             SetState(s =>
             {
@@ -72,15 +94,30 @@ class MainCarouselView : Component<MainCarouselViewState>
         }
         else //Completed
         {
-            SetState(s =>
+            var now = DateTime.Now;
+
+            if (State.StartDrag.HasValue && 
+                ((now - State.StartDrag.Value < TimeSpan.FromMilliseconds(200)) || args.TotalX > State.ContainerSize.Width / 3.0))
             {
-                s.ContainerSize = container.Bounds.Size;
-                s.CurrentType = s.PanX < 0 ?
-                    State.CurrentType.Next() :
-                    State.CurrentType.Previous();
-                s.PanX = 0;
-                s.IsDragging = false;
-            });
+                SetState(s =>
+                {
+                    s.ContainerSize = container.Bounds.Size;
+                    s.CurrentType = s.PanX < 0 ?
+                        State.CurrentType.Next() :
+                        State.CurrentType.Previous();
+                    s.PanX = 0;
+                    s.IsDragging = false;
+                });
+            }
+            else
+            {
+                SetState(s =>
+                {
+                    s.PanX = 0;
+                    s.ContainerSize = container.Bounds.Size;
+                    s.IsDragging = false;
+                });
+            }
         }
     }
 }
@@ -96,10 +133,8 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
     private WonderType _currentType;
     private double _relativePan;
     private Size _containerSize;
-    private bool _isDragging;
 
     private bool IsCurrent => _currentType == _type;
-    private bool IsDuringPan => _relativePan != 0.0;
 
     public MainCarouselViewItem Type(WonderType type)
     {
@@ -122,12 +157,6 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
     public MainCarouselViewItem ContainerSize(Size size)
     {
         _containerSize = size;
-        return this;
-    }
-
-    public MainCarouselViewItem? IsDragging(bool isDragging)
-    {
-        _isDragging = isDragging;
         return this;
     }
 
@@ -193,6 +222,100 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 image.GetFinalBounds(_containerSize) : 
                 image.GetInitialBounds(_containerSize))
             .WithAnimation(duration: 400)
+            ;
+    }
+}
+
+class MainCarouselViewIndicatorState
+{
+    public WonderType CurrentType { get; set; }
+
+    public float Completion { get; set; }
+}
+
+class MainCarouselViewIndicator : Component<MainCarouselViewIndicatorState>
+{
+    private WonderType _wonderType;
+
+    public MainCarouselViewIndicator CurrentType(WonderType wonderType)
+    {
+        _wonderType = wonderType;
+        return this;
+    }
+
+    protected override void OnPropsChanged()
+    {
+        if (_wonderType != State.CurrentType)
+        {
+            State.Completion = 0;
+        }
+
+        base.OnPropsChanged();
+    }
+
+    public override VisualNode Render()
+    {
+        return new CanvasView
+        {
+            new Row
+            {
+                Enum.GetValues<WonderType>().Select(RenderIndicatorItem).ToArray()
+            },
+
+            new AnimationController
+            {
+                new SequenceAnimation
+                {
+                    new DoubleAnimation()
+                        .StartValue(0)
+                        .TargetValue(1)
+                        .Duration(300)
+                        .OnTick(v => SetState(s => s.Completion = (float)v))
+                }
+                .Loop(false)
+                
+            }
+            .IsEnabled(_wonderType != State.CurrentType)
+            .OnIsEnabledChanged(_ => SetState(s =>
+            {
+                s.CurrentType = _wonderType;
+                s.Completion = 1;
+            }))
+        }
+        .BackgroundColor(Colors.Transparent)
+        .HeightRequest(8)
+        .Margin(120, 100)
+        .VEnd()
+        .HCenter();
+    }
+
+    VisualNode RenderIndicatorItem(WonderType type, int index)
+    {
+        float increment = 0.0f;
+        if (type == _wonderType)
+        {
+            increment = 8.0f * State.Completion;
+        }
+        else if (type == State.CurrentType && type.IsPreviousOf(_wonderType))
+        {
+            increment = 8.0f * (1 - State.Completion);
+        }
+        else if (type == State.CurrentType && type.IsNextOf(_wonderType))
+        {
+            increment = 8.0f * (1 - State.Completion);
+        }
+
+        return
+            new Align
+            {
+                new Box()
+                    .BackgroundColor(Colors.White)
+                    .CornerRadius(8)
+            }
+            
+            .HCenter()
+            .Width(8 + increment)
+            
             ;
     }
 }
