@@ -255,69 +255,9 @@ class MainCarouselViewIndicator : Component<MainCarouselViewIndicatorState>
 
     public override VisualNode Render()
     {
-        return new CanvasView
-        {
-            new Row
-            {
-                Enum.GetValues<WonderType>().Select(RenderIndicatorItem).ToArray()
-            },
-
-            new AnimationController
-            {
-                new SequenceAnimation
-                {
-                    new DoubleAnimation()
-                        .StartValue(0)
-                        .TargetValue(1)
-                        .Duration(300)
-                        .OnTick(v => SetState(s => s.Completion = (float)v))
-                }
-                .Loop(false)
-                
-            }
-            .IsEnabled(_wonderType != State.CurrentType)
-            .OnIsEnabledChanged(_ => SetState(s =>
-            {
-                s.CurrentType = _wonderType;
-                s.Completion = 1;
-            }))
-        }
-        .BackgroundColor(Colors.Transparent)
-        .HeightRequest(8)
-        .Margin(120, 100)
-        .VEnd()
-        .HCenter();
+        return null;
     }
 
-    VisualNode RenderIndicatorItem(WonderType type, int index)
-    {
-        float increment = 0.0f;
-        if (type == _wonderType)
-        {
-            increment = 8.0f * State.Completion;
-        }
-        else if (type == State.CurrentType && type.IsPreviousOf(_wonderType))
-        {
-            increment = 8.0f * (1 - State.Completion);
-        }
-        else if (type == State.CurrentType && type.IsNextOf(_wonderType))
-        {
-            increment = 8.0f * (1 - State.Completion);
-        }
-
-        return
-            new Align
-            {
-                new Box()
-                    .BackgroundColor(Colors.White)
-                    .CornerRadius(8)
-            }
-            
-            .HCenter()
-            .Width(8 + increment)
-            
-            ;
-    }
 }
 
 static class WonderTypeExtensions
