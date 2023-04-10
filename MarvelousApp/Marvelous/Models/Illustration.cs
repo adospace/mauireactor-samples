@@ -52,7 +52,7 @@ record Illustration(
     public Brush SecondaryBrush
         => _secondaryBrush ??= new SolidColorBrush(SecondaryColor);
 
-    public static Dictionary<WonderType, Illustration> Config { get; } = new()
+    public static IReadOnlyDictionary<WonderType, Illustration> Config { get; } = new Dictionary<WonderType, Illustration>()
     {
         {
             WonderType.Colosseum, new Illustration(

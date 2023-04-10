@@ -24,6 +24,40 @@ class MainCarouselViewState
 
 class MainCarouselView : Component<MainCarouselViewState>
 {
+    private Action<WonderType>? _selectedWonderAction;
+    private WonderType _initialType;
+    private bool _show;
+
+    public MainCarouselView OnSelected(Action<WonderType> action)
+    {
+        _selectedWonderAction = action;
+        return this;
+    }
+
+    public MainCarouselView InitialType(WonderType type)
+    {
+        _initialType = type;
+        return this;
+    }
+
+    public MainCarouselView Show(bool show)
+    {
+        _show = show;
+        return this;
+    }
+
+    protected override void OnMounted()
+    {
+        State.CurrentType = _initialType;
+        base.OnMounted();
+    }
+
+    protected override void OnPropsChanged()
+    {
+        State.CurrentType = _initialType;
+        base.OnPropsChanged();
+    }
+
     public override VisualNode Render()
     {
         return new Grid()
@@ -37,6 +71,8 @@ class MainCarouselView : Component<MainCarouselViewState>
         .OnSizeChanged(OnMainContainerSizeChanged)
         .OnPanUpdated(OnPan)
         .Background(Illustration.Config[State.CurrentType].BackgroundBrush)
+        .Opacity(_show ? 1 : 0)
+        .WithAnimation()
         ;
     }
 
@@ -123,6 +159,12 @@ class MainCarouselView : Component<MainCarouselViewState>
             }
             else
             {
+                if (State.DraggingOrientation == ScrollOrientation.Vertical &&
+                    State.ContainerSize.Height > 0 &&
+                    Math.Abs(State.PanY) / State.ContainerSize.Height > 0.2)
+                {
+                    _selectedWonderAction?.Invoke(State.CurrentType);
+                }
                 SetState(s =>
                 {
                     s.PanX = 0;
@@ -130,6 +172,7 @@ class MainCarouselView : Component<MainCarouselViewState>
                     s.ContainerSize = container.Bounds.Size;
                     s.DraggingOrientation = ScrollOrientation.Neither;
                 });
+
             }
         }
     }
@@ -186,23 +229,23 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
         var translationX = 0.0;
         var opacity = 0.0;
 
-        var percOpacity = Easing.CubicIn.Ease(Math.Abs(_relativePanX / _containerSize.Width));
-        var percVerticalPan = (-_relativePanY / _containerSize.Height);
+        var percOpacity = _containerSize.Width > 0 ? Easing.CubicIn.Ease(Math.Abs(_relativePanX / _containerSize.Width)) : 0.0;
+        var percVerticalPan = _containerSize.Height > 0 ? (-_relativePanY / _containerSize.Height) : 0.0;
 
         if (IsCurrent)
         {
             translationX = _relativePanX;
-            opacity = _containerSize.Width > 0 ? 1.0 - percOpacity : 1.0;
+            opacity = 1.0 - percOpacity;
         }
         else if (_relativePanX < 0 && _type.IsNextOf(_currentType))
         {
             translationX = _containerSize.Width + _relativePanX;
-            opacity = _containerSize.Width > 0 ? percOpacity : 0.0;
+            opacity = percOpacity;
         }
         else if (_relativePanX > 0 && _type.IsPreviousOf(_currentType))
         {
             translationX = _relativePanX - _containerSize.Width;
-            opacity = _containerSize.Width > 0 ? percOpacity : 0.0;
+            opacity = percOpacity;
         }
         else if (_type.IsNextOf(_currentType))
         {
@@ -237,10 +280,10 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                         ),
             },
 
+            IsCurrent ?
             new Rectangle()
                 .Background(Illustration.Config[_currentType].ForegroundBrush)
-                .Opacity(opacity)
-                ,
+                : null,
 
             new Label(Illustration.Config[_currentType].Title)
                 .TextColor(Colors.White)
