@@ -26,8 +26,10 @@ record Illustration(
     double MarginLeft,
     Color PrimaryColor,
     Color SecondaryColor,
-    IllustrationImage[]? BackgroundImages = null,
-    IllustrationImage[]? ForegroundImages = null
+    IllustrationImage[] BackgroundImages,
+    IllustrationImage MainObjectImage,
+    IllustrationImage MainObjectEditorialImage,
+    IllustrationImage[] ForegroundImages
     )
 {
     Brush? _backgroundBrush;
@@ -81,6 +83,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
                 },
 
+                MainObjectImage: new IllustrationImage("colosseum_colosseum.png", new Rect(-0.38, -0.38, 1.76, 1.76), new Rect(-0.38, -0.38, 1.76, 1.76)),
+                MainObjectEditorialImage: new IllustrationImage("colosseum_colosseum.png", new Rect(0.05, 0.2, 0.9, 0.9), new Rect(0.05, 0.2, 0.9, 0.9)),
+
                 ForegroundImages: new[]
                 {
                     new IllustrationImage("colosseum_foreground_left.png", new Rect(-1.4, 0.48, 0.6, 0.6), new Rect(-0.09, 0.48, 0.6, 0.6)),
@@ -113,6 +118,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, -0.1, 0.4, 0.4), new Rect(0.5, -0.1, 0.4, 0.4), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.25, 0.6, 0.6), new Rect(0, -0.25, 0.6, 0.6), Opacity: 0.3),
                 },
+
+                MainObjectImage: new IllustrationImage("chichen_itza_chichen.png", new Rect(-0.94, -0.94, 2.88, 2.88), new Rect(-0.94, -0.94, 2.88, 2.88)),
+                MainObjectEditorialImage: new IllustrationImage("chichen_itza_chichen.png", new Rect(-0.94, -0.94, 2.88, 2.88), new Rect(0, 0, 0.5, 0.5)),
 
                 ForegroundImages: new[]
                 {
@@ -151,6 +159,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
                 },
 
+                MainObjectImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(-0.94, -0.73, 2.88, 2.88), new Rect(-0.94, -0.72, 2.88, 2.88)),
+                MainObjectEditorialImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(0, 0, 2.2, 2.2), new Rect(-0.6, 0.1, 2.2, 2.2)),
+
                 ForegroundImages: new[]
                 {
                     new IllustrationImage("christ_the_redeemer_foreground_left.png", new Rect(-1.4, -0.05, 1.64, 1.64), new Rect(-0.74, -0.05, 1.64, 1.64), Opacity: 0.8),
@@ -186,6 +197,9 @@ record Illustration(
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.2, -0.06, 0.34, 0.34), new Rect(0.18, -0.06, 0.34, 0.34), Opacity: 0.3),
                 },
+
+                MainObjectImage: new IllustrationImage("great_wall_of_china_great_wall.png", new Rect(-0.1, -0.07, 1.2, 1.2), new Rect(-0.1, -0.07, 1.2, 1.2)),
+                MainObjectEditorialImage: new IllustrationImage("great_wall_of_china_great_wall.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
                 ForegroundImages: new[]
                 {
@@ -223,6 +237,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.2, -0.06, 0.34, 0.34), new Rect(0.18, -0.06, 0.34, 0.34), Opacity: 0.3),
                 },
 
+                MainObjectImage: new IllustrationImage("machu_picchu_machu_picchu.png", new Rect(-1.04, -0.75, 2.9, 2.5), new Rect(-1.04, -0.75, 2.9, 2.5)),
+                MainObjectEditorialImage: new IllustrationImage("machu_picchu_machu_picchu.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
+
                 ForegroundImages: new[]
                 {
                     new IllustrationImage("machu_picchu_foreground_back.png", new Rect(-0.18, 0.16, 1.46, 1.46), new Rect(-0.18, 0.12, 1.46, 1.46)),
@@ -258,6 +275,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
                 },
 
+                MainObjectImage: new IllustrationImage("petra_petra.png", new Rect(-0.44, -0.50, 2.0, 2.0), new Rect(-0.44, -0.50, 2.0, 2.0)),
+                MainObjectEditorialImage: new IllustrationImage("petra_petra.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
+
                 ForegroundImages: new[]
                 {
                     new IllustrationImage("petra_foreground_left.png", new Rect(-1.4, -0.04, 1, 1.1), new Rect(-0.4, -0.04, 1, 1.1)),
@@ -292,6 +312,9 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.05, 0.5, 0.5), new Rect(0.2, 0.05, 0.5, 0.5), Opacity: 0.3),
                 },
 
+                MainObjectImage: new IllustrationImage("pyramids_pyramids.png", new Rect(-0.4, -0.4, 1.8, 1.8), new Rect(-0.4, -0.4, 1.8, 1.8)),
+                MainObjectEditorialImage: new IllustrationImage("pyramids_pyramids.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
+
                 ForegroundImages: new[]
                 {
                     new IllustrationImage("pyramids_foreground_back.png", new Rect(0, 0.2, 1, 1), new Rect(0, 0.18, 1, 1)),
@@ -325,6 +348,10 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, -0.14, 0.65, 0.65), new Rect(0, -0.14, 0.65, 0.65), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.05, 0.5, 0.5), new Rect(0.2, 0.05, 0.5, 0.5), Opacity: 0.3),
                 },
+
+                MainObjectImage: new IllustrationImage("taj_mahal_taj_mahal.png", new Rect(-0.4, -0.466, 1.8, 1.9), new Rect(-0.4, -0.466, 1.8, 1.9)),
+                MainObjectEditorialImage: new IllustrationImage("taj_mahal_taj_mahal.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
+
 
                 ForegroundImages: new[]
                 {

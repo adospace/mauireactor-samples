@@ -1,5 +1,6 @@
 ﻿using Marvelous.Models;
 using MauiReactor;
+using MauiReactor.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,48 @@ class WonderWiki : Component<WonderWikiState>
 
     public override VisualNode Render()
     {
+        var config = Illustration.Config[_wonderType];
         return new Grid
         {
             RenderBackground(),
+        };
+    }
+
+    VisualNode RenderBackground()
+    {
+        var config = Illustration.Config[_wonderType];
+        return new Grid
+        {
+            new Grid
+            {
+                new AbsoluteLayout
+                {
+                    config.BackgroundImages?.Select(RenderBackgroundIllustrationImage),
+                },
+                new AbsoluteLayout
+                {
+                    RenderBackgroundIllustrationImage(config.MainObjectEditorialImage)
+                },
+            }
+            .BackgroundColor(config.SecondaryColor)
+            .OnSizeChanged(OnContainerSizeChanged)
+            .HeightRequest(260)
+            .VStart(),
+
+            new Rectangle()
+                .Margin(0,290,0,0)
+                .Fill(config.PrimaryColor)
+                .VEnd()
         }
-        .OnSizeChanged(OnContainerSizeChanged);
+        .BackgroundColor(config.PrimaryColor);
+    }
+
+    private Image RenderBackgroundIllustrationImage(IllustrationImage image)
+    {
+        return new Image(image.Source)
+            .AbsoluteLayoutBounds(image.GetFinalBounds(State.ContainerSize))
+            .Opacity(image.Opacity)
+            ;
     }
 
     void OnContainerSizeChanged(object? sender, EventArgs args)
@@ -41,32 +79,5 @@ class WonderWiki : Component<WonderWikiState>
         }
 
         SetState(s => s.ContainerSize = container.Bounds.Size);
-    }
-
-    VisualNode RenderBackground()
-    {
-        var config = Illustration.Config[_wonderType];
-        return new Grid
-        {
-            new AbsoluteLayout
-            {
-                config.BackgroundImages?.Select(RenderBackgroundIllustrationImage),
-            },
-
-            new Image(config.MainObject)
-                //.Opacity(opacity)
-                .Margin(config.MarginLeft, config.MarginTop, 0, 0)
-                //.ScaleX(config.ScaleX)
-                //.ScaleY(config.ScaleY)
-                ,
-        }
-        .VStart();
-    }
-
-    private Image RenderBackgroundIllustrationImage(IllustrationImage image)
-    {
-        return new Image(image.Source)
-            .AbsoluteLayoutBounds(image.GetFinalBounds(State.ContainerSize))
-            ;
     }
 }

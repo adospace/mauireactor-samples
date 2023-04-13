@@ -46,17 +46,17 @@ class MainCarouselView : Component<MainCarouselViewState>
         return this;
     }
 
-    protected override void OnMounted()
-    {
-        State.CurrentType = _initialType;
-        base.OnMounted();
-    }
+    //protected override void OnMounted()
+    //{
+    //    State.CurrentType = _initialType;
+    //    base.OnMounted();
+    //}
 
-    protected override void OnPropsChanged()
-    {
-        State.CurrentType = _initialType;
-        base.OnPropsChanged();
-    }
+    //protected override void OnPropsChanged()
+    //{
+    //    State.CurrentType = _initialType;
+    //    base.OnPropsChanged();
+    //}
 
     public override VisualNode Render()
     {
@@ -263,13 +263,23 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 config.BackgroundImages?.Select(RenderIllustrationImage),
             },
 
-            new Image(config.MainObject)
-                .TranslationX(translationX)
-                .WithAnimation(duration: 400)
-                .Opacity(opacity)
-                .Margin(config.MarginLeft, config.MarginTop, 0, 0)
-                .ScaleX(config.ScaleX)
-                .ScaleY(config.ScaleY),
+            new AbsoluteLayout
+            {
+                config.MainObjectImage != null ?
+                RenderIllustrationImage(config.MainObjectImage)
+                    .TranslationX(translationX)
+                    .WithAnimation(duration: 400)
+                    .Opacity(opacity)
+                    :null
+            },
+
+            //new Image(config.MainObject)
+            //    .TranslationX(translationX)
+            //    .WithAnimation(duration: 400)
+            //    .Opacity(opacity)
+            //    .Margin(config.MarginLeft, config.MarginTop, 0, 0)
+            //    .ScaleX(config.ScaleX)
+            //    .ScaleY(config.ScaleY),
 
             new AbsoluteLayout
             {

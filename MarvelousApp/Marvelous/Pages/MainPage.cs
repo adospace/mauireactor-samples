@@ -27,13 +27,14 @@ class MainPage : Component<MainPageState>
             {
                 new MainCarouselView()
                     .OnSelected(OnSelectWonder)
-                    .InitialType(State.CurrentWonderType)
+                    //.InitialType(State.CurrentWonderType)
                     .Show(State.ShowNavigator),
 
                 !State.ShowNavigator ?
                 RenderBody() : null,
 
                 new WonderNavigator()
+                    .Type(State.CurrentWonderType)
                     .OnTabSelected(_=>SetState(s => s.CurrentTab = _))
                     .Show(!State.ShowNavigator)
                     .OnBackToWonderSelect(()=>SetState(s => s.ShowNavigator = true))

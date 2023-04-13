@@ -46,7 +46,7 @@ public class Wonder
     public static IReadOnlyDictionary<WonderType, Wonder> Config { get; } = new Dictionary<WonderType, Wonder>()
     {
         { 
-            WonderType.ChichenItza, new Wonder
+            WonderType.Colosseum, new Wonder
             {
                 Type = WonderType.Colosseum,
                 Title = "colosseumTitle",
