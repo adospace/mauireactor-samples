@@ -37,8 +37,8 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.104" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.104" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.113" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.113" />
   </ItemGroup>
 
   <ItemGroup>
