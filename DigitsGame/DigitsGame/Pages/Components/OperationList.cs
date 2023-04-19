@@ -26,7 +26,8 @@ class OperationList : Component
         {
             new Label("Your operations:")
                 .HorizontalTextAlignment(TextAlignment.Center)
-                .TextColor(Colors.Black),
+                .TextColor(Colors.Black)
+                .FontSize(24),
 
             new CollectionView()
                 .ItemsSource(_operations?.Reverse().ToArray() ?? Array.Empty<OperationItem>(), RenderOperation)
@@ -42,7 +43,8 @@ class OperationList : Component
         return new VStack(spacing: 5)
         {
             new Label($"{operation.Left.Value} {GetOperationSign(operation.Operation)} {operation.Right.Value} = {operation.CalcValue()}")
-                .TextColor(Colors.Black),
+                .TextColor(Colors.Black)
+                .FontSize(24),
 
             new Line()
                 .Stroke(Colors.Black)

@@ -60,7 +60,7 @@ class MainPage : Component<MainPageState>
     VisualNode RenderOnMobile()
     {
         var currentView = _mainStateParameter?.Value.PageView ?? PageView.GameBoard;
-        return new ContentPage
+        return new ContentPage("Digits")
         {
             new Grid("100,400", "*,*")
             {
