@@ -45,6 +45,73 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg_ios.svg" Color="#252621" />
   </ItemGroup>
+  <ItemGroup>
+    <MauiImage Remove="Resources\Images\chichen_itza_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\christ_the_redeemer_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\colosseum_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\common_tab_artifacts.png" />
+    <MauiImage Remove="Resources\Images\common_tab_artifacts_active.png" />
+    <MauiImage Remove="Resources\Images\common_tab_editorial.png" />
+    <MauiImage Remove="Resources\Images\common_tab_editorial_active.png" />
+    <MauiImage Remove="Resources\Images\common_tab_photos.png" />
+    <MauiImage Remove="Resources\Images\common_tab_photos_active.png" />
+    <MauiImage Remove="Resources\Images\common_tab_timeline.png" />
+    <MauiImage Remove="Resources\Images\common_tab_timeline_active.png" />
+    <MauiImage Remove="Resources\Images\great_wall_of_china_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\machu_picchu_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\petra_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\pyramids_wonder_button.png" />
+    <MauiImage Remove="Resources\Images\taj_mahal_wonder_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Fonts\B612Mono-Regular.ttf" />
+    <None Remove="Resources\Fonts\CinzelDecorative-Black.ttf" />
+    <None Remove="Resources\Fonts\CinzelDecorative-Bold.ttf" />
+    <None Remove="Resources\Fonts\CinzelDecorative-Regular.ttf" />
+    <None Remove="Resources\Fonts\Raleway-Bold.ttf" />
+    <None Remove="Resources\Fonts\Raleway-BoldItalic.ttf" />
+    <None Remove="Resources\Fonts\Raleway-ExtraBold.ttf" />
+    <None Remove="Resources\Fonts\Raleway-ExtraBoldItalic.ttf" />
+    <None Remove="Resources\Fonts\Raleway-Italic.ttf" />
+    <None Remove="Resources\Fonts\Raleway-Medium.ttf" />
+    <None Remove="Resources\Fonts\Raleway-MediumItalic.ttf" />
+    <None Remove="Resources\Fonts\Raleway-Regular.ttf" />
+    <None Remove="Resources\Fonts\TenorSans-Regular.ttf" />
+    <None Remove="Resources\Fonts\YesevaOne-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\chichen_itza_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\christ_the_redeemer_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\colosseum_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_artifacts.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_artifacts_active.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_editorial.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_editorial_active.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_photos.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_photos_active.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_timeline.png" />
+    <EmbeddedResource Include="Resources\Images\common_tab_timeline_active.png" />
+    <EmbeddedResource Include="Resources\Images\great_wall_of_china_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\machu_picchu_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\petra_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\pyramids_wonder_button.png" />
+    <EmbeddedResource Include="Resources\Images\taj_mahal_wonder_button.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Models\Localization.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Localization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Models\Localization.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 
   <ItemGroup>

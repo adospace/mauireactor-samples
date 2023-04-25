@@ -1,4 +1,5 @@
-﻿using Marvelous.Pages.Components;
+﻿using Marvelous.Models;
+using Marvelous.Pages.Components;
 using Marvelous.Services;
 using MauiReactor;
 using System;
@@ -11,7 +12,9 @@ namespace Marvelous.Pages;
 
 class MainPageState
 {
-    public int Counter { get; set; }
+    public WonderType CurrentWonderType { get; set; }
+    public NavigatorTabKey CurrentTab { get; set; }
+    public bool ShowNavigator { get; set; } = true;
 }
 
 class MainPage : Component<MainPageState>
@@ -23,7 +26,35 @@ class MainPage : Component<MainPageState>
             new Grid()
             {
                 new MainCarouselView()
-            }           
+                    .OnSelected(OnSelectWonder)
+                    //.InitialType(State.CurrentWonderType)
+                    .Show(State.ShowNavigator),
+
+                !State.ShowNavigator ?
+                RenderBody() : null,
+
+                new WonderNavigator()
+                    .Type(State.CurrentWonderType)
+                    .OnTabSelected(_=>SetState(s => s.CurrentTab = _))
+                    .Show(!State.ShowNavigator)
+                    .OnBackToWonderSelect(()=>SetState(s => s.ShowNavigator = true))
+            }
         };
+    }
+
+    private VisualNode RenderBody()
+    {
+        //if (State.CurrentTab == NavigatorTabKey.Editorial)
+            return new WonderWiki()
+                .Type(State.CurrentWonderType);
+    }
+
+    private void OnSelectWonder(WonderType wonderType)
+    {
+        SetState(s =>
+        {
+            s.CurrentWonderType = wonderType;
+            s.ShowNavigator = false;
+        });
     }
 }
