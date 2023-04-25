@@ -115,7 +115,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.116" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.116" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.122" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.122" />
   </ItemGroup>
 </Project>

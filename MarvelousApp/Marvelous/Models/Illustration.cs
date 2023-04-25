@@ -159,7 +159,7 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
                 },
 
-                MainObjectImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(-0.94, -0.73, 2.88, 2.88), new Rect(-0.94, -0.72, 2.88, 2.88)),
+                MainObjectImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(-0.94, -0.72, 2.88, 2.88), new Rect(-0.94, -0.72, 2.88, 2.88)),
                 MainObjectEditorialImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(0, 0, 2.2, 2.2), new Rect(-0.6, 0.1, 2.2, 2.2)),
 
                 ForegroundImages: new[]
