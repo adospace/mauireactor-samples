@@ -46,18 +46,6 @@ class MainCarouselView : Component<MainCarouselViewState>
         return this;
     }
 
-    //protected override void OnMounted()
-    //{
-    //    State.CurrentType = _initialType;
-    //    base.OnMounted();
-    //}
-
-    //protected override void OnPropsChanged()
-    //{
-    //    State.CurrentType = _initialType;
-    //    base.OnPropsChanged();
-    //}
-
     public override VisualNode Render()
     {
         return new Grid()
@@ -190,6 +178,7 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
     private double _relativePanX;
     private double _relativePanY;
     private Size _containerSize;
+    private bool _isDragging;
 
     private bool IsCurrent => _currentType == _type;
 
@@ -220,6 +209,12 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
     public MainCarouselViewItem ContainerSize(Size size)
     {
         _containerSize = size;
+        return this;
+    }
+
+    public MainCarouselViewItem IsDragging(bool isDragging)
+    {
+        _isDragging = isDragging;
         return this;
     }
 
@@ -268,18 +263,10 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 config.MainObjectImage != null ?
                 RenderIllustrationImage(config.MainObjectImage)
                     .TranslationX(translationX)
-                    .WithAnimation(duration: 400)
+                    .When(!_isDragging, _ => _.WithAnimation(duration: 400))
                     .Opacity(opacity)
                     :null
             },
-
-            //new Image(config.MainObject)
-            //    .TranslationX(translationX)
-            //    .WithAnimation(duration: 400)
-            //    .Opacity(opacity)
-            //    .Margin(config.MarginLeft, config.MarginTop, 0, 0)
-            //    .ScaleX(config.ScaleX)
-            //    .ScaleY(config.ScaleY),
 
             new AbsoluteLayout
             {
