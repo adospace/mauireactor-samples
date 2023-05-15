@@ -8,17 +8,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 
 namespace VideoApp.Pages;
 
-class MainPage : Component
+class MainPageState
+{
+    public Thickness SafeAreaExtent { get; set; }
+}
+
+class MainPage : Component<MainPageState>
 {
     public override VisualNode Render()
     {
         return new ContentPage
         {
             new InfiniteScroller()
-        };
+                .SafeAreaExtent(State.SafeAreaExtent)
+        }
+        .OnAppearing(OnCalcSafeAreaSize)
+        .OniOS(_ => _
+            .Set(MauiControls.PlatformConfiguration.iOSSpecific.Page.UseSafeAreaProperty, false))
+        ;
+    }
+
+    private void OnCalcSafeAreaSize(object? sender, EventArgs args)
+    {
+#if IOS
+        var page = sender as MauiControls.ContentPage;
+        if (page != null)
+        {
+            var safeAreaInsets = Microsoft.Maui.ApplicationModel.WindowStateManager.Default.GetCurrentUIWindow()?.SafeAreaInsets;
+            if (safeAreaInsets != null)
+            {
+                SetState(s => s.SafeAreaExtent = new Thickness(safeAreaInsets.Value.Left, safeAreaInsets.Value.Top, safeAreaInsets.Value.Right, safeAreaInsets.Value.Bottom));
+            }            
+        }           
+#endif
+
+
     }
 }
 
@@ -48,11 +79,18 @@ class InfiniteScrollerState
 
 class InfiniteScroller : Component<InfiniteScrollerState>
 {
-    private Action<int>? _newIndexChanged;
+    private Action<int>? _currentVideoChangedAction;
+    private Thickness _safeAreaExtent;
 
-    public InfiniteScroller OnCurrentVideoChanged(Action<int> newIndexAction)
+    public InfiniteScroller OnCurrentVideoChanged(Action<int> currentVideoChangedAction)
     {
-        _newIndexChanged = newIndexAction;
+        _currentVideoChangedAction = currentVideoChangedAction;
+        return this;
+    }
+
+    internal InfiniteScroller SafeAreaExtent(Thickness safeAreaExtent)
+    {
+        _safeAreaExtent = safeAreaExtent;
         return this;
     }
 
@@ -118,15 +156,20 @@ class InfiniteScroller : Component<InfiniteScrollerState>
                         s.PanY = 0;
                         System.Diagnostics.Debug.WriteLine($"CurrentIndex = {s.VideoIndex}");
 
-                        _newIndexChanged?.Invoke(s.VideoIndex);
+                        _currentVideoChangedAction?.Invoke(s.VideoIndex);
                     }
                 });
             })
         }
-        .OnSizeChanged(videoSize => SetState(s => s.VideoSize = videoSize))
+        .OnSizeChanged(videoSize =>
+        {
+            SetState(s => s.VideoSize = new Size(videoSize.Width, videoSize.Height - _safeAreaExtent.VerticalThickness));
+        })
         .OnPanUpdated(OnPan)
+        .Margin(0, -_safeAreaExtent.Top, 0, -_safeAreaExtent.Bottom)
         ;
     }
+
 
     void OnPan(object? sender, MauiControls.PanUpdatedEventArgs args)
     {
