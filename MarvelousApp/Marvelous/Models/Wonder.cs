@@ -42,41 +42,41 @@ public class Wonder
     public IList<string> SearchSuggestions { get; set; } = new List<string>();
 
     IList<object> Props => new List<object> { Type, Title, HistoryInfo1, ImageIds, Facts };
-
+    
     public static IReadOnlyDictionary<WonderType, Wonder> Config { get; } = new Dictionary<WonderType, Wonder>()
     {
-        { 
+        {
             WonderType.Colosseum, new Wonder
             {
                 Type = WonderType.Colosseum,
-                Title = "colosseumTitle",
-                SubTitle = "colosseumSubTitle",
-                RegionTitle = "colosseumRegionTitle",
+                Title = Localization.ResourceManager.GetString("colosseumTitle").ThrowIfNull(),
+                SubTitle = Localization.ResourceManager.GetString("colosseumSubTitle").ThrowIfNull(),
+                RegionTitle = Localization.ResourceManager.GetString("colosseumRegionTitle").ThrowIfNull(),
                 VideoId = "GXoEpNjgKzg",
                 StartYr = 70,
                 EndYr = 80,
                 ArtifactStartYr = 0,
                 ArtifactEndYr = 500,
-                ArtifactCulture = "colosseumArtifactCulture",
-                ArtifactGeolocation = "colosseumArtifactGeolocation",
+                ArtifactCulture = Localization.ResourceManager.GetString("colosseumArtifactCulture").ThrowIfNull(),
+                ArtifactGeolocation = Localization.ResourceManager.GetString("colosseumArtifactGeolocation").ThrowIfNull(),
                 Lat = 41.890242126393495,
                 Lng = 12.492349361871392,
                 UnsplashCollectionId = "VPdti8Kjq9o",
-                PullQuote1Top = "colosseumPullQuote1Top",
-                PullQuote1Bottom = "colosseumPullQuote1Bottom",
+                PullQuote1Top = Localization.ResourceManager.GetString("colosseumPullQuote1Top").ThrowIfNull(),
+                PullQuote1Bottom = Localization.ResourceManager.GetString("colosseumPullQuote1Bottom").ThrowIfNull(),
                 PullQuote1Author = "",
-                PullQuote2 = "colosseumPullQuote2",
-                PullQuote2Author = "colosseumPullQuote2Author",
-                Callout1 = "colosseumCallout1",
-                Callout2 = "colosseumCallout2",
-                VideoCaption = "colosseumVideoCaption",
-                MapCaption = "colosseumMapCaption",
-                HistoryInfo1 = "colosseumHistoryInfo1",
-                HistoryInfo2 = "colosseumHistoryInfo2",
-                ConstructionInfo1 = "colosseumConstructionInfo1",
-                ConstructionInfo2 = "colosseumConstructionInfo2",
-                LocationInfo1 = "colosseumLocationInfo1",
-                LocationInfo2 = "colosseumLocationInfo2",
+                PullQuote2 = Localization.ResourceManager.GetString("colosseumPullQuote2").ThrowIfNull(),
+                PullQuote2Author = Localization.ResourceManager.GetString("colosseumPullQuote2Author").ThrowIfNull(),
+                Callout1 = Localization.ResourceManager.GetString("colosseumCallout1").ThrowIfNull(),
+                Callout2 = Localization.ResourceManager.GetString("colosseumCallout2").ThrowIfNull(),
+                VideoCaption = Localization.ResourceManager.GetString("colosseumVideoCaption").ThrowIfNull(),
+                MapCaption = Localization.ResourceManager.GetString("colosseumMapCaption").ThrowIfNull(),
+                HistoryInfo1 = Localization.ResourceManager.GetString("colosseumHistoryInfo1").ThrowIfNull(),
+                HistoryInfo2 = Localization.ResourceManager.GetString("colosseumHistoryInfo2").ThrowIfNull(),
+                ConstructionInfo1 = Localization.ResourceManager.GetString("colosseumConstructionInfo1").ThrowIfNull(),
+                ConstructionInfo2 = Localization.ResourceManager.GetString("colosseumConstructionInfo2").ThrowIfNull(),
+                LocationInfo1 = Localization.ResourceManager.GetString("colosseumLocationInfo1").ThrowIfNull(),
+                LocationInfo2 = Localization.ResourceManager.GetString("colosseumLocationInfo2").ThrowIfNull(),
                 HighlightArtifacts = new List<string> {
                     "251350",
                     "255960",
@@ -100,9 +100,7 @@ public class Wonder
                 }
             }
         },
-
     };
-
 }
 
 public class Search

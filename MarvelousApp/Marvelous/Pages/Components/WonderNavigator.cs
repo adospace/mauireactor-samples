@@ -10,6 +10,8 @@ namespace Marvelous.Pages.Components;
 class WonderNavigatorState
 {
     public NavigatorTabKey CurrentTab { get; set; }
+
+    public bool Show { get; set; }
 }
 
 class WonderNavigator : Component<WonderNavigatorState>
@@ -18,6 +20,7 @@ class WonderNavigator : Component<WonderNavigatorState>
     private Action? _backToWonderSelectionAction;
     private Action<NavigatorTabKey>? _onTabSelected;
     private bool _show;
+    private static readonly NavigatorTabKey[] _navigatorTabKeys = Enum.GetValues<NavigatorTabKey>();
 
     public WonderNavigator Type(WonderType type)
     {
@@ -41,6 +44,12 @@ class WonderNavigator : Component<WonderNavigatorState>
     {
         _show = show;
         return this;
+    }
+
+    protected override void OnMounted()
+    {
+        MauiControls.Application.Current?.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(10), () => SetState(s => s.Show = _show));
+        base.OnMounted();
     }
 
     public override VisualNode Render()
@@ -88,21 +97,21 @@ class WonderNavigator : Component<WonderNavigatorState>
                 }
                 .OnTap(_backToWonderSelectionAction),
 
-                Enum.GetValues<NavigatorTabKey>().Select(tabKey=>
+                _navigatorTabKeys.Select(tabKey=>
                     new WonderNavigatorTab()
                         .TabKey(tabKey)
                         .IsActive(State.CurrentTab == tabKey)
-                        .OnSelected(OnTabSelected)
-                        )
+                        .OnSelected(OnTabSelected))
                 .ToArray()
             }
         }
-        .TranslationY(_show ? 0 : 80)
-        .WithAnimation(duration: 400)
+        .TranslationY(State.Show ? 0 : 80)
+        .WithAnimation(duration: 200)
         .HeightRequest(80)
         .VEnd()
         .BackgroundColor(Colors.Transparent);
     }
+
 
     void OnTabSelected(NavigatorTabKey tabKey)
     {

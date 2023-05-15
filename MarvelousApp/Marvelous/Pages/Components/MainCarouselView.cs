@@ -56,23 +56,12 @@ class MainCarouselView : Component<MainCarouselViewState>
             new MainCarouselViewIndicator()
                 .CurrentType(State.CurrentType)
         }
-        .OnSizeChanged(OnMainContainerSizeChanged)
+        .OnSizeChanged(size => SetState(s => s.ContainerSize = size))
         .OnPanUpdated(OnPan)
         .Background(Illustration.Config[State.CurrentType].BackgroundBrush)
         .Opacity(_show ? 1 : 0)
         .WithAnimation()
         ;
-    }
-
-    void OnMainContainerSizeChanged(object? sender, EventArgs args)
-    {
-        var container = (MauiControls.Grid?)sender;
-        if (container == null)
-        {
-            return;
-        }
-
-        SetState(s => s.ContainerSize = container.Bounds.Size);
     }
 
     MainCarouselViewItem? RenderViewItem(WonderType wonderType)
