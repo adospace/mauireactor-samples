@@ -1,23 +1,16 @@
 ﻿using MauiReactor;
 using MauiReactor.Animations;
-using MauiReactor.Internals;
 using VideoApp.Models;
 using VideoApp.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+using VideoApp.Pages.Components;
 
 namespace VideoApp.Pages;
 
 class MainPageState
 {
     public Thickness SafeAreaExtent { get; set; }
+    public int CurrentVideoIndex { get; set; }
 }
 
 class MainPage : Component<MainPageState>
@@ -26,8 +19,15 @@ class MainPage : Component<MainPageState>
     {
         return new ContentPage
         {
-            new InfiniteScroller()
-                .SafeAreaExtent(State.SafeAreaExtent)
+            new Grid
+            {
+                new InfiniteScroller()
+                    .SafeAreaExtent(State.SafeAreaExtent)
+                    .OnCurrentVideoChanged(videoIndex => SetState(s => s.CurrentVideoIndex = videoIndex)),
+
+                new FeedbackFlow()
+                    .VideoId(State.CurrentVideoIndex >= 0 ? VideoModel.All[State.CurrentVideoIndex].Source.ToString() : null)
+            }
         }
         .OnAppearing(OnCalcSafeAreaSize)
         .OniOS(_ => _

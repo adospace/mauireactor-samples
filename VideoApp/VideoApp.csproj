@@ -39,9 +39,9 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.129" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.129" />
-    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.129" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.131" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.131" />
+    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.131" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="1.0.2" />
   </ItemGroup>
 </Project>
