@@ -35,13 +35,19 @@ internal class ChatServer : IChatServer
 
         res.EnsureSuccessStatusCode();
 
-        return new UserViewModel(id, firstName, lastName);
+        var allUsers = await GetAllUsers();
+
+        return allUsers.First(_ => _.Id == id);
+    }
+    public async Task<UserViewModel[]> GetAllUsers()
+    {
+        return await _httpClient.GetFromJsonAsync<UserViewModel[]>("/users") ?? throw new InvalidOperationException();
     }
 
     public async Task StartListener()
     {
         _connection.On("MessageCreated",
-            (MessageCreateModel model) => MessageCreatedCallback?.Invoke(model));
+            (MessageViewModel model) => MessageCreatedCallback?.Invoke(model));
         _connection.On("UserCreated",
             (UserCreateModel model) => UserCreatedCallback?.Invoke(model));
         _connection.On("UserUpdated",
@@ -57,7 +63,7 @@ internal class ChatServer : IChatServer
         await _connection.StopAsync();
     }
 
-    public Action<MessageCreateModel>? MessageCreatedCallback { get; set; }
+    public Action<MessageViewModel>? MessageCreatedCallback { get; set; }
 
     public Action<UserCreateModel>? UserCreatedCallback { get; set; }
 

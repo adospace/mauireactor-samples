@@ -22,7 +22,7 @@ public static class MauiProgram
             });
 
 
-        builder.Services.AddChatServices(new Uri("http://192.168.1.3:5112"));
+        builder.Services.AddChatServices(new Uri("http://172.31.240.1:5000"));
 
         return builder.Build();
     }

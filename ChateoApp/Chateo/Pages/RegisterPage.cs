@@ -5,6 +5,7 @@ using MauiReactor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Storage;
 using System;
+using System.Linq;
 
 namespace Chateo.Pages;
 
@@ -73,9 +74,9 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
         var chatServer = Services.GetRequiredService<IChatServer>();
 
         var id = Guid.NewGuid();
-        await chatServer.CreateUser(id, State.FirstName, State.LastName);
+        var newUser = await chatServer.CreateUser(id, State.FirstName, State.LastName);
 
-        Preferences.Default.Set("current_user", new UserViewModel(id, State.FirstName, State.LastName));
+        Preferences.Default.SetAsJson("current_user", newUser);
 
         OnBackClicked();
 

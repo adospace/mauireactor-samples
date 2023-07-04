@@ -14,10 +14,10 @@ class LandingPage : Component
         return this;
     }
 
-    protected override void OnMounted()
+    protected override void OnMountedOrPropsChanged()
     {
         Routing.RegisterRoute<RegisterPage>("register");
-        base.OnMounted();
+        base.OnMountedOrPropsChanged();
     }
 
     public override VisualNode Render()
@@ -49,11 +49,7 @@ class LandingPage : Component
                         .GridRow(2)
                         .TextColor(Theme.Current.Foreground),
 
-                    new Button("Start Messaging")
-                        .CornerRadius(30)
-                        .FontFamily("MulishSemiBold")
-                        .BackgroundColor(Theme.Current.Primary)
-                        .TextColor(Theme.Current.Foreground)
+                    Theme.Current.PrimaryButton("Start Messaging")
                         .OnClicked(OnOpenLoginPage)
                         .GridRow(3)
                         .Margin(0,18,0,0)

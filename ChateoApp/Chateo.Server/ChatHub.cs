@@ -14,7 +14,7 @@ public class ChatHub : Hub
         Instance = this;
     }
 
-    public async Task NotifyNewMessage(MessageCreateModel model)
+    public async Task NotifyNewMessage(Shared.MessageViewModel model)
     {
         await Clients.All.SendAsync("MessageCreated", model);
     }

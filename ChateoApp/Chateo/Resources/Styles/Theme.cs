@@ -15,9 +15,16 @@ abstract class Theme
 
     public abstract Color Foreground { get; }
 
-    public abstract Color Primary { get; }
+    public abstract Color Accent { get; }
 
     public abstract Color MediumBackground { get; }
+
+    public abstract Color ForegroundAccent { get; }
+
+    public abstract Color MediumForeground { get; }
+
+
+    public abstract Color Neutral { get; }
 
     public Label Label(string content)
         => new Label(content)
@@ -34,8 +41,49 @@ abstract class Theme
         => new Button(content)
             .CornerRadius(30)
             .FontFamily("MulishSemiBold")
-            .BackgroundColor(Primary)
-            .TextColor(Foreground);
+            .TextColor(ForegroundAccent)
+            .BackgroundColor(Accent);
+
+    public Image Image(Icon icon)
+        => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+            .HeightRequest(24)
+            .WidthRequest(24);
+
+}
+
+public enum Icon
+{
+    Back,
+
+    Chat,
+
+    Chats,
+
+    Check,
+
+    Comment,
+
+    Contacts,
+
+    Dots,
+
+    Email,
+
+    Folder,
+
+    Help,
+
+    Notification,
+
+    Plus,
+
+    Privacy,
+
+    User,
+
+    UserPlus,
+
+    Search
 
 }
 
@@ -43,20 +91,33 @@ class LightTheme : Theme
 {
     public override Color Background => Colors.White;    
 
-    public override Color Primary => Color.FromArgb("#002DE3");
+    public override Color Accent => Color.FromArgb("#002DE3");
 
     public override Color Foreground => Color.FromArgb("#0F1828");
 
     public override Color MediumBackground => Color.FromArgb("#F7F7FC");
+
+    public override Color ForegroundAccent => Color.FromArgb("#F7F7FC");
+
+    public override Color MediumForeground => Color.FromArgb("#ADB5BD");
+
+    public override Color Neutral => Color.FromRgba("#EDEDED");
 }
 
 class DarkTheme : Theme
 {
     public override Color Background => Color.FromArgb("#0F1828");
 
-    public override Color Primary => Color.FromArgb("#375FFF");
+    public override Color Accent => Color.FromArgb("#375FFF");
 
     public override Color Foreground => Color.FromArgb("#F7F7FC");
+    
 
     public override Color MediumBackground => Color.FromArgb("#152033");
+
+    public override Color ForegroundAccent => Color.FromArgb("#F7F7FC");
+
+    public override Color MediumForeground => Color.FromArgb("#ADB5BD");
+
+    public override Color Neutral => Color.FromRgba("#152033");
 }
