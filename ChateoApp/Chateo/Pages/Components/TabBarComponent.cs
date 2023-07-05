@@ -46,7 +46,7 @@ class TabBarComponent : Component
     static Icon GetIconFromPage(Page page)
         => page switch
         {
-            Pages.Page.Chats => Icon.Chats,
+            Pages.Page.Chats => Icon.ChatsMenu,
             Pages.Page.Contacts => Icon.Contacts,
             Pages.Page.Settings => Icon.Dots,
             _ => throw new NotSupportedException(),

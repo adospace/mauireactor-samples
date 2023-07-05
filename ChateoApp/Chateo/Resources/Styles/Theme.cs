@@ -1,6 +1,8 @@
 ﻿
 
 using MauiReactor;
+using MauiReactor.Shapes;
+using System;
 
 namespace Chateo.Resources.Styles;
 
@@ -49,6 +51,33 @@ abstract class Theme
             .HeightRequest(24)
             .WidthRequest(24);
 
+    public Border BorderedImage(Icon icon)
+        => new Border
+        {
+            Image(icon)
+                .HeightRequest(48)
+                .WidthRequest(48)
+                .VCenter()
+                .HCenter()
+        }
+        .Margin(-2)
+        .Stroke(MediumForeground)
+        .StrokeThickness(2)
+        .StrokeCornerRadius(18);
+
+    public Border BorderedImage(string image, bool highlighted = false)
+        => new Border
+        {
+            new Image(image)
+                .HeightRequest(48)
+                .WidthRequest(48)
+                .VCenter()
+                .HCenter()
+        }
+        .Margin(-2)
+        .Stroke(MediumForeground)
+        .StrokeThickness(2)
+        .StrokeCornerRadius(18);
 }
 
 public enum Icon
@@ -58,6 +87,8 @@ public enum Icon
     Chat,
 
     Chats,
+
+    ChatsMenu,
 
     Check,
 
@@ -83,7 +114,11 @@ public enum Icon
 
     UserPlus,
 
-    Search
+    Search,
+    
+    SearchOverlay,
+
+    StoryPlus
 
 }
 

@@ -14,6 +14,8 @@ class LoginPageState
     public string FirstName { get; set; } = string.Empty;
 
     public string LastName { get; set; } = string.Empty;
+
+    public string? Avatar { get; set; }
 }
 
 class LoginPageProps
@@ -23,6 +25,12 @@ class LoginPageProps
 
 class RegisterPage : Component<LoginPageState, LoginPageProps>
 {
+    protected override void OnMountedOrPropsChanged()
+    {
+        
+        base.OnMountedOrPropsChanged();
+    }
+
     public override VisualNode Render()
     {
         return new ContentPage()
@@ -31,7 +39,7 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
             {
                 new Grid("*", "24, *")
                 {
-                    new Image("/images/back_icon.png")
+                    Theme.Current.Image(Icon.Back)
                         .VEnd()
                         .OnTapped(OnBackClicked),
 
@@ -43,7 +51,7 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                 }
                 .Padding(0,13),
 
-                new Image("/images/user_plus.png")
+                Theme.Current.Image(Icon.UserPlus)
                     .HeightRequest(100)
                     .Margin(0,46,0,32),
 
@@ -61,6 +69,7 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                 Theme.Current.PrimaryButton("Save")
                     .HeightRequest(52)
                     .Margin(8,68,8,0)
+                    .IsEnabled(!string.IsNullOrWhiteSpace(State.FirstName) && !string.IsNullOrWhiteSpace(State.LastName) && State.Avatar != null)
                     .OnClicked(OnSaveClicked)
             }
             .Margin(16)

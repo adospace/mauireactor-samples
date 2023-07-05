@@ -25,7 +25,7 @@ class HomePage : Component<HomePageState>
     {
         return new Shell
         {
-            new ContentPage("Contacts")
+            new ContentPage("Home")
             {
                 new Grid("*, 83", "*")
                 {
@@ -44,17 +44,11 @@ class HomePage : Component<HomePageState>
     }
 
     VisualNode RenderCurrentPage()
-    {
-        switch (State.CurrentPage)
+        => State.CurrentPage switch
         {
-            case Page.Contacts:
-                return new ContactsPage();
-            case Page.Chats:
-                return new ChatsPage();
-            case Page.Settings:
-                return new SettingsPage();
-        }
-
-        throw new NotSupportedException();
-    }
+            Page.Contacts => new ContactsPage(),
+            Page.Chats => new ChatsPage(),
+            Page.Settings => new SettingsPage(),
+            _ => throw new NotSupportedException(),
+        };
 }
