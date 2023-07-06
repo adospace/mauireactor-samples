@@ -30,11 +30,18 @@ public class ContactsPage : Component<ContactsPageState>
         
         State.IsLoading = true;
 
+        chatService.UserCreatedCallback = this.OnNewUser;
+        chatService.UserUpdatedCallback = this.OnUserUpdated;
+        chatService.UserDeletedCallback = this.OnUserDeleted;
+
         var allUsers = await chatService.GetAllUsers();
+
+        var mainState = GetParameter<MainState>();
+        var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
 
         SetState(s =>
         {
-            s.Users = new ObservableCollection<UserViewModel>(allUsers);
+            s.Users = new ObservableCollection<UserViewModel>(allUsers.Where(_ => _.Id != currentUser.Id));
             s.IsLoading = false;
         });
     }
@@ -93,10 +100,11 @@ public class ContactsPage : Component<ContactsPageState>
     private VisualNode RenderContactItem(UserViewModel model)
     {
         var lastSeen = DateTime.Now - model.LastSeen;
+        var online = lastSeen.TotalMinutes < 2;
 
         return new Grid("68", "56, *")
         {
-            new Image("/images/avatar1.png")
+            new Image($"/images/{model.Avatar}.png")
                 .Margin(0,0,0,12),
 
             new VStack
@@ -106,7 +114,7 @@ public class ContactsPage : Component<ContactsPageState>
                     .HeightRequest(24)
                     .VerticalTextAlignment(TextAlignment.Center),
 
-                Theme.Current.Label(lastSeen.TotalMinutes < 2 ? "Online" : $"Last seen {lastSeen.Humanize(1)} ago")
+                Theme.Current.Label(online ? "Online" : $"Last seen {lastSeen.Humanize(1)} ago")
                     .TextColor(Theme.Current.MediumForeground)
                     .FontSize(12)
                     .HeightRequest(20)
@@ -122,4 +130,32 @@ public class ContactsPage : Component<ContactsPageState>
                 .VEnd()
         };
     }
+
+    private void OnNewUser(UserViewModel user)
+    {
+        SetState(s => s.Users.Add(user));
+    }
+
+    private void OnUserDeleted(Guid id)
+    {
+        var userToDeleted = State.Users.FirstOrDefault(_ => _.Id == id);
+        if (userToDeleted != null)
+        {
+            SetState(s => s.Users.Remove(userToDeleted));
+        }        
+    }
+
+    private void OnUserUpdated(UserViewModel user)
+    {
+        var userToReplace = State.Users.FirstOrDefault(_ => _.Id == user.Id);
+        if (userToReplace != null)
+        {
+            SetState(s =>
+            {
+                s.Users.Remove(userToReplace);
+                s.Users.Add(user);
+            });
+        }
+    }
+
 }

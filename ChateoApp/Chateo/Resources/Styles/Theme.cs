@@ -25,6 +25,8 @@ abstract class Theme
 
     public abstract Color MediumForeground { get; }
 
+    public abstract Color Green { get; }
+
 
     public abstract Color Neutral { get; }
 
@@ -50,6 +52,26 @@ abstract class Theme
         => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
             .HeightRequest(24)
             .WidthRequest(24);
+
+    public Grid Avatar(string avatar, bool online = false)
+        => new Grid("52", "52")
+        {
+            new Image($"images/{avatar}.png")
+                .HeightRequest(48)
+                .WidthRequest(48)
+                .HCenter()
+                .VCenter(),
+
+            new Ellipse()
+                .Fill(Green)
+                .StrokeThickness(2)
+                .Stroke(Colors.White)
+                .HeightRequest(14)
+                .WidthRequest(14)
+                .HEnd()
+                .VStart()
+                .IsVisible(online)
+        };
 
     public Border BorderedImage(Icon icon)
         => new Border
@@ -118,7 +140,9 @@ public enum Icon
     
     SearchOverlay,
 
-    StoryPlus
+    StoryPlus,
+
+    Send
 
 }
 
@@ -137,6 +161,8 @@ class LightTheme : Theme
     public override Color MediumForeground => Color.FromArgb("#ADB5BD");
 
     public override Color Neutral => Color.FromRgba("#EDEDED");
+
+    public override Color Green => Color.FromArgb("#2CC069");
 }
 
 class DarkTheme : Theme
@@ -155,4 +181,6 @@ class DarkTheme : Theme
     public override Color MediumForeground => Color.FromArgb("#ADB5BD");
 
     public override Color Neutral => Color.FromRgba("#152033");
+
+    public override Color Green => Color.FromArgb("#2CC069");
 }

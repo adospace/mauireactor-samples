@@ -8,7 +8,14 @@ using System.Threading.Tasks;
 
 namespace Chateo.Pages;
 
-class AvatarPage : Component
+class AvatarPageState { }
+
+class AvatarPageProps
+{
+    public Action<string>? OnAvatarSelected { get; set; }
+}
+
+class AvatarPage : Component<AvatarPageState, AvatarPageProps>
 {
     public override VisualNode Render()
     {
@@ -32,7 +39,7 @@ class AvatarPage : Component
 
 
                 new CollectionView()
-                    .ItemsLayout(new VerticalGridItemsLayout().HorizontalItemSpacing(16).VerticalItemSpacing(16))
+                    .ItemsLayout(new VerticalGridItemsLayout().HorizontalItemSpacing(16).VerticalItemSpacing(16).Span(4))
                     .ItemsSource(Enumerable.Range(1, 8), RenderAvatarItem)
                     .VFill()
                     .Margin(0,16)
@@ -47,7 +54,14 @@ class AvatarPage : Component
         return new Image($"/images/avatar{avatarIndex}.png")
             .HeightRequest(48)
             .WidthRequest(48)
+            .OnTapped(()=> OnAvatarSelected(avatarIndex))
             ;
+    }
+
+    private void OnAvatarSelected(int avatarIndex)
+    {
+        Props.OnAvatarSelected?.Invoke($"avatar{avatarIndex}");
+        OnBackClicked();
     }
 
     private void OnBackClicked()

@@ -27,7 +27,9 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
 {
     protected override void OnMountedOrPropsChanged()
     {
-        
+        MauiControls.Routing.UnRegisterRoute("avatar");
+        Routing.RegisterRoute<AvatarPage>("avatar");
+
         base.OnMountedOrPropsChanged();
     }
 
@@ -51,20 +53,22 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                 }
                 .Padding(0,13),
 
-                Theme.Current.Image(Icon.UserPlus)
+                (State.Avatar != null ? new Image($"/images/{State.Avatar}.png") : Theme.Current.Image(Icon.UserPlus))
                     .HeightRequest(100)
-                    .Margin(0,46,0,32),
+                    .WidthRequest(100)
+                    .Margin(0,46,0,32)
+                    .OnTapped(OnOpenAvatarPage),
 
                 Theme.Current.Entry()
                     .Margin(8,0)
                     .Placeholder("First Name (Required)")
-                    .OnAfterTextChanged(text => State.FirstName = text)
+                    .OnAfterTextChanged(text => SetState(s => s.FirstName = text))
                     ,
 
                 Theme.Current.Entry()
                     .Margin(8,12,8,0)
                     .Placeholder("Last Name (Optional)")
-                    .OnAfterTextChanged(text => State.LastName = text),
+                    .OnAfterTextChanged(text => SetState(s => s.LastName = text)),
 
                 Theme.Current.PrimaryButton("Save")
                     .HeightRequest(52)
@@ -78,12 +82,20 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
 
     }
 
+    private async void OnOpenAvatarPage()
+    {
+        await MauiControls.Shell.Current.GoToAsync<AvatarPageProps>("avatar", props =>
+        {
+            props.OnAvatarSelected = (avatar) => SetState(s => s.Avatar = avatar);
+        });
+    }
+
     private async void OnSaveClicked()
     {
         var chatServer = Services.GetRequiredService<IChatServer>();
 
         var id = Guid.NewGuid();
-        var newUser = await chatServer.CreateUser(id, State.FirstName, State.LastName);
+        var newUser = await chatServer.CreateUser(id, State.FirstName, State.LastName, State.Avatar ?? throw new InvalidOperationException());
 
         Preferences.Default.SetAsJson("current_user", newUser);
 
