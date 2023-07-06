@@ -50,11 +50,13 @@ abstract class Theme
 
     public Image Image(Icon icon)
         => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+            .VCenter()
+            .HCenter()
             .HeightRequest(24)
             .WidthRequest(24);
 
     public Grid Avatar(string avatar, bool online = false)
-        => new Grid("52", "52")
+        => new Grid("*", "*")
         {
             new Image($"images/{avatar}.png")
                 .HeightRequest(48)
@@ -71,7 +73,9 @@ abstract class Theme
                 .HEnd()
                 .VStart()
                 .IsVisible(online)
-        };
+        }
+        .HeightRequest(52)
+        .WidthRequest(52);
 
     public Border BorderedImage(Icon icon)
         => new Border
@@ -142,7 +146,9 @@ public enum Icon
 
     StoryPlus,
 
-    Send
+    Send,
+
+    Menu
 
 }
 

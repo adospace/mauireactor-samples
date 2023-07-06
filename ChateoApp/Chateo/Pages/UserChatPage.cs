@@ -72,29 +72,44 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         {
             new Grid("58, *, 56", "*")
             {
-                new Grid("*", "24, 36, *")
+                new Grid("*", "24, 48, *, 32, 24")
                 {
                     Theme.Current.Image(Icon.Back)
-                        .VEnd()
                         .OnTapped(OnBackClicked),
 
                     Theme.Current.Avatar(Props.OtherUser.Avatar)
-                        .Margin(8,0)
+                        .HeightRequest(24)
+                        .WidthRequest(24)
+                        .VCenter()
+                        .HEnd()
                         .GridColumn(1),
 
                     Theme.Current.Label($"{Props.OtherUser.FirstName} {Props.OtherUser.LastName}")
-                        .VEnd()
-                        .Margin(8,0)
+                        .VCenter()
+                        .Margin(24,0,8,0)
                         .FontSize(18)
                         .GridColumn(2),
+
+                    Theme.Current.Image(Icon.Search)
+                        .Margin(0,0,8,0)
+                        .GridColumn(3),
+
+
+                    Theme.Current.Image(Icon.Menu)
+                        .GridColumn(4)
                 }
                 .Padding(0,13),
 
-                new CollectionView()
-                    .ItemsSource(State.Messages, RenderMessageItem)
+                new Border()
                     .GridRow(1)
                     .BackgroundColor(Theme.Current.MediumBackground)
-                    .Margin(-16,16),
+                    .Margin(-16,0),
+
+                new CollectionView()
+                    .ItemsSource(State.Messages, RenderMessageItem)
+                    .ItemsUpdatingScrollMode(MauiControls.ItemsUpdatingScrollMode.KeepLastItemInView)
+                    .GridRow(1)
+                    .Margin(0,16),
 
                 RenderEntryBox()
                     .GridRow(2),
@@ -140,7 +155,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start)
         .StrokeCornerRadius(myMessage ? new CornerRadius(16, 16, 16, 0) : new CornerRadius(16, 16, 0, 16))
         .Padding(10)
-        .Margin(16,0,16,12);
+        .Margin(0,0,0,12);
     }
 
     private void OnNewMessage(MessageViewModel message)
