@@ -12,7 +12,7 @@ public class Message
 
     public required DateTime TimeStamp { get; set; }
 
-    public bool Seen { get; set; }
+    public DateTime? ReadTimeStamp { get; set; }
 
     public static List<Message> All { get; } = new();
 }

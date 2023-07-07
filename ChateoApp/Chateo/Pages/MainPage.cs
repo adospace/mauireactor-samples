@@ -1,4 +1,5 @@
-﻿using Chateo.Services;
+﻿using Chateo.Resources.Styles;
+using Chateo.Services;
 using Chateo.Shared;
 using MauiReactor;
 using MauiReactor.Parameters;
@@ -32,6 +33,16 @@ class MainPage : Component<MainPageState>
         _mainState = CreateParameter<MainState>();
     }
 
+    protected override void OnMounted()
+    {
+        if (MauiControls.Application.Current != null)
+        {
+            MauiControls.Application.Current.RequestedThemeChanged += (sender, args) => Invalidate();
+        }
+        
+        base.OnMounted();
+    }
+
     protected override async void OnMountedOrPropsChanged()
     {
         var chatServer = Services.GetRequiredService<IChatServer>();
@@ -58,7 +69,6 @@ class MainPage : Component<MainPageState>
         base.OnMountedOrPropsChanged();
     }
 
-
     public override VisualNode Render()
     {
         if (State.Loading)
@@ -70,7 +80,8 @@ class MainPage : Component<MainPageState>
                     .IsRunning(true)
                     .HCenter()
                     .VCenter()
-            };
+            }
+            .BackgroundColor(Theme.Current.Background);
         }
 
         if (_mainState.Value.CurrentUser == null)

@@ -78,6 +78,7 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
             }
             .Margin(16)
         }
+        .BackgroundColor(Theme.Current.Background)
         .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
 
     }

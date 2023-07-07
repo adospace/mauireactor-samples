@@ -57,9 +57,9 @@ class LandingPage : Component
                 }
                 .Margin(24, 90, 24, 54)
             }
+            .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
         }
-        .BackgroundColor(Theme.Current.Background)
         ;
     }
 

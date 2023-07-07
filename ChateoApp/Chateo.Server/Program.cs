@@ -29,7 +29,11 @@ app.MapPost("/users/create", (IHubContext<ChatHub> chatHub, UserCreateModel crea
         LastSeen = now,
     });
 
-    chatHub.Clients.All.SendAsync("UserCreated", new UserViewModel(createModel.Id, createModel.FirstName, createModel.LastName, createModel.Avatar, now));
+    var userCreated = new UserViewModel(createModel.Id, createModel.FirstName, createModel.LastName, createModel.Avatar, now);
+    
+    chatHub.Clients.All.SendAsync("UserCreated", userCreated);
+
+    return userCreated;
 });
 
 app.MapPost("/users/update", (IHubContext<ChatHub> chatHub, UserUpdatedModel updateModel) =>
@@ -39,7 +43,11 @@ app.MapPost("/users/update", (IHubContext<ChatHub> chatHub, UserUpdatedModel upd
     user.TypingToUserId = updateModel.TypingToUserId;
     user.LastSeen = now;
 
-    chatHub.Clients.All.SendAsync("UserUpdated", new UserViewModel(user.Id, user.FirstName, user.LastName, user.Avatar, user.LastSeen));
+    var userUpdated = new UserViewModel(user.Id, user.FirstName, user.LastName, user.Avatar, user.LastSeen);
+
+    chatHub.Clients.All.SendAsync("UserUpdated", userUpdated);
+
+    return userUpdated;
 });
 
 app.MapDelete("/users", (IHubContext<ChatHub> chatHub, Guid id) =>
@@ -49,7 +57,7 @@ app.MapDelete("/users", (IHubContext<ChatHub> chatHub, Guid id) =>
     chatHub.Clients.All.SendAsync("UserDeleted", id);
 });
 
-app.MapGet("/messages", () => Message.All.Select(_=> new MessageViewModel(_.Id, _.FromUserId, _.ToUserId, _.Content, _.TimeStamp)));
+app.MapGet("/messages", () => Message.All.Select(_=> new MessageViewModel(_.Id, _.FromUserId, _.ToUserId, _.Content, _.TimeStamp, _.ReadTimeStamp)));
 
 app.MapPost("/messages/create", (IHubContext<ChatHub> chatHub, MessageCreateModel createModel) =>
 {
@@ -63,7 +71,25 @@ app.MapPost("/messages/create", (IHubContext<ChatHub> chatHub, MessageCreateMode
         TimeStamp = now,
     });
 
-    chatHub.Clients.All.SendAsync("MessageCreated", new MessageViewModel(createModel.Id, createModel.FromUserId, createModel.ToUserId, createModel.Content, now));
+    var newMessage = new MessageViewModel(createModel.Id, createModel.FromUserId, createModel.ToUserId, createModel.Content, now, null);
+
+    chatHub.Clients.All.SendAsync("MessageCreated", newMessage);
+
+    return newMessage;
+});
+
+app.MapPost("/messages/update", (IHubContext<ChatHub> chatHub, MessageUpdateModel updateModel) =>
+{
+    var now = DateTime.Now;
+    var message = Message.All.First(_ => _.Id == updateModel.Id);
+
+    message.ReadTimeStamp = DateTime.Now;
+
+    var updatedMessage = new MessageViewModel(message.Id, message.FromUserId, message.ToUserId, message.Content, message.TimeStamp, message.ReadTimeStamp);
+
+    chatHub.Clients.All.SendAsync("MessageUpdated", updatedMessage);
+
+    return updatedMessage;
 });
 
 app.MapHub<ChatHub>("/chat-hub");

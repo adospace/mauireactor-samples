@@ -35,20 +35,8 @@ Content-Type: application/json
 {
     "Id": "e6f27674-3f8f-4600-9a81-d4b7ce6bbfda",
     "FromUserId": "3a492999-a9d6-4b78-8ab1-afb681c91f36",
-    "ToUserId": "59d7915f-1aa5-4f1a-be6a-bbcb587ed920",
-    "Content": "Message generated 3"
-}
-
-###
-
-POST http://{{hostname}}:{{port}}/messages/create
-Content-Type: application/json
-
-{
-    "Id": "e6f27674-3f8f-4600-9a81-d4b7ce6bbfda",
-    "FromUserId": "d906a6ba-857b-448d-baf9-de2f6606d8e0",
-    "ToUserId": "59d7915f-1aa5-4f1a-be6a-bbcb587ed920",
-    "Content": "Message generated 1 from second user generated"
+    "ToUserId": "351b1dd9-0978-46a8-8642-999fb69fa6b0",
+    "Content": "Message generated adasdasdas"
 }
 
 ###

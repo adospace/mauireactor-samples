@@ -35,13 +35,34 @@ internal class ChatServer : IChatServer
 
         res.EnsureSuccessStatusCode();
 
-        var allUsers = await GetAllUsers();
-
-        return allUsers.First(_ => _.Id == id);
+        return await res.Content.ReadFromJsonAsync<UserViewModel>() ?? throw new InvalidOperationException();
     }
     public async Task<UserViewModel[]> GetAllUsers()
     {
         return await _httpClient.GetFromJsonAsync<UserViewModel[]>("/users") ?? throw new InvalidOperationException();
+    }
+
+    public async Task<MessageViewModel[]> GetAllMessages()
+    {
+        return await _httpClient.GetFromJsonAsync<MessageViewModel[]>("/messages") ?? throw new InvalidOperationException();
+    }
+
+    public async Task<MessageViewModel> CreateMessage(Guid id, Guid fromUserId, Guid toUserId, string content)
+    {
+        var res = await _httpClient.PostAsJsonAsync("/messages/create", new MessageCreateModel(id, fromUserId, toUserId, content));
+
+        res.EnsureSuccessStatusCode();
+
+        return await res.Content.ReadFromJsonAsync<MessageViewModel>() ?? throw new InvalidOperationException();
+    }
+
+    public async Task<MessageViewModel> UpdateMessage(Guid id)
+    {
+        var res = await _httpClient.PostAsJsonAsync("/messages/update", new MessageUpdateModel(id));
+
+        res.EnsureSuccessStatusCode();
+
+        return await res.Content.ReadFromJsonAsync<MessageViewModel>() ?? throw new InvalidOperationException();
     }
 
     public async Task StartListener()
@@ -51,14 +72,17 @@ internal class ChatServer : IChatServer
             return;
         }
 
-        _connection.On("MessageCreated",
-            (MessageViewModel model) => MessageCreatedCallback?.Invoke(model));
         _connection.On("UserCreated",
             (UserViewModel model) => UserCreatedCallback?.Invoke(model));
         _connection.On("UserUpdated",
             (UserViewModel model) => UserUpdatedCallback?.Invoke(model));
-        _connection.On("NotifyUserDeleted",
+        _connection.On("UserDeleted",
             (Guid id) => UserDeletedCallback?.Invoke(id));
+
+        _connection.On("MessageCreated",
+            (MessageViewModel model) => MessageCreatedCallback?.Invoke(model));
+        _connection.On("MessageUpdated",
+            (MessageViewModel model) => MessageUpdatedCallback?.Invoke(model));
 
         await _connection.StartAsync();
     }
@@ -73,12 +97,9 @@ internal class ChatServer : IChatServer
         await _connection.StopAsync();
     }
 
-    public async Task<MessageViewModel[]> GetAllMessages()
-    {
-        return await _httpClient.GetFromJsonAsync<MessageViewModel[]>("/messages") ?? throw new InvalidOperationException();
-    }
-
     public Action<MessageViewModel>? MessageCreatedCallback { get; set; }
+
+    public Action<MessageViewModel>? MessageUpdatedCallback { get; set; }
 
     public Action<UserViewModel>? UserCreatedCallback { get; set; }
 

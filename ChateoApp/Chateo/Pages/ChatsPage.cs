@@ -75,20 +75,7 @@ class ChatsPage : Component<ChatsPageState>
                     :
             new Grid("56,108,52,*, 83", "*")
             {
-                new Grid("24", "*, 32, 24")
-                {
-                    Theme.Current.Label("Chats")
-                        .FontSize(18),
-
-                    Theme.Current.Image(Icon.Comment)
-                        .GridColumn(1)
-                        .Margin(0,0,8,0),
-
-                    Theme.Current.Image(Icon.Check)
-                        .GridColumn(2)
-                }
-                .VEnd()
-                .Margin(0,13),
+                RenderTitleBar(),
 
                 new ScrollView
                 {
@@ -136,11 +123,28 @@ class ChatsPage : Component<ChatsPageState>
                     .ItemsSource(State.Items, RenderChatItem)
                     .Margin(0, 16)
                     .GridRow (3),
-
             }
         }
         .Margin(24, 16);
         ;
+    }
+
+    VisualNode RenderTitleBar()
+    {
+        return new Grid("24", "*, 32, 24")
+        {
+            Theme.Current.Label("Chats")
+                .FontSize(18),
+
+            Theme.Current.Image(Icon.Comment)
+                .GridColumn(1)
+                .Margin(0,0,8,0),
+
+            Theme.Current.Image(Icon.Check)
+                .GridColumn(2)
+        }
+        .VEnd()
+        .Margin(0, 13);
     }
 
     VisualNode RenderStoryItem(string label, Border image)

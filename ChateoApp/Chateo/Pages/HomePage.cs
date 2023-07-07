@@ -37,10 +37,9 @@ class HomePage : Component<HomePageState>
                         .GridRow(1)
                 }
             }
+            .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
-        }
-        .BackgroundColor(Theme.Current.Background)
-        ;
+        };
     }
 
     VisualNode RenderCurrentPage()

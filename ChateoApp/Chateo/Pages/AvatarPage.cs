@@ -46,6 +46,7 @@ class AvatarPage : Component<AvatarPageState, AvatarPageProps>
             }
             .Margin(16)
         }
+        .BackgroundColor(Theme.Current.Background)
         .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
     }
 

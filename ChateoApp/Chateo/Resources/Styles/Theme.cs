@@ -11,7 +11,17 @@ abstract class Theme
     public static LightTheme Light { get; } = new();
     public static DarkTheme Dark { get; } = new();
 
-    public static Theme Current => MauiControls.Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark ? Dark : Light;
+    public static bool IsDarkTheme => MauiControls.Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+
+    public static Theme Current => IsDarkTheme ? Dark : Light;
+
+    public static void ToggleCurrentAppTheme()
+    {
+        if (MauiControls.Application.Current != null)
+        {
+            MauiControls.Application.Current.UserAppTheme = IsDarkTheme ? Microsoft.Maui.ApplicationModel.AppTheme.Light : Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+        }
+    }
 
     public abstract Color Background { get; }
 
@@ -47,6 +57,19 @@ abstract class Theme
             .FontFamily("MulishSemiBold")
             .TextColor(ForegroundAccent)
             .BackgroundColor(Accent);
+
+
+    public ImageButton ImageButton(string image)
+        => new ImageButton(image)
+            .BackgroundColor(Colors.Transparent)
+            .BorderWidth(0)
+            .BorderColor(Colors.Transparent);
+
+    public ImageButton ImageButton(Icon icon)
+        => new ImageButton($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+            .BackgroundColor(Colors.Transparent)
+            .BorderWidth(0)
+            .BorderColor(Colors.Transparent);
 
     public Image Image(Icon icon)
         => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
@@ -148,7 +171,13 @@ public enum Icon
 
     Send,
 
-    Menu
+    Menu,
+
+    Forward,
+
+    Account,
+
+    Appearance,
 
 }
 

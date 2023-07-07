@@ -7,6 +7,20 @@ namespace Chateo.Services;
 
 public interface IChatServer
 {
+    Task<MessageViewModel[]> GetAllMessages();
+
+    Task<UserViewModel[]> GetAllUsers();
+
+    Task<UserViewModel> CreateUser(Guid id, string firstName, string lastName, string avatar);
+
+    Task<MessageViewModel> CreateMessage(Guid id, Guid FromUserId, Guid ToUserId, string Content);
+
+    Task<MessageViewModel> UpdateMessage(Guid id);
+
+    Task StartListener();
+
+    Task StopListener();
+
     Action<MessageViewModel>? MessageCreatedCallback { get; set; }
 
     Action<UserViewModel>? UserCreatedCallback { get; set; }
@@ -14,14 +28,7 @@ public interface IChatServer
     Action<Guid>? UserDeletedCallback { get; set; }
 
     Action<UserViewModel>? UserUpdatedCallback { get; set; }
-    
-    Task<MessageViewModel[]> GetAllMessages();
 
-    Task<UserViewModel[]> GetAllUsers();
+    public Action<MessageViewModel>? MessageUpdatedCallback { get; set; }
 
-    Task<UserViewModel> CreateUser(Guid id, string firstName, string lastName, string avatar);
-
-    Task StartListener();
-
-    Task StopListener();
 }
