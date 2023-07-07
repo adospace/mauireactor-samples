@@ -4,6 +4,7 @@ using Chateo.Shared;
 using Humanizer;
 using MauiReactor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Devices;
 using Microsoft.Maui.Platform;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ class UserChatPageState
     public ObservableCollection<MessageViewModel> Messages { get; set; } = new();
     
     public string CurrentMessage { get; set; } = string.Empty;
+
+#if IOS
+    //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+    public double BodyHeight { get; set; }
+#endif
 }
 
 class UserChatPageProps
@@ -79,6 +85,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                     .IsRunning(true)
                     .HCenter()
                     .VCenter()
+                    .GridRow(1)
             }
             .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
@@ -94,6 +101,10 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 
                 RenderEntryBox(),
             }
+#if IOS
+            //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+            .OnSizeChanged(size => SetState(s => s.BodyHeight = size.Height, false))
+#endif
             .Margin(16)
         }
         .BackgroundColor(Theme.Current.Background)
@@ -150,6 +161,10 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                         ((MauiControls.CollectionView?)sender)?.ScrollTo(State.Messages[State.Messages.Count-1]);
                     }
                 }))
+#if IOS
+                //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+                .HeightRequest(()=>State.BodyHeight - 58 - 56)
+#endif
                 .Margin(0, 16)
                 .GridRow(1)
         };
@@ -168,8 +183,11 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                 .Placeholder("Message")
                 .FontSize(14)
                 .VerticalTextAlignment(TextAlignment.Center)
+#if ANDROID
+                .Margin(0,10)
+#endif
                 .GridColumn(1)
-                .Margin(0,10),
+                ,
 
             Theme.Current.ImageButton(Icon.Send)
                 .IsEnabled(()=> !string.IsNullOrWhiteSpace(State.CurrentMessage))
@@ -184,7 +202,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
     {
         bool myMessage = item.FromUserId == Props.CurrentUser?.Id;
 
-        string FormatTimeStamp(DateTime timeStamp)
+        static string FormatTimeStamp(DateTime timeStamp)
         {
             if (timeStamp.Date == DateTime.Today)
             {
@@ -203,9 +221,13 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                     .FontSize(14)
                     .HeightRequest(24)
                     .VerticalTextAlignment(TextAlignment.Center)
-                    .VFill(),
+                    .VFill()
+#if IOS
+                    .Margin(myMessage ? 10 : 0,0)
+#endif
+                    ,
 
-                new Label(myMessage ? FormatTimeStamp(item.TimeStamp) : (item.ReadTimeStamp != null ? $"{FormatTimeStamp(item.TimeStamp)} - Read" : FormatTimeStamp(item.TimeStamp)))
+                new Label(!myMessage ? FormatTimeStamp(item.TimeStamp) : (item.ReadTimeStamp != null ? $"{FormatTimeStamp(item.TimeStamp)} - Read" : FormatTimeStamp(item.TimeStamp)))
                     .TextColor(myMessage ? Theme.Current.ForegroundAccent : Theme.Current.Foreground)
                     .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start),
             }
@@ -214,6 +236,8 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start)
         .StrokeCornerRadius(myMessage ? new CornerRadius(16, 16, 16, 0) : new CornerRadius(16, 16, 0, 16))
         .Padding(10)
+
+
         .Margin(0,0,0,12)
         .MinimumWidthRequest(200);
     }

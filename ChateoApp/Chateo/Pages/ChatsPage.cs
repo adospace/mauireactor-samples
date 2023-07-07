@@ -31,9 +31,6 @@ class ChatsPage : Component<ChatsPageState>
 
     protected override async void OnMountedOrPropsChanged()
     {
-        MauiControls.Routing.UnRegisterRoute("chat");
-        Routing.RegisterRoute<UserChatPage>("chat");
-
         var chatServer = Services.GetRequiredService<IChatServer>();
 
         State.IsLoading = true;
@@ -83,9 +80,9 @@ class ChatsPage : Component<ChatsPageState>
                     {
                         RenderStoryItem("Your Story", Theme.Current.BorderedImage(Icon.StoryPlus)),
 
-                        RenderStoryItem("Story 1", Theme.Current.BorderedImage("/images/avatar1.png")),
+                        RenderStoryItem("Story 1", Theme.Current.BorderedImage("avatar1.png")),
 
-                        RenderStoryItem("Story 2", Theme.Current.BorderedImage("/images/avatar2.png"))
+                        RenderStoryItem("Story 2", Theme.Current.BorderedImage("avatar2.png"))
                     }
                 }
                 .Margin(0,16)
@@ -160,7 +157,10 @@ class ChatsPage : Component<ChatsPageState>
         };
 
     VisualNode RenderChatItem(ChatItem item)
-        => new Grid("*, *", "56, *")
+    {
+        var notSeen = item.Messages.Count(_ => _.ReadTimeStamp == null);
+
+        return new Grid("*, *", "56, *")
         {
             Theme.Current.Avatar(item.User.Avatar, (DateTime.Now - item.User.LastSeen).TotalMinutes < 2)
                 .GridRowSpan(2),
@@ -187,24 +187,27 @@ class ChatsPage : Component<ChatsPageState>
                     .TextColor(Theme.Current.MediumForeground)
                     .VerticalTextAlignment(TextAlignment.Center),
 
+                notSeen > 0 ?
                 new Grid
                 {
                     new Ellipse()
                         .Fill(Theme.Current.MediumBackground),
 
-                    Theme.Current.Label(item.Messages.Length.ToString())
+                    Theme.Current.Label(notSeen.ToString())
                         .VerticalTextAlignment(TextAlignment.Center)
                         .HorizontalTextAlignment(TextAlignment.Center)
                 }
                 .GridColumn(1)
+                : null
             }
             .Margin(12,0,0,0)
             .HFill()
             .GridColumn(1)
             .GridRow(2)
         }
-        .OnTapped(()=> OnOpenUserChatPage(item))
-        .Margin(0,16,0,0);
+        .OnTapped(() => OnOpenUserChatPage(item))
+        .Margin(0, 16, 0, 0);
+    }
 
     private async void OnOpenUserChatPage(ChatItem item)
     {

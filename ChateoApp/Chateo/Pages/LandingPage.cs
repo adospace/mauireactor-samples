@@ -29,7 +29,8 @@ class LandingPage : Component
             {
                 new Grid("*,*,24,70", "*")
                 {
-                    new Image("images/landing.png")
+                    new Image("landing.png")
+                        .HeightRequest(262)
                         .WidthRequest(262),
 
                     new Label("Connect easily with your family and friends over countries")

@@ -29,8 +29,14 @@ class TabBarComponent : Component
 
     public override VisualNode Render()
     {
-        return new Grid("83", "* * *")
+        return new Grid("*", "* * *")
         {
+            new Rectangle()
+                .HeightRequest(2)
+                .Fill(Theme.Current.MediumForeground)
+                .GridColumnSpan(3)
+                .VStart(),
+
             RenderButtonIcon(Pages.Page.Contacts),
 
             RenderButtonIcon(Pages.Page.Chats)
@@ -39,8 +45,7 @@ class TabBarComponent : Component
             RenderButtonIcon(Pages.Page.Settings)
                 .GridColumn(2),
         }
-        .BackgroundColor(Theme.Current.Background)
-        .Shadow(new Shadow());
+        .BackgroundColor(Theme.Current.Background);
     }
 
     static Icon GetIconFromPage(Page page)
@@ -54,7 +59,7 @@ class TabBarComponent : Component
 
     Grid RenderButtonIcon(Page page)
         => _page == page ?
-        new Grid()
+        new Grid
         {
             Theme.Current.Label(page.ToString())
                 .HorizontalTextAlignment(TextAlignment.Center)

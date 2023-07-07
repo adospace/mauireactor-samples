@@ -52,7 +52,7 @@ class AvatarPage : Component<AvatarPageState, AvatarPageProps>
 
     private VisualNode RenderAvatarItem(int avatarIndex)
     {
-        return new Image($"/images/avatar{avatarIndex}.png")
+        return new Image($"avatar{avatarIndex}.png")
             .HeightRequest(48)
             .WidthRequest(48)
             .OnTapped(()=> OnAvatarSelected(avatarIndex))

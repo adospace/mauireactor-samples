@@ -1,5 +1,6 @@
 ﻿
 
+using Chateo.Controls;
 using MauiReactor;
 using MauiReactor.Shapes;
 using System;
@@ -45,9 +46,10 @@ abstract class Theme
             .FontFamily("MulishSemiBold")
             .TextColor(Foreground);
 
-    public Entry Entry()
-        => new Entry()
+    public BorderlessEntry Entry()
+        => new BorderlessEntry()
             .FontFamily("MulishSemiBold")
+            .PlaceholderColor(MediumForeground)
             .TextColor(Foreground)
         ;
 
@@ -66,13 +68,13 @@ abstract class Theme
             .BorderColor(Colors.Transparent);
 
     public ImageButton ImageButton(Icon icon)
-        => new ImageButton($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+        => new ImageButton($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
             .BackgroundColor(Colors.Transparent)
             .BorderWidth(0)
             .BorderColor(Colors.Transparent);
 
     public Image Image(Icon icon)
-        => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+        => new Image($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
             .VCenter()
             .HCenter()
             .HeightRequest(24)
@@ -81,7 +83,7 @@ abstract class Theme
     public Grid Avatar(string avatar, bool online = false)
         => new Grid("*", "*")
         {
-            new Image($"images/{avatar}.png")
+            new Image($"{avatar}.png")
                 .HeightRequest(48)
                 .WidthRequest(48)
                 .HCenter()
@@ -109,9 +111,9 @@ abstract class Theme
                 .VCenter()
                 .HCenter()
         }
-        .Margin(-2)
+        .Margin(0)
         .Stroke(MediumForeground)
-        .StrokeThickness(2)
+        .StrokeThickness(3)
         .StrokeCornerRadius(18);
 
     public Border BorderedImage(string image, bool highlighted = false)
@@ -123,9 +125,9 @@ abstract class Theme
                 .VCenter()
                 .HCenter()
         }
-        .Margin(-2)
+        .Margin(0)
         .Stroke(MediumForeground)
-        .StrokeThickness(2)
+        .StrokeThickness(3)
         .StrokeCornerRadius(18);
 }
 

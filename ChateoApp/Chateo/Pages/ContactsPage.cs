@@ -48,68 +48,76 @@ public class ContactsPage : Component<ContactsPageState>
 
     public override VisualNode Render()
     {
-        if (State.IsLoading)
+        return new Grid
         {
-            return new ActivityIndicator()
-                    .IsVisible(true)
-                    .IsRunning(true)
-                    .HCenter()
-                    .VCenter(); 
-        }
+            State.IsLoading ?
+                new ActivityIndicator()
+                        .IsVisible(true)
+                        .IsRunning(true)
+                        .HCenter()
+                        .VCenter()
+            :
 
-        return new Grid("56,68,*", "*")
-        {
-            new Grid("24", "*, 24")
+            new Grid("56,68,*", "*")
             {
-                Theme.Current.Label("Contacts")
-                    .FontSize(18),
-
-                Theme.Current.Image(Icon.Plus)
-                    .GridColumn(1)
-            }
-            .VEnd()
-            .Margin(0,13),
-
-            new Border
-            {
-                new Grid
+                new Grid("24", "*, 24")
                 {
-                    Theme.Current.Image(Icon.Search)
-                        .HeightRequest(24)
-                        .HStart()
-                        .Margin(8),
+                    Theme.Current.Label("Contacts")
+                        .FontSize(18),
 
-                    Theme.Current.Entry()
-                        .Placeholder("Search")
-                        .Margin(32,0,4,0)
+                    Theme.Current.Image(Icon.Plus)
+                        .GridColumn(1)
                 }
-            }
-            .BackgroundColor(Theme.Current.MediumBackground)
-            .StrokeShape(new RoundRectangle().CornerRadius(4))
-            .HeightRequest(36)
-            .Margin(0, 16)
-            .GridRow(1),
+                .VEnd()
+                .Margin(0,13),
 
-            new CollectionView()
-                .ItemsSource(State.Users, RenderContactItem)
-                .GridRow(2)
-        }
-        .Margin(24, 16);
+                new Border
+                {
+                    new Grid
+                    {
+                        Theme.Current.Image(Icon.Search)
+                            .HeightRequest(24)
+                            .HStart()
+                            .Margin(8),
+
+                        Theme.Current.Entry()
+                            .Placeholder("Search")
+                            .Margin(32,0,4,0)
+                    }
+                }
+                .BackgroundColor(Theme.Current.MediumBackground)
+                .StrokeShape(new RoundRectangle().CornerRadius(4))
+                .HeightRequest(36)
+                .Margin(0, 16)
+                .GridRow(1),
+
+                new CollectionView()
+                    .ItemsSource(State.Users, RenderContactItem)
+                    .GridRow(2)
+            }
+            .Margin(24, 16)
+        };
     }
 
-    private VisualNode RenderContactItem(UserViewModel model)
+    private VisualNode RenderContactItem(UserViewModel user)
     {
-        var lastSeen = DateTime.Now - model.LastSeen;
+        var lastSeen = DateTime.Now - user.LastSeen;
         var online = lastSeen.TotalMinutes < 2;
 
-        return new Grid("68", "56, *")
+        return new Grid("68,2", "56, *")
         {
-            new Image($"/images/{model.Avatar}.png")
+            new Rectangle()
+                .Fill(Theme.Current.Neutral)
+                .GridColumnSpan(2)
+                .GridRow(1)
+                .VEnd(),
+
+            new Image($"{user.Avatar}.png")
                 .Margin(0,0,0,12),
 
             new VStack
             {
-                Theme.Current.Label($"{model.FirstName} {model.LastName}")
+                Theme.Current.Label($"{user.FirstName} {user.LastName}")
                     .FontSize(14)
                     .HeightRequest(24)
                     .VerticalTextAlignment(TextAlignment.Center),
@@ -122,13 +130,8 @@ public class ContactsPage : Component<ContactsPageState>
             }
             .Margin(12,0,0,12)
             .GridColumn (1),
-
-            new Rectangle()
-                .HeightRequest(1)
-                .Fill(Theme.Current.Neutral)
-                .GridColumnSpan(2)
-                .VEnd()
-        };
+        }
+        .OnTapped(()=> OnOpenUserChatPage(user));
     }
 
     private void OnNewUser(UserViewModel user)
@@ -158,4 +161,15 @@ public class ContactsPage : Component<ContactsPageState>
         }
     }
 
+    private async void OnOpenUserChatPage(UserViewModel otherUser)
+    {
+        var mainState = GetParameter<MainState>();
+        var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
+
+        await MauiControls.Shell.Current.GoToAsync<UserChatPageProps>("chat", props =>
+        {
+            props.OtherUser = otherUser;
+            props.CurrentUser = currentUser;
+        });
+    }
 }

@@ -53,7 +53,7 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                 }
                 .Padding(0,13),
 
-                (State.Avatar != null ? new Image($"/images/{State.Avatar}.png") : Theme.Current.Image(Icon.UserPlus))
+                (State.Avatar != null ? new Image($"{State.Avatar}.png") : Theme.Current.Image(Icon.UserPlus))
                     .HeightRequest(100)
                     .WidthRequest(100)
                     .Margin(0,46,0,32)
