@@ -4,6 +4,8 @@ using Chateo.Shared;
 using Humanizer;
 using MauiReactor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Platform;
 using System;
@@ -23,10 +25,17 @@ class UserChatPageState
     
     public string CurrentMessage { get; set; } = string.Empty;
 
-#if IOS
-    //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+    public float KeyboardHeight { get; set; }
+
+    //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
     public double BodyHeight { get; set; }
-#endif
+
+    //Page padding under iOS
+    public Thickness PagePadding { get; set; }
+
+    public double TitleBarHeight { get; set; }
+
+    public double EntryBoxHeight { get; set; }
 }
 
 class UserChatPageProps
@@ -38,6 +47,35 @@ class UserChatPageProps
 
 class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 {
+#if IOS
+    const double EntryBoxHeight = 128;
+#else
+    const double EntryBoxHeight = 58;
+#endif
+
+    protected override void OnMounted()
+    {
+        var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
+
+        keyboardInteractionService.KeyboardHeightChanged += KeyboardInteractionService_KeyboardHeightChanged;
+
+        base.OnMounted();
+    }
+
+    private void KeyboardInteractionService_KeyboardHeightChanged(object? sender, float height)
+    {
+        SetState(s => s.KeyboardHeight = (float)Math.Max(0, height - EntryBoxHeight - s.PagePadding.Bottom));
+    }
+
+    protected override void OnWillUnmount()
+    {
+        var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
+
+        keyboardInteractionService.KeyboardHeightChanged -= KeyboardInteractionService_KeyboardHeightChanged;
+
+        base.OnWillUnmount();
+    }
+
     protected override void OnMountedOrPropsChanged()
     {
         State.IsLoading = true;
@@ -76,39 +114,57 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 
     public override VisualNode Render()
     {
-        if (State.IsLoading || Props.OtherUser == null || Props.CurrentUser == null)
-        {
-            return new ContentPage
-            {
-                new ActivityIndicator()
-                    .IsVisible(true)
-                    .IsRunning(true)
-                    .HCenter()
-                    .VCenter()
-                    .GridRow(1)
-            }
-            .BackgroundColor(Theme.Current.Background)
-            .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
-        }
-
         return new ContentPage()
         {
-            new Grid("58, *, 56", "*")
+            (State.IsLoading || Props.OtherUser == null || Props.CurrentUser == null) ?
+            new ActivityIndicator()
+                .IsVisible(true)
+                .IsRunning(true)
+                .HCenter()
+                .VCenter()
+                :
+            new Grid("Auto, *, Auto", "*")
             {
-                RenderTitleBar(),
+                RenderMessages()
+                    .OniOS(_=>_.TranslationY(-State.KeyboardHeight))
+                    .OnAndroid(_=>_.TranslationY(State.KeyboardHeight > 0 ? State.KeyboardHeight + EntryBoxHeight : 0))
+                    ,
 
-                RenderMessages(),
+                RenderTitleBar()
+                    .OnAndroid(_=>_.TranslationY(State.KeyboardHeight > 0 ? State.KeyboardHeight + EntryBoxHeight : 0)),
 
-                RenderEntryBox(),
+                RenderEntryBox()
+                    .OniOS(_=>_.TranslationY(-State.KeyboardHeight)),
             }
-#if IOS
-            //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+            //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
             .OnSizeChanged(size => SetState(s => s.BodyHeight = size.Height, false))
-#endif
-            .Margin(16)
+            
         }
+#if IOS
+        .OnAppearing((sender, args) =>
+        {
+            var page = (MauiControls.ContentPage?)sender;
+            //NOT WORKING https://github.com/dotnet/maui/issues/2657
+            //var safeAreaInsets = page?.On<iOS>().SafeAreaInsets();
+            //if (safeAreaInsets != null && page != null)
+            //{
+            //    page.Padding = customSafe.Value;
+            //}
+
+            //HACK:
+            var safeAreaInsets = Microsoft.Maui.ApplicationModel.WindowStateManager.Default.GetCurrentUIWindow()?.SafeAreaInsets;
+            if (safeAreaInsets != null && page != null)
+            {
+                SetState(s => s.PagePadding = new Thickness(-safeAreaInsets.Value.Left, -safeAreaInsets.Value.Top, -safeAreaInsets.Value.Right, -safeAreaInsets.Value.Bottom));
+            }
+        })
+#endif
+        .Padding(State.PagePadding)
         .BackgroundColor(Theme.Current.Background)
         .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
+
+        .OniOS(_=>_.Set(MauiControls.PlatformConfiguration.iOSSpecific.Page.UseSafeAreaProperty, false))
+
         ;
     }
 
@@ -124,6 +180,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                 .WidthRequest(24)
                 .VCenter()
                 .HEnd()
+                .Margin(0,13)
                 .GridColumn(1),
 
             Theme.Current.Label($"{Props.OtherUser.FirstName} {Props.OtherUser.LastName}")
@@ -139,15 +196,17 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
             Theme.Current.Image(Icon.Menu)
                 .GridColumn(4)
         }
-        .Padding(0, 13);
+        .OnSizeChanged(size => SetState(s => s.TitleBarHeight = size.Height))
+        .Padding(16, 13 - State.PagePadding.Top, 16, 13)
+        .BackgroundColor(Theme.Current.Background)
+        ;
     }
 
-    private IEnumerable<VisualNode> RenderMessages()
+    private Grid RenderMessages()
     {
-        return new VisualNode[]
+        return new Grid
         {
             new Border()
-                .GridRow(1)
                 .BackgroundColor(Theme.Current.MediumBackground)
                 .Margin(-16, 0),
 
@@ -161,21 +220,22 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                         ((MauiControls.CollectionView?)sender)?.ScrollTo(State.Messages[State.Messages.Count-1]);
                     }
                 }))
-#if IOS
-                //Hack required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
-                .HeightRequest(()=>State.BodyHeight - 58 - 56)
-#endif
+                //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
+                .OniOS(_=>_.HeightRequest(() => State.BodyHeight - State.TitleBarHeight - State.EntryBoxHeight - State.KeyboardHeight))
                 .Margin(0, 16)
-                .GridRow(1)
-        };
+        }
+        .GridRow(1);
     }
 
     private Grid RenderEntryBox()
     {
-        return new Grid("56", "48,*,48")
+        return new Grid("*", "48,*,48")
         {
             Theme.Current.Image(Icon.Plus)
-                .Margin(12,10),
+                .OnAndroid(_=>_.Margin(12,5))
+                .OniOS(_=>_.Margin(12,12))
+                .VStart()
+                ,
 
             Theme.Current.Entry()
                 .OnTextChanged(text => SetState(s => s.CurrentMessage = text, false))
@@ -183,18 +243,28 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                 .Placeholder("Message")
                 .FontSize(14)
                 .VerticalTextAlignment(TextAlignment.Center)
-#if ANDROID
-                .Margin(0,10)
-#endif
+                
+                .VStart()
                 .GridColumn(1)
+                .OnAndroid(_=>_.Margin(0, -5))
+                .OniOS(_=>_.Margin(0,5))
                 ,
 
             Theme.Current.ImageButton(Icon.Send)
                 .IsEnabled(()=> !string.IsNullOrWhiteSpace(State.CurrentMessage))
-                .Margin(12,10)
+                .OniOS(_=>_.Padding(12,0))
+                .OnAndroid(_=>_.WidthRequest(24))
+                
                 .OnClicked(SendMessage)
+                .VStart()
                 .GridColumn(2)
+        
         }
+        .HeightRequest(EntryBoxHeight - State.PagePadding.Bottom)
+        .OnSizeChanged(size => SetState(s => s.EntryBoxHeight = size.Height))
+        .BackgroundColor(Theme.Current.Background)
+        
+        .Padding(16, 13, 16, 13)
         .GridRow(2);
     }
 

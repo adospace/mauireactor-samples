@@ -23,6 +23,8 @@ public static class MauiProgram
 
         Controls.Native.BorderlessEntry.Configure();
 
+        builder.Services.AddPlatformServices();
+
         builder.Services.AddChatServices(new Uri("http://192.168.1.79:15000"));
 
         return builder.Build();
