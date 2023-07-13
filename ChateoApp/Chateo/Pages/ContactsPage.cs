@@ -17,86 +17,78 @@ namespace Chateo.Pages;
 
 public class ContactsPageState
 {
-    public bool IsLoading { get; set; }
-
     public ObservableCollection<UserViewModel> Users { get; set; } = new();
 }
 
 public class ContactsPage : Component<ContactsPageState>
 {
-    protected override async void OnMountedOrPropsChanged()
+    protected override void OnMounted()
     {
         var chatService = Services.GetRequiredService<IChatServer>();
-        
-        State.IsLoading = true;
 
-        chatService.UserCreatedCallback = this.OnNewUser;
-        chatService.UserUpdatedCallback = this.OnUserUpdated;
-        chatService.UserDeletedCallback = this.OnUserDeleted;
-
-        var allUsers = await chatService.GetAllUsers();
+        chatService.UserCreated += OnUserCreated;
+        chatService.UserUpdated += OnUserUpdated;
+        chatService.UserDeleted += OnUserDeleted;
 
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
 
-        SetState(s =>
-        {
-            s.Users = new ObservableCollection<UserViewModel>(allUsers.Where(_ => _.Id != currentUser.Id));
-            s.IsLoading = false;
-        });
+        State.Users = new ObservableCollection<UserViewModel>(chatService.Users.Where(_ => _.Id != currentUser.Id));
+
+        base.OnMounted();
+    }
+
+    protected override void OnWillUnmount()
+    {
+        var chatService = Services.GetRequiredService<IChatServer>();
+
+        chatService.UserCreated -= OnUserCreated;
+        chatService.UserUpdated -= OnUserUpdated;
+        chatService.UserDeleted -= OnUserDeleted;
+
+        base.OnWillUnmount();
     }
 
     public override VisualNode Render()
     {
-        return new Grid
+        return new Grid("56,68,*", "*")
         {
-            State.IsLoading ?
-                new ActivityIndicator()
-                        .IsVisible(true)
-                        .IsRunning(true)
-                        .HCenter()
-                        .VCenter()
-            :
-
-            new Grid("56,68,*", "*")
+            new Grid("24", "*, 24")
             {
-                new Grid("24", "*, 24")
-                {
-                    Theme.Current.Label("Contacts")
-                        .FontSize(18),
+                Theme.Current.Label("Contacts")
+                    .FontSize(18),
 
-                    Theme.Current.Image(Icon.Plus)
-                        .GridColumn(1)
-                }
-                .VEnd()
-                .Margin(0,13),
-
-                new Border
-                {
-                    new Grid
-                    {
-                        Theme.Current.Image(Icon.Search)
-                            .HeightRequest(24)
-                            .HStart()
-                            .Margin(8),
-
-                        Theme.Current.Entry()
-                            .Placeholder("Search")
-                            .Margin(32,0,4,0)
-                    }
-                }
-                .BackgroundColor(Theme.Current.MediumBackground)
-                .StrokeShape(new RoundRectangle().CornerRadius(4))
-                .HeightRequest(36)
-                .Margin(0, 16)
-                .GridRow(1),
-
-                new CollectionView()
-                    .ItemsSource(State.Users, RenderContactItem)
-                    .GridRow(2)
+                Theme.Current.Image(Icon.Plus)
+                    .GridColumn(1)
             }
-            .Margin(24, 16)
-        };
+            .VEnd()
+            .Margin(0,13),
+
+            new Border
+            {
+                new Grid
+                {
+                    Theme.Current.Image(Icon.Search)
+                        .HeightRequest(24)
+                        .HStart()
+                        .Margin(8),
+
+                    Theme.Current.Entry()
+                        .Placeholder("Search")
+                        .Margin(32,0,4,0)
+                }
+            }
+            .BackgroundColor(Theme.Current.MediumBackground)
+            .StrokeShape(new RoundRectangle().CornerRadius(4))
+            .HeightRequest(36)
+            .Margin(0, 16)
+            .GridRow(1),
+
+            new CollectionView()
+                .ItemsSource(State.Users, RenderContactItem)
+                .GridRow(2)
+        }
+        .Margin(24, 16);
     }
 
     private VisualNode RenderContactItem(UserViewModel user)
@@ -134,21 +126,16 @@ public class ContactsPage : Component<ContactsPageState>
         .OnTapped(()=> OnOpenUserChatPage(user));
     }
 
-    private void OnNewUser(UserViewModel user)
-    {
-        SetState(s => s.Users.Add(user));
-    }
-
-    private void OnUserDeleted(Guid id)
+    private void OnUserDeleted(object? sender, Guid id)
     {
         var userToDeleted = State.Users.FirstOrDefault(_ => _.Id == id);
         if (userToDeleted != null)
         {
             SetState(s => s.Users.Remove(userToDeleted));
-        }        
+        }
     }
 
-    private void OnUserUpdated(UserViewModel user)
+    private void OnUserUpdated(object? sender, UserViewModel user)
     {
         var userToReplace = State.Users.FirstOrDefault(_ => _.Id == user.Id);
         if (userToReplace != null)
@@ -159,6 +146,11 @@ public class ContactsPage : Component<ContactsPageState>
                 s.Users.Add(user);
             });
         }
+    }
+
+    private void OnUserCreated(object? sender, UserViewModel user)
+    {
+        SetState(s => s.Users.Add(user));
     }
 
     private async void OnOpenUserChatPage(UserViewModel otherUser)

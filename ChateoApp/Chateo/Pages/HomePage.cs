@@ -23,7 +23,6 @@ class HomePage : Component<HomePageState>
 {
     protected override void OnMountedOrPropsChanged()
     {
-        MauiControls.Routing.UnRegisterRoute("chat");
         Routing.RegisterRoute<UserChatPage>("chat");
 
         base.OnMountedOrPropsChanged();

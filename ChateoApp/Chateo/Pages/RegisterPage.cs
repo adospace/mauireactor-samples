@@ -27,7 +27,6 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
 {
     protected override void OnMountedOrPropsChanged()
     {
-        MauiControls.Routing.UnRegisterRoute("avatar");
         Routing.RegisterRoute<AvatarPage>("avatar");
 
         base.OnMountedOrPropsChanged();

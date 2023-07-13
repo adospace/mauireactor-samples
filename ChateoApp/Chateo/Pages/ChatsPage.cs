@@ -19,8 +19,6 @@ record ChatItem(UserViewModel User, MessageViewModel[] Messages);
 
 class ChatsPageState
 {
-    public bool IsLoading { get; set; }
-
     public ObservableCollection<ChatItem> Items { get; set; } = new();
 
     public ChatItem? SelectedItem { get; set; }
@@ -28,99 +26,93 @@ class ChatsPageState
 
 class ChatsPage : Component<ChatsPageState>
 {
-
-    protected override async void OnMountedOrPropsChanged()
+    protected override void OnMounted()
     {
         var chatServer = Services.GetRequiredService<IChatServer>();
-
-        State.IsLoading = true;
-
-        var messages = await chatServer.GetAllMessages();
-        var users = await chatServer.GetAllUsers();
 
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
 
-        var myMessages = messages.Where(_ => _.ToUserId == currentUser.Id).ToArray();
+        var myMessages = chatServer.Messages.Where(_ => _.ToUserId == currentUser.Id).ToArray();
 
-        var items = users
+        var items = chatServer.Users
             .Select(_ => new ChatItem(User: _, Messages: myMessages.Where(x => x.FromUserId == _.Id).OrderBy(_ => _.TimeStamp).ToArray()))
             .Where(_ => _.Messages.Any())
             .ToArray();
 
-        chatServer.MessageCreatedCallback = this.OnNewMessage;
-
         SetState(s =>
         {
             s.Items = new ObservableCollection<ChatItem>(items);
-            s.IsLoading = false;
         });
 
-        base.OnMountedOrPropsChanged();
+        chatServer.MessageCreated += OnMessageCreated;
+        chatServer.MessageUpdated += OnMessageUpdated;
+
+        base.OnMounted();
+    }
+
+    protected override void OnWillUnmount()
+    {
+        var chatServer = Services.GetRequiredService<IChatServer>();
+
+        chatServer.MessageCreated -= OnMessageCreated;
+        chatServer.MessageUpdated -= OnMessageUpdated;
+
+        base.OnWillUnmount();
     }
 
     public override VisualNode Render()
     {
-        return new Grid
+        return new Grid("56,108,52,*, 83", "*")
         {
-            State.IsLoading ?
-            new ActivityIndicator()
-                    .IsVisible(true)
-                    .IsRunning(true)
-                    .HCenter()
-                    .VCenter()
-                    :
-            new Grid("56,108,52,*, 83", "*")
+            RenderTitleBar(),
+
+            new ScrollView
             {
-                RenderTitleBar(),
-
-                new ScrollView
+                new HStack(spacing: 16)
                 {
-                    new HStack(spacing: 16)
-                    {
-                        RenderStoryItem("Your Story", Theme.Current.BorderedImage(Icon.StoryPlus)),
+                    RenderStoryItem("Your Story", Theme.Current.BorderedImage(Icon.StoryPlus)),
 
-                        RenderStoryItem("Story 1", Theme.Current.BorderedImage("avatar1.png")),
+                    RenderStoryItem("Story 1", Theme.Current.BorderedImage("avatar1.png")),
 
-                        RenderStoryItem("Story 2", Theme.Current.BorderedImage("avatar2.png"))
-                    }
+                    RenderStoryItem("Story 2", Theme.Current.BorderedImage("avatar2.png"))
                 }
-                .Margin(0,16)
-                .Orientation(ScrollOrientation.Horizontal)
+            }
+            .Margin(0,16)
+            .Orientation(ScrollOrientation.Horizontal)
+            .GridRow(1),
+
+            new Rectangle()
+                .HeightRequest(2)
+                .Margin(-24,0)
+                .Fill(Theme.Current.MediumBackground)
+                .VEnd()
                 .GridRow(1),
 
-                new Rectangle()
-                    .HeightRequest(2)
-                    .Margin(-24,0)
-                    .Fill(Theme.Current.MediumBackground)
-                    .VEnd()
-                    .GridRow(1),
-
-                new Border
+            new Border
+            {
+                new Grid
                 {
-                    new Grid
-                    {
-                        Theme.Current.Image(Icon.Search)
-                            .HeightRequest(24)
-                            .HStart()
-                            .Margin(8),
+                    Theme.Current.Image(Icon.Search)
+                        .HeightRequest(24)
+                        .HStart()
+                        .Margin(8),
 
-                        Theme.Current.Entry()
-                            .Placeholder("Search")
-                            .Margin(32,0,4,0)
-                    }
+                    Theme.Current.Entry()
+                        .Placeholder("Search")
+                        .Margin(32,0,4,0)
                 }
-                .BackgroundColor(Theme.Current.MediumBackground)
-                .StrokeShape(new RoundRectangle().CornerRadius(4))
-                .HeightRequest(36)
-                .Margin(0, 16, 0, 0)
-                .GridRow(2),
-
-                new CollectionView()
-                    .ItemsSource(State.Items, RenderChatItem)
-                    .Margin(0, 16)
-                    .GridRow (3),
             }
+            .BackgroundColor(Theme.Current.MediumBackground)
+            .StrokeShape(new RoundRectangle().CornerRadius(4))
+            .HeightRequest(36)
+            .Margin(0, 16, 0, 0)
+            .GridRow(2),
+
+            new CollectionView()
+                .ItemsSource(State.Items, RenderChatItem)
+                .Margin(0, 16)
+                .GridRow (3),
         }
         .Margin(24, 16);
         ;
@@ -221,20 +213,43 @@ class ChatsPage : Component<ChatsPageState>
         });
     }
 
-    private async void OnNewMessage(MessageViewModel model)
+    private void OnMessageUpdated(object? sender, MessageViewModel message)
     {
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
-        if (model.ToUserId != currentUser.Id)
+        if (message.ToUserId != currentUser.Id)
         {
             return;
-        }    
+        }
 
-        var existingItem = State.Items.FirstOrDefault(_ => _.User.Id == model.FromUserId);
+        var existingItem = State.Items.FirstOrDefault(_ => _.User.Id == message.FromUserId);
+        if (existingItem != null)
+        {
+            var newItem = new ChatItem(existingItem.User,
+                existingItem.Messages.Replace(_ => _.Id == message.Id, message));
+
+            SetState(s =>
+            {
+                var indexToReplace = s.Items.IndexOf(existingItem);
+                s.Items[indexToReplace] = newItem;
+            });
+        }
+    }
+
+    private void OnMessageCreated(object? sender, MessageViewModel message)
+    {
+        var mainState = GetParameter<MainState>();
+        var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
+        if (message.ToUserId != currentUser.Id)
+        {
+            return;
+        }
+
+        var existingItem = State.Items.FirstOrDefault(_ => _.User.Id == message.FromUserId);
         if (existingItem != null)
         {
             var newMessageList = existingItem.Messages.ToList();
-            newMessageList.Add(model);
+            newMessageList.Add(message);
             var newItem = new ChatItem(existingItem.User, newMessageList.ToArray());
 
             SetState(s =>
@@ -246,17 +261,13 @@ class ChatsPage : Component<ChatsPageState>
         else
         {
             var chatServer = Services.GetRequiredService<IChatServer>();
-            var messages = await chatServer.GetAllMessages();
-            var users = await chatServer.GetAllUsers();
 
-            var myMessages = messages.Where(_ => _.ToUserId == currentUser.Id).ToArray();
+            var myMessages = chatServer.Messages.Where(_ => _.ToUserId == currentUser.Id).ToArray();
 
-            var items = users
+            var items = chatServer.Users
                 .Select(_ => new ChatItem(User: _, Messages: myMessages.Where(x => x.FromUserId == _.Id).OrderBy(_ => _.TimeStamp).ToArray()))
                 .Where(_ => _.Messages.Any())
                 .ToArray();
-
-            chatServer.MessageCreatedCallback = this.OnNewMessage;
 
             SetState(s =>
             {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using Microsoft.Maui.Devices;
+using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Platform;
 using System;
 using System.Collections.Generic;
@@ -53,49 +54,12 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
     const double EntryBoxHeight = 58;
 #endif
 
-    protected override void OnMounted()
+    protected override async void OnMounted()
     {
         var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
-
-        keyboardInteractionService.KeyboardHeightChanged += KeyboardInteractionService_KeyboardHeightChanged;
-
-        base.OnMounted();
-    }
-
-    private void KeyboardInteractionService_KeyboardHeightChanged(object? sender, float height)
-    {
-        SetState(s => s.KeyboardHeight = (float)Math.Max(0, height - EntryBoxHeight - s.PagePadding.Bottom));
-    }
-
-    protected override void OnWillUnmount()
-    {
-        var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
-
-        keyboardInteractionService.KeyboardHeightChanged -= KeyboardInteractionService_KeyboardHeightChanged;
-
-        base.OnWillUnmount();
-    }
-
-    protected override void OnMountedOrPropsChanged()
-    {
-        State.IsLoading = true;
-
-        LoadMessages();
-
-        base.OnMountedOrPropsChanged();
-    }
-
-    private async void LoadMessages()
-    {
         var chatServer = Services.GetRequiredService<IChatServer>();
 
-        var messages = await chatServer.GetAllMessages();
-        var users = await chatServer.GetAllUsers();
-
-        chatServer.MessageCreatedCallback = OnNewMessage;
-        chatServer.MessageUpdatedCallback = OnUpdatedMessage;
-
-        var myMessages = messages
+        var myMessages = chatServer.Messages
                     .Where(_ => (_.ToUserId == Props.CurrentUser?.Id && _.FromUserId == Props.OtherUser?.Id) || (_.ToUserId == Props.OtherUser?.Id && _.FromUserId == Props.CurrentUser?.Id))
                     .OrderBy(_ => _.TimeStamp)
                     .ToArray();
@@ -110,6 +74,32 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
             s.Messages = new ObservableCollection<MessageViewModel>(myMessages);
             s.IsLoading = false;
         }, 300); //give some time to the UI to render
+
+
+        chatServer.MessageCreated += OnMessageCreated;
+        chatServer.MessageUpdated += OnMessageUpdated;
+
+        keyboardInteractionService.KeyboardHeightChanged += KeyboardInteractionService_KeyboardHeightChanged;
+
+        base.OnMounted();
+    }
+
+    private void KeyboardInteractionService_KeyboardHeightChanged(object? sender, float height)
+    {
+        SetState(s => s.KeyboardHeight = (float)Math.Max(0, height - EntryBoxHeight - s.PagePadding.Bottom));
+    }
+
+    protected override void OnWillUnmount()
+    {
+        var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
+        var chatServer = Services.GetRequiredService<IChatServer>();
+        
+        chatServer.MessageCreated -= OnMessageCreated;
+        chatServer.MessageUpdated -= OnMessageUpdated;
+
+        keyboardInteractionService.KeyboardHeightChanged -= KeyboardInteractionService_KeyboardHeightChanged;
+
+        base.OnWillUnmount();
     }
 
     public override VisualNode Render()
@@ -213,13 +203,14 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
             new CollectionView()
                 .ItemsSource(State.Messages, RenderMessageItem)
                 .ItemsUpdatingScrollMode(MauiControls.ItemsUpdatingScrollMode.KeepLastItemInView)
-                .OnLoaded((sender, args)=> ContainerPage?.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(100), ()=>
+                .OnLoaded((sender, args) => 
                 {
                     if (State.Messages.Count > 0)
                     {
-                        ((MauiControls.CollectionView?)sender)?.ScrollTo(State.Messages[State.Messages.Count-1]);
+                        ContainerPage?.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(100), () =>
+                            ((MauiControls.CollectionView?)sender)?.ScrollTo(State.Messages[^1]));
                     }
-                }))
+                })
                 //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
                 .OniOS(_=>_.HeightRequest(() => State.BodyHeight - State.TitleBarHeight - State.EntryBoxHeight - State.KeyboardHeight))
                 .Margin(0, 16)
@@ -321,7 +312,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         SetState(s => s.CurrentMessage = string.Empty);
     }
 
-    private void OnNewMessage(MessageViewModel message)
+    private void OnMessageCreated(object? sender, MessageViewModel message)
     {
         if (!((message.ToUserId == Props.CurrentUser?.Id && message.FromUserId == Props.OtherUser?.Id) || (message.ToUserId == Props.OtherUser?.Id && message.FromUserId == Props.CurrentUser?.Id)))
         {
@@ -331,7 +322,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         SetState(s => s.Messages.Add(message));
     }
 
-    private void OnUpdatedMessage(MessageViewModel message)
+    private void OnMessageUpdated(object? sender, MessageViewModel message)
     {
         if (!((message.ToUserId == Props.CurrentUser?.Id && message.FromUserId == Props.OtherUser?.Id) || (message.ToUserId == Props.OtherUser?.Id && message.FromUserId == Props.CurrentUser?.Id)))
         {

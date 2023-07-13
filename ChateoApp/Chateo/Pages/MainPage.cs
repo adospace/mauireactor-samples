@@ -33,18 +33,13 @@ class MainPage : Component<MainPageState>
         _mainState = CreateParameter<MainState>();
     }
 
-    protected override void OnMounted()
+    protected override async void OnMounted()
     {
         if (MauiControls.Application.Current != null)
         {
             MauiControls.Application.Current.RequestedThemeChanged += (sender, args) => Invalidate();
         }
         
-        base.OnMounted();
-    }
-
-    protected override async void OnMountedOrPropsChanged()
-    {
         var chatServer = Services.GetRequiredService<IChatServer>();
 
         State.Loading = true;
@@ -55,18 +50,15 @@ class MainPage : Component<MainPageState>
 
         if (_mainState.Value.CurrentUser != null)
         {
-            var allUsers = await chatServer.GetAllUsers();
-
-            if (!allUsers.Any(_=>_.Id == _mainState.Value.CurrentUser.Id))
+            if (!chatServer.Users.Any(_=>_.Id == _mainState.Value.CurrentUser.Id))
             {
                 _mainState.Set(s => s.CurrentUser = null);
             }
-
         }
 
         SetState(s => s.Loading = false);
-
-        base.OnMountedOrPropsChanged();
+        
+        base.OnMounted();
     }
 
     public override VisualNode Render()

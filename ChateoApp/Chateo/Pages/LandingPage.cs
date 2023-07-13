@@ -16,7 +16,6 @@ class LandingPage : Component
 
     protected override void OnMountedOrPropsChanged()
     {
-        MauiControls.Routing.UnRegisterRoute("register");
         Routing.RegisterRoute<RegisterPage>("register");
         base.OnMountedOrPropsChanged();
     }
