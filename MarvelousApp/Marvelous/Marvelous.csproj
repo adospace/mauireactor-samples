@@ -49,7 +49,6 @@
     <MauiImage Remove="Resources\Images\chichen_itza_wonder_button.png" />
     <MauiImage Remove="Resources\Images\christ_the_redeemer_wonder_button.png" />
     <MauiImage Remove="Resources\Images\colosseum_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\common_compass_full.png" />
     <MauiImage Remove="Resources\Images\common_tab_artifacts.png" />
     <MauiImage Remove="Resources\Images\common_tab_artifacts_active.png" />
     <MauiImage Remove="Resources\Images\common_tab_editorial.png" />
@@ -84,7 +83,6 @@
     <EmbeddedResource Include="Resources\Images\chichen_itza_wonder_button.png" />
     <EmbeddedResource Include="Resources\Images\christ_the_redeemer_wonder_button.png" />
     <EmbeddedResource Include="Resources\Images\colosseum_wonder_button.png" />
-    <EmbeddedResource Include="Resources\Images\common_compass_full.png" />
     <EmbeddedResource Include="Resources\Images\common_tab_artifacts.png" />
     <EmbeddedResource Include="Resources\Images\common_tab_artifacts_active.png" />
     <EmbeddedResource Include="Resources\Images\common_tab_editorial.png" />
@@ -98,6 +96,10 @@
     <EmbeddedResource Include="Resources\Images\petra_wonder_button.png" />
     <EmbeddedResource Include="Resources\Images\pyramids_wonder_button.png" />
     <EmbeddedResource Include="Resources\Images\taj_mahal_wonder_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Reactor.Maui" Version="1.0.140" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
   </ItemGroup>
 
   <ItemGroup>
@@ -113,10 +115,5 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj" />
-    <ProjectReference Include="..\..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
   </ItemGroup>
 </Project>
