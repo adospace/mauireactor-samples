@@ -44,19 +44,13 @@
     <PackageReference Include="Humanizer" Version="2.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="Reactor.Maui" Version="1.0.136" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.136" />
-    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.136" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Reactor.Maui" Version="1.0.140" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
+    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.140" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Chateo.Services\Chateo.Services.csproj" />
     <ProjectReference Include="..\Chateo.Shared\Chateo.Shared.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Controls\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

@@ -59,6 +59,9 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
         var keyboardInteractionService = Services.GetRequiredService<IKeyboardInteractionService>();
         var chatServer = Services.GetRequiredService<IChatServer>();
 
+        var mainState = GetParameter<MainState>();
+        var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
+
         var myMessages = chatServer.Messages
                     .Where(_ => (_.ToUserId == Props.CurrentUser?.Id && _.FromUserId == Props.OtherUser?.Id) || (_.ToUserId == Props.OtherUser?.Id && _.FromUserId == Props.CurrentUser?.Id))
                     .OrderBy(_ => _.TimeStamp)
