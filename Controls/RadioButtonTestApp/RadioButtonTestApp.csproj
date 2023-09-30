@@ -41,12 +41,9 @@
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Reactor.Maui" Version="1.0.140" />
-        <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
-        <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.140" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
+        <PackageReference Include="Reactor.Maui" Version="1.0.144" />
+        <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.144" />
+        <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.144" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Resources\Images\email.png" />
