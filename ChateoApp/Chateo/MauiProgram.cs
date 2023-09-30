@@ -21,8 +21,11 @@ public static class MauiProgram
                 fonts.AddFont("Mulish-SemiBold.ttf", "MulishSemiBold");
             });
 
+        Controls.Native.BorderlessEntry.Configure();
 
-        builder.Services.AddChatServices(new Uri("http://172.31.240.1:5000"));
+        builder.Services.AddPlatformServices();
+
+        builder.Services.AddChatServices(new Uri("http://192.168.1.33:15000"));
 
         return builder.Build();
     }

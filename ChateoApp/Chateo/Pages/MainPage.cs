@@ -1,6 +1,8 @@
-﻿using Chateo.Services;
+﻿using Chateo.Resources.Styles;
+using Chateo.Services;
 using Chateo.Shared;
 using MauiReactor;
+using MauiReactor.Parameters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Storage;
 using System;
@@ -15,43 +17,49 @@ class MainPageState
 {
     public bool Loading { get; set; }
 
+}
+
+class MainState
+{
     public UserViewModel? CurrentUser { get; set; }
-
-
 }
 
 class MainPage : Component<MainPageState>
 {
+    private readonly IParameter<MainState> _mainState;
 
-    protected override void OnMounted()
+    public MainPage()
     {
-
-        base.OnMounted();
+        _mainState = CreateParameter<MainState>();
     }
 
-    protected override async void OnMountedOrPropsChanged()
+    protected override async void OnMounted()
     {
-        State.CurrentUser = Preferences.Default.GetFromJson<UserViewModel?>("current_user", null);
-
-        if (State.CurrentUser != null)
+        if (MauiControls.Application.Current != null)
         {
-            State.Loading = true;
+            MauiControls.Application.Current.RequestedThemeChanged += (sender, args) => Invalidate();
+        }
+        
+        var chatServer = Services.GetRequiredService<IChatServer>();
 
-            var chatServer = Services.GetRequiredService<IChatServer>();
+        State.Loading = true;
 
-            var allUsers = await chatServer.GetAllUsers();
+        await chatServer.StartListener();
 
-            if (!allUsers.Any(_=>_.Id == State.CurrentUser.Id))
-            { 
-                SetState(s => s.CurrentUser = null);
+        _mainState.Set(s => s.CurrentUser = Preferences.Default.GetFromJson<UserViewModel?>("current_user", null));
+
+        if (_mainState.Value.CurrentUser != null)
+        {
+            if (!chatServer.Users.Any(_=>_.Id == _mainState.Value.CurrentUser.Id))
+            {
+                _mainState.Set(s => s.CurrentUser = null);
             }
-
-            SetState(s => s.Loading = false);
         }
 
-        base.OnMountedOrPropsChanged();
+        SetState(s => s.Loading = false);
+        
+        base.OnMounted();
     }
-
 
     public override VisualNode Render()
     {
@@ -64,10 +72,11 @@ class MainPage : Component<MainPageState>
                     .IsRunning(true)
                     .HCenter()
                     .VCenter()
-            };
+            }
+            .BackgroundColor(Theme.Current.Background);
         }
 
-        if (State.CurrentUser == null)
+        if (_mainState.Value.CurrentUser == null)
         {
             return RenderLogin();
         }
@@ -78,7 +87,7 @@ class MainPage : Component<MainPageState>
     private VisualNode RenderLogin()
     {
         return new LandingPage()
-            .OnLogged(() => SetState(s => s.CurrentUser = Preferences.Default.GetFromJson<UserViewModel?>("current_user", null)));
+            .OnLogged(() => _mainState.Set(s => s.CurrentUser = Preferences.Default.GetFromJson<UserViewModel?>("current_user", null)));
     }
 
     private VisualNode RenderHome()

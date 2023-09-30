@@ -21,6 +21,14 @@ class HomePageState
 
 class HomePage : Component<HomePageState>
 {
+    protected override void OnMountedOrPropsChanged()
+    {
+        Routing.RegisterRoute<UserChatPage>("chat");
+
+        base.OnMountedOrPropsChanged();
+    }
+
+
     public override VisualNode Render()
     {
         return new Shell
@@ -37,10 +45,9 @@ class HomePage : Component<HomePageState>
                         .GridRow(1)
                 }
             }
+            .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
-        }
-        .BackgroundColor(Theme.Current.Background)
-        ;
+        };
     }
 
     VisualNode RenderCurrentPage()

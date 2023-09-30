@@ -1,0 +1,44 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@hostname=localhost
+@port=5000
+GET http://{{hostname}}:{{port}}/users
+
+###
+
+POST http://{{hostname}}:{{port}}/users/create
+Content-Type: application/json
+
+{
+    "Id": "3a492999-a9d6-4b78-8ab1-afb681c91f36",
+    "FirstName": "User",
+    "LastName": "Generated",
+    "Avatar": "avatar1"
+}
+
+###
+
+POST http://{{hostname}}:{{port}}/users/create
+Content-Type: application/json
+
+{
+    "Id": "d906a6ba-857b-448d-baf9-de2f6606d8e0",
+    "FirstName": "Second User",
+    "LastName": "Generated",
+    "Avatar": "avatar2"
+}
+
+###
+
+POST http://{{hostname}}:{{port}}/messages/create
+Content-Type: application/json
+
+{
+    "Id": "e6f27674-3f8f-4600-9a81-d4b7ce6bbfda",
+    "FromUserId": "3a492999-a9d6-4b78-8ab1-afb681c91f36",
+    "ToUserId": "351b1dd9-0978-46a8-8642-999fb69fa6b0",
+    "Content": "Message generated adasdasdas"
+}
+
+###
+
+GET http://{{hostname}}:{{port}}/messages

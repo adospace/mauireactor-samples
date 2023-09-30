@@ -1,19 +1,34 @@
 ﻿using Chateo.Shared;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Chateo.Services;
 
 public interface IChatServer
 {
-    Action<MessageViewModel>? MessageCreatedCallback { get; set; }
-    Action<UserCreateModel>? UserCreatedCallback { get; set; }
-    Action<Guid>? UserDeletedCallback { get; set; }
-    Action<UserUpdatedModel>? UserUpdatedCallback { get; set; }
-
-    Task<UserViewModel> CreateUser(Guid id, string firstName, string lastName);
-
-    Task<UserViewModel[]> GetAllUsers();
     Task StartListener();
+
     Task StopListener();
+    
+    UserViewModel[] Users { get; }
+
+    MessageViewModel[] Messages { get; }
+
+    Task<UserViewModel> CreateUser(Guid id, string firstName, string lastName, string avatar);
+
+    Task<MessageViewModel> CreateMessage(Guid id, Guid FromUserId, Guid ToUserId, string Content);
+
+    Task<MessageViewModel> UpdateMessage(Guid id);
+
+    event EventHandler<MessageViewModel>? MessageCreated;
+
+    event EventHandler<UserViewModel>? UserCreated;
+
+    event EventHandler<Guid>? UserDeleted;
+
+    event EventHandler<UserViewModel>? UserUpdated;
+
+    event EventHandler<MessageViewModel>? MessageUpdated;
+
 }

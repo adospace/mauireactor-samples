@@ -28,7 +28,8 @@ class LandingPage : Component
             {
                 new Grid("*,*,24,70", "*")
                 {
-                    new Image("images/landing.png")
+                    new Image("landing.png")
+                        .HeightRequest(262)
                         .WidthRequest(262),
 
                     new Label("Connect easily with your family and friends over countries")
@@ -56,9 +57,9 @@ class LandingPage : Component
                 }
                 .Margin(24, 90, 24, 54)
             }
+            .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
         }
-        .BackgroundColor(Theme.Current.Background)
         ;
     }
 

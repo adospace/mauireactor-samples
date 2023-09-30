@@ -1,5 +1,6 @@
 ﻿
 
+using Chateo.Controls;
 using MauiReactor;
 using MauiReactor.Shapes;
 using System;
@@ -11,7 +12,17 @@ abstract class Theme
     public static LightTheme Light { get; } = new();
     public static DarkTheme Dark { get; } = new();
 
-    public static Theme Current => MauiControls.Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark ? Dark : Light;
+    public static bool IsDarkTheme => MauiControls.Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+
+    public static Theme Current => IsDarkTheme ? Dark : Light;
+
+    public static void ToggleCurrentAppTheme()
+    {
+        if (MauiControls.Application.Current != null)
+        {
+            MauiControls.Application.Current.UserAppTheme = IsDarkTheme ? Microsoft.Maui.ApplicationModel.AppTheme.Light : Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+        }
+    }
 
     public abstract Color Background { get; }
 
@@ -25,6 +36,8 @@ abstract class Theme
 
     public abstract Color MediumForeground { get; }
 
+    public abstract Color Green { get; }
+
 
     public abstract Color Neutral { get; }
 
@@ -33,9 +46,10 @@ abstract class Theme
             .FontFamily("MulishSemiBold")
             .TextColor(Foreground);
 
-    public Entry Entry()
-        => new Entry()
+    public BorderlessEntry Entry()
+        => new BorderlessEntry()
             .FontFamily("MulishSemiBold")
+            .PlaceholderColor(MediumForeground)
             .TextColor(Foreground)
         ;
 
@@ -46,10 +60,47 @@ abstract class Theme
             .TextColor(ForegroundAccent)
             .BackgroundColor(Accent);
 
+
+    public ImageButton ImageButton(string image)
+        => new ImageButton(image)
+            .BackgroundColor(Colors.Transparent)
+            .BorderWidth(0)
+            .BorderColor(Colors.Transparent);
+
+    public ImageButton ImageButton(Icon icon)
+        => new ImageButton($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+            .BackgroundColor(Colors.Transparent)
+            .BorderWidth(0)
+            .BorderColor(Colors.Transparent);
+
     public Image Image(Icon icon)
-        => new Image($"images/{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+        => new Image($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+            .VCenter()
+            .HCenter()
             .HeightRequest(24)
             .WidthRequest(24);
+
+    public Grid Avatar(string avatar, bool online = false)
+        => new Grid("*", "*")
+        {
+            new Image($"{avatar}.png")
+                .HeightRequest(48)
+                .WidthRequest(48)
+                .HCenter()
+                .VCenter(),
+
+            new Ellipse()
+                .Fill(Green)
+                .StrokeThickness(2)
+                .Stroke(Colors.White)
+                .HeightRequest(14)
+                .WidthRequest(14)
+                .HEnd()
+                .VStart()
+                .IsVisible(online)
+        }
+        .HeightRequest(52)
+        .WidthRequest(52);
 
     public Border BorderedImage(Icon icon)
         => new Border
@@ -60,9 +111,9 @@ abstract class Theme
                 .VCenter()
                 .HCenter()
         }
-        .Margin(-2)
+        .Margin(0)
         .Stroke(MediumForeground)
-        .StrokeThickness(2)
+        .StrokeThickness(3)
         .StrokeCornerRadius(18);
 
     public Border BorderedImage(string image, bool highlighted = false)
@@ -74,9 +125,9 @@ abstract class Theme
                 .VCenter()
                 .HCenter()
         }
-        .Margin(-2)
+        .Margin(0)
         .Stroke(MediumForeground)
-        .StrokeThickness(2)
+        .StrokeThickness(3)
         .StrokeCornerRadius(18);
 }
 
@@ -118,7 +169,17 @@ public enum Icon
     
     SearchOverlay,
 
-    StoryPlus
+    StoryPlus,
+
+    Send,
+
+    Menu,
+
+    Forward,
+
+    Account,
+
+    Appearance,
 
 }
 
@@ -137,6 +198,8 @@ class LightTheme : Theme
     public override Color MediumForeground => Color.FromArgb("#ADB5BD");
 
     public override Color Neutral => Color.FromRgba("#EDEDED");
+
+    public override Color Green => Color.FromArgb("#2CC069");
 }
 
 class DarkTheme : Theme
@@ -155,4 +218,6 @@ class DarkTheme : Theme
     public override Color MediumForeground => Color.FromArgb("#ADB5BD");
 
     public override Color Neutral => Color.FromRgba("#152033");
+
+    public override Color Green => Color.FromArgb("#2CC069");
 }

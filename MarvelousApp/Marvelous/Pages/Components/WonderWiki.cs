@@ -86,32 +86,70 @@ class WonderWiki : Component<WonderWikiState>
     }
 
     VisualNode RenderMain()
+<<<<<<< HEAD
     {
         var wikiConfig = Wonder.Config[_wonderType];
         var wonderConfig = Illustration.Config[_wonderType];
 
         return new ScrollView
+=======
+        => Render(context =>
+>>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
         {
-            new VStack
-            {
-                new Grid("45", "* Auto *")
-                {
-                    new Rectangle()
-                        .HeightRequest(1)
-                        .BackgroundColor(wonderConfig.SecondaryColor)
-                        .VCenter()
-                        .Margin(20,0)
-                        ,
+            var wikiConfig = Wonder.Config[_wonderType];
+            var wonderConfig = Illustration.Config[_wonderType];
 
-                    new Label(wikiConfig.SubTitle.ToUpper())
+            var scrollY = context.UseState<double>();
+
+            return new ScrollView
+            {
+                new VStack
+                {
+                    new Grid("52", "* Auto *")
+                    {
+                        new Rectangle()
+                            .HeightRequest(1)
+                            .BackgroundColor(wonderConfig.SecondaryColor)
+                            .VCenter()
+                            .Margin(20,0)
+                            ,
+
+                        new Label(wikiConfig.SubTitle.ToUpper())
+                            .BackgroundColor(Colors.Transparent)
+                            .TextColor(Colors.White)
+                            .FontSize(14)
+                            .FontFamily("TenorSans")
+                            .HCenter()
+                            .VCenter()
+                            .GridColumn(1),
+
+                        new Rectangle()
+                            .HeightRequest(1)
+                            .BackgroundColor(wonderConfig.SecondaryColor)
+                            .VCenter()
+                            .Margin(20,0)
+                            .GridColumn(2)
+                            ,
+                    },
+
+                    new Label(wikiConfig.Title)
+                        .FontFamily("YesevaOne")
+                        .FontSize(60)
+                        .TextColor(Colors.White)
+                        .HCenter()
+                        .VerticalTextAlignment(TextAlignment.End)
+                        .HeightRequest(150),
+
+                    new Label(wikiConfig.RegionTitle.ToUpper())
                         .BackgroundColor(Colors.Transparent)
                         .TextColor(Colors.White)
-                        .FontSize(14)
+                        .FontSize(16)
                         .FontFamily("TenorSans")
                         .HCenter()
-                        .VCenter()
-                        .GridColumn(1),
+                        .VerticalTextAlignment(TextAlignment.End)
+                        .HeightRequest(70),
 
+<<<<<<< HEAD
                     new Rectangle()
                         .HeightRequest(1)
                         .BackgroundColor(wonderConfig.SecondaryColor)
@@ -154,51 +192,111 @@ class WonderWiki : Component<WonderWikiState>
                     new Image($"{_wonderType.ToString().ToLower()}_photo_1.png")
                 }
                 .StrokeCornerRadius(18)
+=======
+                    Separator(isOpen: scrollY.Value < 10),
 
+                    new Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
+                        .BackgroundColor(Colors.Transparent)
+                        .TextColor(Colors.White)
+                        .FontFamily("RalewayBold")
+                        .HCenter()
+                        .VerticalTextAlignment(TextAlignment.End)
+                        .HeightRequest(80),
+
+>>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
+
+                    new Image($"{_wonderType.ToString().ToLower()}_photo_1.png"),
+                }
             }
+<<<<<<< HEAD
         }
         .Padding(0, 300, 0, 0)
         .OnScrolled((sender, args) => SetState(s => s.ScrollY = args.ScrollY));
     }
+=======
+            .Padding(0, 300, 0, 0)
+            .OnScrolled((sender, args) => scrollY.Set(s => args.ScrollY));
+        });
+
+    //VisualNode Separator(bool isOpen)
+    //{
+    //    var wonderConfig = Illustration.Config[_wonderType];
+    //    return new CanvasView
+    //    {
+    //        new Row("*, 42, *")
+    //        {
+    //            new Align
+    //            {
+    //                new Box()
+    //                    .BackgroundColor(wonderConfig.SecondaryColor)
+    //            }
+    //            .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
+    //            .WithAnimation(easing: Easing.CubicIn)
+    //            .Height(1)
+    //            .VCenter(),
+
+    //            new Align()
+    //            {
+    //                new Picture("Marvelous.Resources.Images.common_compass_full.png")
+    //                    //.Rotation(isOpen ? 0 : 360)
+    //                    //.WithAnimation(easing: Easing.BounceOut, duration: 1000)
+    //                    .AnchorX(0.5f)
+    //                    .AnchorY(0.5f),
+    //            }
+    //            .Height(32)
+    //            .Width(32)
+    //            .VCenter()
+    //            .HCenter()
+    //            ,
+
+    //            new Align
+    //            {
+    //                new Box()
+    //                    .BackgroundColor(wonderConfig.SecondaryColor)
+    //            }
+    //            .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
+    //            .WithAnimation(easing: Easing.CubicIn)
+    //            .Height(1)
+    //            .VCenter(),
+    //        }
+    //    }
+    //    .HeightRequest(42)
+    //    .BackgroundColor(Colors.Red);
+    //}
+>>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
 
     VisualNode Separator(bool isOpen)
     {
         var wonderConfig = Illustration.Config[_wonderType];
-        return new CanvasView
+
+        return new Grid("42", "*,42,*")
         {
-            new Row("*, 30, *")
-            {
-                new Align
-                {
-                    new Box()
-                        .BackgroundColor(wonderConfig.SecondaryColor)
-                }
-                .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
+            new Rectangle()
+                .HeightRequest(2)
+                .Margin(isOpen ? new Thickness(20,0) : new Thickness(40, 0))
                 .WithAnimation(easing: Easing.CubicIn)
-                .Height(1)
+                .Fill(wonderConfig.SecondaryColor)
                 .VCenter(),
 
-                new Picture("Marvelous.Resources.Images.common_compass_full.png")
-                    .Rotation(isOpen ? 0 : 360)
-                    .WithAnimation(easing: Easing.BounceOut, duration: 1000)
-                    .AnchorX(0.5f)
-                    .AnchorY(0.5f),
+            new Image("common_compass_full.png")
+                .GridColumn(1)
+                .Rotation(isOpen ? 0 : 360)
+                .WithAnimation(easing: Easing.BounceOut, duration: 1000)
+                .AnchorX(0.5f)
+                .AnchorY(0.5f)
+                ,
 
-
-
-                new Align
-                {
-                    new Box()
-                        .BackgroundColor(wonderConfig.SecondaryColor)
-                }
-                .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
+            new Rectangle()
+                .GridColumn(2)
+                .HeightRequest(2)
+                .Margin(isOpen ? new Thickness(20,0) : new Thickness(40, 0))
                 .WithAnimation(easing: Easing.CubicIn)
-                .Height(1)
+                .Fill(wonderConfig.SecondaryColor)
                 .VCenter(),
-            }
+
         }
-        .HeightRequest(45)
-        .BackgroundColor(Colors.Transparent);
+        .HeightRequest(42);
     }
+
 }
 

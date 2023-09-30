@@ -5,10 +5,6 @@ VisualStudioVersion = 17.5.33326.253
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marvelous", "Marvelous\Marvelous.csproj", "{9B12250C-172C-4F80-BA20-15EAECCFCD3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiReactor", "..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj", "{CC0D08BC-0678-4CE0-82C2-2AAFF3DFA255}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiReactor.Canvas", "..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj", "{95BDAE7C-2C3A-4B0C-AA90-B427353BFA32}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,14 +17,6 @@ Global
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{CC0D08BC-0678-4CE0-82C2-2AAFF3DFA255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC0D08BC-0678-4CE0-82C2-2AAFF3DFA255}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC0D08BC-0678-4CE0-82C2-2AAFF3DFA255}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC0D08BC-0678-4CE0-82C2-2AAFF3DFA255}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95BDAE7C-2C3A-4B0C-AA90-B427353BFA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95BDAE7C-2C3A-4B0C-AA90-B427353BFA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95BDAE7C-2C3A-4B0C-AA90-B427353BFA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95BDAE7C-2C3A-4B0C-AA90-B427353BFA32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,4 +18,9 @@ public static class ServiceCollectionExtensions
             httpClient.BaseAddress = serverUri;
         });
     }
+
+    public static void AddPlatformServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IKeyboardInteractionService, Implementation.KeyboardInteractionService>();
+    }
 }
