@@ -14,7 +14,7 @@ namespace Marvelous.Pages.Components;
 class WonderWikiState
 {
     public Size ContainerSize { get; set; }
-    //public double ScrollY { get; set; }
+    public double ScrollY { get; set; }
 }
 
 class WonderWiki : Component<WonderWikiState>
@@ -33,7 +33,7 @@ class WonderWiki : Component<WonderWikiState>
         {
             RenderBackground(),
 
-            Render(Main)
+            RenderMain()
         };
     }
 
@@ -85,12 +85,10 @@ class WonderWiki : Component<WonderWikiState>
         SetState(s => s.ContainerSize = container.Bounds.Size);
     }
 
-    VisualNode Main(ComponentContext context)
+    VisualNode RenderMain()
     {
         var wikiConfig = Wonder.Config[_wonderType];
         var wonderConfig = Illustration.Config[_wonderType];
-
-        var state = context.UseState<double>();
 
         return new ScrollView
         {
@@ -140,7 +138,7 @@ class WonderWiki : Component<WonderWikiState>
                     .VerticalTextAlignment(TextAlignment.End)
                     .HeightRequest(70),
 
-                Separator(isOpen: state.Value < 10),
+                Separator(isOpen: State.ScrollY < 10),
 
                 new Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
                     .BackgroundColor(Colors.Transparent)
@@ -151,14 +149,16 @@ class WonderWiki : Component<WonderWikiState>
                     .HeightRequest(80),
 
 
-                new Image($"{_wonderType.ToString().ToLower()}_photo_1.png"),
-
-
+                new Border
+                {
+                    new Image($"{_wonderType.ToString().ToLower()}_photo_1.png")
+                }
+                .StrokeCornerRadius(18)
 
             }
         }
         .Padding(0, 300, 0, 0)
-        .OnScrolled((sender, args) => state.Set(s => args.ScrollY));
+        .OnScrolled((sender, args) => SetState(s => s.ScrollY = args.ScrollY));
     }
 
     VisualNode Separator(bool isOpen)
