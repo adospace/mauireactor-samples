@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadioButtonTestApp", "Radio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlyoutPageTestApp", "FlyoutPageTestApp\FlyoutPageTestApp.csproj", "{57C47873-190F-4350-9931-87D0C5963AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionViewTestApp", "CollectionViewTestApp\CollectionViewTestApp.csproj", "{2D3DA45B-D560-49D4-9EA1-71EDF5A32FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionViewTestApp", "CollectionViewTestApp\CollectionViewTestApp.csproj", "{2D3DA45B-D560-49D4-9EA1-71EDF5A32FC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndicatorViewTestApp", "IndicatorViewTestApp\IndicatorViewTestApp.csproj", "{35123AFF-CBEB-45A1-800B-AAF2B384002C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,12 @@ Global
 		{2D3DA45B-D560-49D4-9EA1-71EDF5A32FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D3DA45B-D560-49D4-9EA1-71EDF5A32FC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D3DA45B-D560-49D4-9EA1-71EDF5A32FC7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35123AFF-CBEB-45A1-800B-AAF2B384002C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
