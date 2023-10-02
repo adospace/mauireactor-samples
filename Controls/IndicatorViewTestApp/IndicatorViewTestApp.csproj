@@ -38,6 +38,10 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\circle.svg" />
+    <None Remove="Resources\Images\sun.svg" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Reactor.Maui" Version="1.0.140" />
     <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
     <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.140" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />

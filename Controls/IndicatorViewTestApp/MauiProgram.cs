@@ -10,7 +10,7 @@ namespace IndicatorViewTestApp
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiReactorApp<MainPage>(app =>
+                .UseMauiReactorApp<MainPageCustom>(app =>
                 {
                     app.AddResource("Resources/Styles/Colors.xaml");
                     app.AddResource("Resources/Styles/Styles.xaml");
