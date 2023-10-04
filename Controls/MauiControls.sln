@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionViewTestApp", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndicatorViewTestApp", "IndicatorViewTestApp\IndicatorViewTestApp.csproj", "{35123AFF-CBEB-45A1-800B-AAF2B384002C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickerTestApp", "PickerTestApp\PickerTestApp.csproj", "{66317BB3-1A24-44E3-A7D1-D4B33100B526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PickerTestApp", "PickerTestApp\PickerTestApp.csproj", "{66317BB3-1A24-44E3-A7D1-D4B33100B526}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellTestPage", "ShellTestPage\ShellTestPage.csproj", "{164E086B-B1B6-47A4-AEC9-9FDF21A30698}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,12 @@ Global
 		{66317BB3-1A24-44E3-A7D1-D4B33100B526}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66317BB3-1A24-44E3-A7D1-D4B33100B526}.Release|Any CPU.Build.0 = Release|Any CPU
 		{66317BB3-1A24-44E3-A7D1-D4B33100B526}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164E086B-B1B6-47A4-AEC9-9FDF21A30698}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
