@@ -10,7 +10,7 @@ namespace CollectionViewTestApp
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiReactorApp<MainPageGrouping>(app =>
+                .UseMauiReactorApp<MainPageScrollingMode>(app =>
                 {
                     app.AddResource("Resources/Styles/Colors.xaml");
                     app.AddResource("Resources/Styles/Styles.xaml");
