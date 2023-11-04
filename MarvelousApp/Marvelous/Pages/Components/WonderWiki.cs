@@ -86,15 +86,7 @@ class WonderWiki : Component<WonderWikiState>
     }
 
     VisualNode RenderMain()
-<<<<<<< HEAD
-    {
-        var wikiConfig = Wonder.Config[_wonderType];
-        var wonderConfig = Illustration.Config[_wonderType];
-
-        return new ScrollView
-=======
         => Render(context =>
->>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
         {
             var wikiConfig = Wonder.Config[_wonderType];
             var wonderConfig = Illustration.Config[_wonderType];
@@ -149,50 +141,6 @@ class WonderWiki : Component<WonderWikiState>
                         .VerticalTextAlignment(TextAlignment.End)
                         .HeightRequest(70),
 
-<<<<<<< HEAD
-                    new Rectangle()
-                        .HeightRequest(1)
-                        .BackgroundColor(wonderConfig.SecondaryColor)
-                        .VCenter()
-                        .Margin(20,0)
-                        .GridColumn(2)
-                        ,
-                },
-
-                new Label(wikiConfig.Title)
-                    .FontFamily("YesevaOne")
-                    .FontSize(60)
-                    .TextColor(Colors.White)
-                    .HCenter()
-                    .VerticalTextAlignment(TextAlignment.End)
-                    .HeightRequest(150),
-
-                new Label(wikiConfig.RegionTitle.ToUpper())
-                    .BackgroundColor(Colors.Transparent)
-                    .TextColor(Colors.White)
-                    .FontSize(16)
-                    .FontFamily("TenorSans")
-                    .HCenter()
-                    .VerticalTextAlignment(TextAlignment.End)
-                    .HeightRequest(70),
-
-                Separator(isOpen: State.ScrollY < 10),
-
-                new Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
-                    .BackgroundColor(Colors.Transparent)
-                    .TextColor(Colors.White)
-                    .FontFamily("RalewayBold")
-                    .HCenter()
-                    .VerticalTextAlignment(TextAlignment.End)
-                    .HeightRequest(80),
-
-
-                new Border
-                {
-                    new Image($"{_wonderType.ToString().ToLower()}_photo_1.png")
-                }
-                .StrokeCornerRadius(18)
-=======
                     Separator(isOpen: scrollY.Value < 10),
 
                     new Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
@@ -202,68 +150,16 @@ class WonderWiki : Component<WonderWikiState>
                         .HCenter()
                         .VerticalTextAlignment(TextAlignment.End)
                         .HeightRequest(80),
-
->>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
+                     
 
                     new Image($"{_wonderType.ToString().ToLower()}_photo_1.png"),
                 }
+                .Opacity(Math.Clamp((100 - scrollY.Value) / 300, 0.1, 1.0))
+
             }
-<<<<<<< HEAD
-        }
-        .Padding(0, 300, 0, 0)
-        .OnScrolled((sender, args) => SetState(s => s.ScrollY = args.ScrollY));
-    }
-=======
             .Padding(0, 300, 0, 0)
             .OnScrolled((sender, args) => scrollY.Set(s => args.ScrollY));
         });
-
-    //VisualNode Separator(bool isOpen)
-    //{
-    //    var wonderConfig = Illustration.Config[_wonderType];
-    //    return new CanvasView
-    //    {
-    //        new Row("*, 42, *")
-    //        {
-    //            new Align
-    //            {
-    //                new Box()
-    //                    .BackgroundColor(wonderConfig.SecondaryColor)
-    //            }
-    //            .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
-    //            .WithAnimation(easing: Easing.CubicIn)
-    //            .Height(1)
-    //            .VCenter(),
-
-    //            new Align()
-    //            {
-    //                new Picture("Marvelous.Resources.Images.common_compass_full.png")
-    //                    //.Rotation(isOpen ? 0 : 360)
-    //                    //.WithAnimation(easing: Easing.BounceOut, duration: 1000)
-    //                    .AnchorX(0.5f)
-    //                    .AnchorY(0.5f),
-    //            }
-    //            .Height(32)
-    //            .Width(32)
-    //            .VCenter()
-    //            .HCenter()
-    //            ,
-
-    //            new Align
-    //            {
-    //                new Box()
-    //                    .BackgroundColor(wonderConfig.SecondaryColor)
-    //            }
-    //            .Margin(isOpen ? new ThicknessF(20,0) : new ThicknessF(40, 0))
-    //            .WithAnimation(easing: Easing.CubicIn)
-    //            .Height(1)
-    //            .VCenter(),
-    //        }
-    //    }
-    //    .HeightRequest(42)
-    //    .BackgroundColor(Colors.Red);
-    //}
->>>>>>> f07779485fe526f7a848b9ab3d5b528498517e6d
 
     VisualNode Separator(bool isOpen)
     {
@@ -299,4 +195,3 @@ class WonderWiki : Component<WonderWikiState>
     }
 
 }
-
