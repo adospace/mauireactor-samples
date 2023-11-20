@@ -5,20 +5,20 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace CollectionViewTestApp.Pages;
 
-
-class MainPageScrollingModeState
+class MainPageScrollingAnimationState
 {
     public ObservableCollection<IndexedPersonWithAddress> Persons { get; set; }
-
-    public MauiControls.ItemsUpdatingScrollMode CurrentScrollMode { get; set; }
+    
+    public double ScrollY { get; set; }
 }
 
-class MainPageScrollingMode : Component<MainPageScrollingModeState>
+class MainPageScrollingAnimation : Component<MainPageScrollingAnimationState>
 {
+    private const double _itemSize = 128;
+
     private static List<IndexedPersonWithAddress> GenerateSamplePersons(int count)
     {
         var random = new Random();
@@ -52,32 +52,44 @@ class MainPageScrollingMode : Component<MainPageScrollingModeState>
     {
         return new ContentPage
         {
-            new Grid("Auto, Auto, *", "*")
-            {
-                new Picker()
-                    .ItemsSource(Enum.GetValues<MauiControls.ItemsUpdatingScrollMode>().Select(_=>_.ToString()).ToArray())
-                    .OnSelectedIndexChanged(index => SetState(s => s.CurrentScrollMode = (MauiControls.ItemsUpdatingScrollMode)index)),                    
-
-                new Button("Add item", ()=> State.Persons.Add(GenerateSamplePersons(1).First() with { Index = State.Persons.Count }))
-                    .GridRow(1),
-
-                new CollectionView()
-                    .ItemsSource(State.Persons, RenderPerson)
-                    .ItemsUpdatingScrollMode(State.CurrentScrollMode)
-                    .GridRow(2)
-            }
+            new CollectionView()
+                .ItemsSource(State.Persons, RenderItem)
+                .OnScrolled((s,e) => SetState(s => s.ScrollY = e.VerticalOffset, false))
         };
     }
 
-    private VisualNode RenderPerson(IndexedPersonWithAddress person)
+    private VisualNode RenderItem(IndexedPersonWithAddress item)
     {
-        return new VStack(spacing: 5)
+        return new Border
         {
-            new Label($"{person.Index}. {person.FirstName} {person.LastName}"),
-            new Label(person.Address)
-                .FontSize(12)
+            new Label($"Item {item.Index}")
+                .TextColor(Colors.White)
+                .Center()
         }
-        .HeightRequest(56)
-        .VCenter();
+        .StrokeThickness(0)
+        .StrokeCornerRadius(34, 34, 0, 0)
+        .HeightRequest(_itemSize)
+        .BackgroundColor(Colors.BlueViolet)
+        .ScaleX(() => 0.5 + GetPercOffset(item) * 0.5)
+        .Opacity(() => 0.2 + GetPercOffset(item) * 0.8)
+        .WithAnimation()
+        .WithKey(item.Index)
+        ;
+    }
+
+    private double GetPercOffset(IndexedPersonWithAddress item)
+    {
+        var itemScrollY = item.Index * _itemSize;
+
+        if (itemScrollY < State.ScrollY - _itemSize)
+        {
+            return 0.0;
+        }
+        else if (itemScrollY > State.ScrollY + _itemSize) 
+        {
+            return 1.0;
+        }
+
+        return (itemScrollY - (State.ScrollY - _itemSize)) / (_itemSize * 2);
     }
 }

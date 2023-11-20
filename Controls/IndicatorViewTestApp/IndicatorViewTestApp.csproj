@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-    <!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
     <OutputType>Exe</OutputType>
     <RootNamespace>IndicatorViewTestApp</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -38,12 +38,12 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Resources\Images\circle.svg" />
-    <None Remove="Resources\Images\sun.svg" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.140" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
-    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.140" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Reactor.Maui" Version="2.0.5-beta" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.5-beta" />
+    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.5-beta" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>
