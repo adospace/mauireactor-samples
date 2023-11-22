@@ -55,6 +55,15 @@ class MainPageScrollingAnimation : Component<MainPageScrollingAnimationState>
             new CollectionView()
                 .ItemsSource(State.Persons, RenderItem)
                 .OnScrolled((s,e) => SetState(s => s.ScrollY = e.VerticalOffset, false))
+
+            //new ScrollView
+            //{
+            //    new VStack
+            //    {
+            //        State.Persons.Select(RenderItem)
+            //    }
+            //}
+            //.OnScrolled((s,e) => SetState(s => s.ScrollY = e.ScrollY, false))
         };
     }
 
@@ -72,8 +81,6 @@ class MainPageScrollingAnimation : Component<MainPageScrollingAnimationState>
         .BackgroundColor(Colors.BlueViolet)
         .ScaleX(() => 0.5 + GetPercOffset(item) * 0.5)
         .Opacity(() => 0.2 + GetPercOffset(item) * 0.8)
-        .WithAnimation()
-        .WithKey(item.Index)
         ;
     }
 
