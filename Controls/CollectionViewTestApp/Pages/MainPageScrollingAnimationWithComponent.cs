@@ -11,13 +11,11 @@ namespace CollectionViewTestApp.Pages;
 class MainPageScrollingAnimationWithComponentState
 {
     public ObservableCollection<IndexedPersonWithAddress> Persons { get; set; }
-
-    public double ScrollY { get; set; }
 }
 
 class MainPageScrollingAnimationWithComponent : Component<MainPageScrollingAnimationWithComponentState>
 {
-    private const double _itemSize = 128;
+    event EventHandler<double> Scrolled;
 
     private static List<IndexedPersonWithAddress> GenerateSamplePersons(int count)
     {
@@ -54,40 +52,30 @@ class MainPageScrollingAnimationWithComponent : Component<MainPageScrollingAnima
         {
             new CollectionView()
                 .ItemsSource(State.Persons, RenderItem)
-                .OnScrolled((s,e) => SetState(s => s.ScrollY = e.VerticalOffset, false))
+                .OnScrolled((s,e) =>
+                {
+                    Scrolled?.Invoke(s, e.VerticalOffset);
+                    System.Diagnostics.Debug.WriteLine($"Scroll {e.VerticalOffset}");
+                })
         };
     }
 
     private VisualNode RenderItem(IndexedPersonWithAddress item)
-         => new Grid
-         {
-             new PersonComponent()
-                .Item(item)
-         }
-        .ScaleX(() => 0.5 + GetPercOffset(item) * 0.5)
-        .Opacity(() => 0.2 + GetPercOffset(item) * 0.8);
-
-    private double GetPercOffset(IndexedPersonWithAddress item)
-    {
-        var itemScrollY = item.Index * _itemSize;
-
-        if (itemScrollY < State.ScrollY - _itemSize)
-        {
-            return 0.0;
-        }
-        else if (itemScrollY > State.ScrollY + _itemSize)
-        {
-            return 1.0;
-        }
-
-        return (itemScrollY - (State.ScrollY - _itemSize)) / (_itemSize * 2);
-    }
+         => new PersonComponent()
+                .WhenScroll(handler => Scrolled += handler)
+                .Item(item);
 }
 
-class PersonComponent : Component
+class PersonComponentState
 {
+    public double ScrollY { get; set; }
+}
 
+class PersonComponent : Component<PersonComponentState>
+{
     IndexedPersonWithAddress _item;
+    private Action<EventHandler<double>> _subscribeToScrollEvent;
+
     readonly double _itemSize = 128;
 
     public PersonComponent Item(IndexedPersonWithAddress item)
@@ -96,18 +84,67 @@ class PersonComponent : Component
         return this;
     }
 
+    public PersonComponent WhenScroll(Action<EventHandler<double>> subscribeToScrollEvent)
+    {
+        _subscribeToScrollEvent = subscribeToScrollEvent;
+        return this;        
+    }
+
+    protected override void OnMounted()
+    {
+        //System.Diagnostics.Debug.WriteLine($"OnMounted (Item {_item.Index})");
+        _subscribeToScrollEvent?.Invoke(OnParentScrolled);
+        base.OnMounted();
+    }
+
+    void OnParentScrolled(object sender, double verticalOffset)
+    {
+        SetState(s => s.ScrollY = verticalOffset);
+    }
 
     public override VisualNode Render()
     {
+        //System.Diagnostics.Debug.WriteLine($"Render (Item {_item.Index})");
+        double GetPercOffset()
+        {
+            var itemScrollY = _item.Index * _itemSize;
+
+            if (itemScrollY < State.ScrollY - _itemSize)
+            {
+                return 0.0;
+            }
+            else if (itemScrollY > State.ScrollY + _itemSize)
+            {
+                return 1.0;
+            }
+
+            return (itemScrollY - (State.ScrollY - _itemSize)) / (_itemSize * 2);
+        }
+
         return new Border
         {
-            new Label($"Item {_item.Index}")
-                .TextColor(Colors.White)
-                .Center()
+            new VStack()
+            {
+                new Border()
+                    .BackgroundColor(Colors.Blue)
+                    .WidthRequest(50)
+                    .HeightRequest(50)
+                    .VCenter()
+                    .HCenter()
+                    .ScaleX(() => 1.0 + GetPercOffset()),
+
+                new Label($"Item {_item.Index}")
+                    .TextColor(Colors.White)
+                    .Center()
+            }
         }
         .StrokeThickness(0)
         .StrokeCornerRadius(34, 34, 0, 0)
         .HeightRequest(_itemSize)
-        .BackgroundColor(Colors.BlueViolet);
+        .BackgroundColor(Colors.BlueViolet)
+        //.ScaleX(() => 0.5 + GetPercOffset() * 0.5)
+        .Opacity(() => 0.2 + GetPercOffset() * 0.8)
+        ;
     }
+
 }
