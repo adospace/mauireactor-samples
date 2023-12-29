@@ -19,37 +19,32 @@ class MainPageState
 
 class MainPage : Component<MainPageState>
 {
-    public override VisualNode Render()
-    {
-        return new ContentPage
-        {
-            new Grid()
-            {
+    public override VisualNode Render() 
+        => ContentPage(
+            Grid(
                 new MainCarouselView()
                     .OnSelected(OnSelectWonder)
                     //.InitialType(State.CurrentWonderType)
                     .Show(State.ShowNavigator),
 
-                !State.ShowNavigator ?
-                RenderBody() : null,
+                !State.ShowNavigator ? RenderBody() : null,
 
                 new WonderNavigator()
                     .Type(State.CurrentWonderType)
                     .OnTabSelected(_=>SetState(s => s.CurrentTab = _))
                     .Show(!State.ShowNavigator)
                     .OnBackToWonderSelect(()=>SetState(s => s.ShowNavigator = true))
-            }
-        };
-    }
+            )
+        );
 
-    private VisualNode RenderBody()
+    VisualNode RenderBody()
     {
         //if (State.CurrentTab == NavigatorTabKey.Editorial)
             return new WonderWiki()
-                .Type(State.CurrentWonderType);
+                .WonderType(State.CurrentWonderType);
     }
 
-    private void OnSelectWonder(WonderType wonderType)
+    void OnSelectWonder(WonderType wonderType)
     {
         SetState(s =>
         {

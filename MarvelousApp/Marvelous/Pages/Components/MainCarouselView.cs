@@ -22,57 +22,38 @@ class MainCarouselViewState
     public ScrollOrientation DraggingOrientation { get; set; } = ScrollOrientation.Neither;
 }
 
-class MainCarouselView : Component<MainCarouselViewState>
+partial class MainCarouselView : Component<MainCarouselViewState>
 {
-    private Action<WonderType>? _selectedWonderAction;
-    private WonderType _initialType;
-    private bool _show;
+    [Prop]
+    Action<WonderType>? _onSelected;
 
-    public MainCarouselView OnSelected(Action<WonderType> action)
-    {
-        _selectedWonderAction = action;
-        return this;
-    }
+    [Prop]
+    WonderType _initialType;
 
-    public MainCarouselView InitialType(WonderType type)
-    {
-        _initialType = type;
-        return this;
-    }
+    [Prop]
+    bool _show;
 
-    public MainCarouselView Show(bool show)
-    {
-        _show = show;
-        return this;
-    }
-
-    public override VisualNode Render()
-    {
-        return new Grid()
-        {
-            Enum.GetValues<WonderType>().Select(RenderViewItem),
-
+    public override VisualNode Render() 
+        => Grid(
+            [.. Enum.GetValues<WonderType>().Select(RenderViewItem),
 
             new MainCarouselViewIndicator()
-                .CurrentType(State.CurrentType)
-        }
+                .WonderType(State.CurrentType)]
+        )
         .OnSizeChanged(size => SetState(s => s.ContainerSize = size))
         .OnPanUpdated(OnPan)
         .Background(Illustration.Config[State.CurrentType].BackgroundBrush)
         .Opacity(_show ? 1 : 0)
         .WithAnimation()
         ;
-    }
 
-    MainCarouselViewItem? RenderViewItem(WonderType wonderType)
-    {
-        return new MainCarouselViewItem()
+    MainCarouselViewItem? RenderViewItem(WonderType wonderType) 
+        => new MainCarouselViewItem()
             .Type(wonderType)
             .RelativePanX(State.PanX)
             .RelativePanY(State.PanY)
             .CurrentType(State.CurrentType)
             .ContainerSize(State.ContainerSize);
-    }
 
     void OnPan(object? sender, MauiControls.PanUpdatedEventArgs args)
     {
@@ -118,10 +99,8 @@ class MainCarouselView : Component<MainCarouselViewState>
         }
         else //Completed
         {
-            var now = DateTime.Now;
-
             if (State.StartDrag.HasValue && 
-                (((now - State.StartDrag.Value < TimeSpan.FromMilliseconds(200)) && Math.Abs(State.PanY) < 10) || Math.Abs(State.PanX) > State.ContainerSize.Width / 3.0))
+                (((DateTime.Now - State.StartDrag.Value < TimeSpan.FromMilliseconds(200)) && Math.Abs(State.PanY) < 10) || Math.Abs(State.PanX) > State.ContainerSize.Width / 3.0))
             {
                 SetState(s =>
                 {
@@ -140,7 +119,7 @@ class MainCarouselView : Component<MainCarouselViewState>
                     State.ContainerSize.Height > 0 &&
                     Math.Abs(State.PanY) / State.ContainerSize.Height > 0.2)
                 {
-                    _selectedWonderAction?.Invoke(State.CurrentType);
+                    _onSelected?.Invoke(State.CurrentType);
                 }
                 SetState(s =>
                 {
@@ -155,57 +134,27 @@ class MainCarouselView : Component<MainCarouselViewState>
     }
 }
 
-class MainCarouselViewItemState
+partial class MainCarouselViewItem : Component
 {
-    public double TranslationX { get; set; }
-}
+    [Prop]
+    WonderType _type;
 
-class MainCarouselViewItem : Component<MainCarouselViewItemState>
-{
-    private WonderType _type;
-    private WonderType _currentType;
-    private double _relativePanX;
-    private double _relativePanY;
-    private Size _containerSize;
-    private bool _isDragging;
+    [Prop]
+    WonderType _currentType;
 
-    private bool IsCurrent => _currentType == _type;
+    [Prop]
+    double _relativePanX;
 
-    public MainCarouselViewItem Type(WonderType type)
-    {
-        _type = type;
-        return this;
-    }
+    [Prop]
+    double _relativePanY;
 
-    public MainCarouselViewItem CurrentType(WonderType currentType)
-    {
-        _currentType = currentType;
-        return this;
-    }
+    [Prop]
+    Size _containerSize;
 
-    public MainCarouselViewItem RelativePanX(double relativePan)
-    {
-        _relativePanX = relativePan;
-        return this;
-    }
+    [Prop]
+    bool _isDragging;
 
-    public MainCarouselViewItem RelativePanY(double relativePan)
-    {
-        _relativePanY = relativePan;
-        return this;
-    }
-
-    public MainCarouselViewItem ContainerSize(Size size)
-    {
-        _containerSize = size;
-        return this;
-    }
-
-    public MainCarouselViewItem IsDragging(bool isDragging)
-    {
-        _isDragging = isDragging;
-        return this;
-    }
+    bool IsCurrent => _currentType == _type;
 
     public override VisualNode Render()
     {
@@ -215,6 +164,7 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
 
         var percOpacity = _containerSize.Width > 0 ? Easing.CubicIn.Ease(Math.Abs(_relativePanX / _containerSize.Width)) : 0.0;
         var percVerticalPan = _containerSize.Height > 0 ? (-_relativePanY / _containerSize.Height) : 0.0;
+        var percOpacityInverse = _containerSize.Width > 0 ? Easing.CubicOut.Ease(Math.Abs(_relativePanX / _containerSize.Width)) : 0.0;
 
         if (IsCurrent)
         {
@@ -240,38 +190,35 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
             translationX = - _containerSize.Width;
         }
 
-        return new Grid
-        {
-            new AbsoluteLayout
-            {
-                config.BackgroundImages?.Select(RenderIllustrationImage),
-            },
+        return Grid(
+            AbsoluteLayout(
+                [.. config.BackgroundImages?.Select(RenderIllustrationImage)]
+            ),
 
-            new AbsoluteLayout
-            {
+            AbsoluteLayout(
                 config.MainObjectImage != null ?
                 RenderIllustrationImage(config.MainObjectImage)
                     .TranslationX(translationX)
                     .When(!_isDragging, _ => _.WithAnimation(duration: 400))
                     .Opacity(opacity)
                     :null
-            },
+            ),
 
-            new AbsoluteLayout
-            {
-                config.ForegroundImages?.Select(_=> 
-                    RenderIllustrationImage(_)
-                        .Scale(1.0 + (float)percVerticalPan * 0.3f)
-                        .WithAnimation(duration: 300)
-                        ),
-            },
+            AbsoluteLayout([.. config.ForegroundImages?.Select(_=> 
+                RenderIllustrationImage(_)
+                    .Scale(1.0 + (float)percVerticalPan * 0.3f)
+                    .WithAnimation(duration: 300)
+                    )]
+            ),
 
             IsCurrent ?
-            new Rectangle()
+            Rectangle()
                 .Background(Illustration.Config[_currentType].ForegroundBrush)
                 : null,
 
-            new Label(Illustration.Config[_currentType].Title)
+            Label(Illustration.Config[_currentType].Title)
+                .Opacity(opacity)
+                .WithAnimation()
                 .TextColor(Colors.White)
                 .FontFamily("YesevaOne")
                 .FontSize(58)
@@ -281,16 +228,14 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 .HorizontalTextAlignment(TextAlignment.Center)
                 .LineHeight(0.8)
                 .Margin(0, 120)
-                .Opacity(opacity)
                 ,
 
-            new Border()
-                .Background(new MauiControls.LinearGradientBrush(new MauiControls.GradientStopCollection
-                {
-                    new MauiControls.GradientStop(Colors.White.WithAlpha(0.0f), 1.0f - (float)percVerticalPan),
-                    new MauiControls.GradientStop(Colors.White, 1),
-                }, new Point(0, 0), new Point(0, 1)))
-                .StrokeShape(new Rectangle().RadiusX(30).RadiusY(30))
+            Border()
+                .Background(new LinearGradient(180.0,
+                    (Colors.White.WithAlpha(0.0f), 1.0f - (float)percVerticalPan),
+                    (Colors.White, 1)
+                ))
+                .StrokeCornerRadius(30)
                 .VCenter()
                 .VEnd()
                 .Margin(0,25)
@@ -300,59 +245,45 @@ class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 .Opacity(opacity)
                 ,
 
-            new Image("common_arrow_indicator.png")
-                .TranslationY(IsCurrent ? 30 : 0)
-                .WithAnimation(duration: 200)
+            Image("common_arrow_indicator.png")
                 .HCenter()
                 .VEnd()
-                .Margin(0,70)
+                .Margin(0,30)
                 .Opacity(opacity)
 
-        };
+        );
     }
 
-    private Image RenderIllustrationImage(IllustrationImage image)
-    {
-        return new Image(image.Source)
+    Image RenderIllustrationImage(IllustrationImage image) 
+        => Image(image.Source)
             .Opacity(IsCurrent ? image.Opacity : 0.0)
-            .AbsoluteLayoutBounds(IsCurrent ? 
-                image.GetFinalBounds(_containerSize) : 
+            .AbsoluteLayoutBounds(IsCurrent ?
+                image.GetFinalBounds(_containerSize) :
                 image.GetInitialBounds(_containerSize))
             .WithAnimation(duration: 400)
             ;
-    }
 }
 
-class MainCarouselViewIndicator : Component
+partial class MainCarouselViewIndicator : Component
 {
-    private WonderType _wonderType;
+    [Prop]
+    WonderType _wonderType;
 
-    public MainCarouselViewIndicator CurrentType(WonderType wonderType)
-    {
-        _wonderType = wonderType;
-        return this;
-    }
-
-    public override VisualNode Render()
-    {
-        return new HStack(spacing: 5)
-        {
-            Enum.GetValues<WonderType>().Select(RenderIndicatorItem)
-        }
+    public override VisualNode Render() 
+        => HStack(spacing: 5,
+            [.. Enum.GetValues<WonderType>().Select(RenderIndicatorItem)]
+        )
         .HeightRequest(10)
         .Margin(0, 80)
         .HCenter()
         .VEnd();
-    }
 
-    private VisualNode RenderIndicatorItem(WonderType type, int index)
-    {
-        return new Border()
+    VisualNode RenderIndicatorItem(WonderType type, int index)
+        => Border()
             .StrokeShape(new Rectangle().RadiusX(10).RadiusY(10))
             .BackgroundColor(Colors.White)
             .WidthRequest(type == _wonderType ? 20 : 10)
             .WithAnimation(duration: 200);
-    }
 }
 
 static class WonderTypeExtensions

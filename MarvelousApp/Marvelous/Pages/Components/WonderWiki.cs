@@ -17,61 +17,48 @@ class WonderWikiState
     public double ScrollY { get; set; }
 }
 
-class WonderWiki : Component<WonderWikiState>
+partial class WonderWiki : Component<WonderWikiState>
 {
-    private WonderType _wonderType;
+    [Prop]
+    WonderType _wonderType;
 
-    public WonderWiki Type(WonderType wonderType)
-    {
-        _wonderType = wonderType;
-        return this;
-    }
-
-    public override VisualNode Render()
-    {
-        return new Grid
-        {
+    public override VisualNode Render() 
+        => Grid(
             RenderBackground(),
 
             RenderMain()
-        };
-    }
+        );
 
-    VisualNode RenderBackground()
+    Grid RenderBackground()
     {
         var config = Illustration.Config[_wonderType];
-        return new Grid
-        {
-            new Grid
-            {
-                new AbsoluteLayout
-                {
-                    config.BackgroundImages?.Select(RenderBackgroundIllustrationImage),
-                },
-                new AbsoluteLayout
-                {
+        return Grid(
+            Grid(
+                AbsoluteLayout(
+                    config.BackgroundImages?.Select(RenderBackgroundIllustrationImage).ToArray()
+                ),
+                AbsoluteLayout(
                     RenderBackgroundIllustrationImage(config.MainObjectEditorialImage)
-                },
-            }
+                )
+            )
             .BackgroundColor(config.SecondaryColor)
             .OnSizeChanged(OnContainerSizeChanged)
             .HeightRequest(260)
             .VStart(),
 
-            new Rectangle()
+            Rectangle()
                 .Margin(0,290,0,0)
                 .Fill(config.PrimaryColor)
                 .VEnd()
-        }
+        )
         .BackgroundColor(config.PrimaryColor);
     }
 
     Image RenderBackgroundIllustrationImage(IllustrationImage image)
     {
-        return new Image(image.Source)
+        return Image(image.Source)
             .AbsoluteLayoutBounds(image.GetFinalBounds(State.ContainerSize))
-            .Opacity(image.Opacity)
-            ;
+            .Opacity(image.Opacity);
     }
 
     void OnContainerSizeChanged(object? sender, EventArgs args)
@@ -99,14 +86,14 @@ class WonderWiki : Component<WonderWikiState>
                 {
                     new Grid("52", "* Auto *")
                     {
-                        new Rectangle()
+                        Rectangle()
                             .HeightRequest(1)
                             .BackgroundColor(wonderConfig.SecondaryColor)
                             .VCenter()
                             .Margin(20,0)
                             ,
 
-                        new Label(wikiConfig.SubTitle.ToUpper())
+                        Label(wikiConfig.SubTitle.ToUpper())
                             .BackgroundColor(Colors.Transparent)
                             .TextColor(Colors.White)
                             .FontSize(14)
@@ -115,7 +102,7 @@ class WonderWiki : Component<WonderWikiState>
                             .VCenter()
                             .GridColumn(1),
 
-                        new Rectangle()
+                        Rectangle()
                             .HeightRequest(1)
                             .BackgroundColor(wonderConfig.SecondaryColor)
                             .VCenter()
@@ -124,7 +111,7 @@ class WonderWiki : Component<WonderWikiState>
                             ,
                     },
 
-                    new Label(wikiConfig.Title)
+                    Label(wikiConfig.Title)
                         .FontFamily("YesevaOne")
                         .FontSize(60)
                         .TextColor(Colors.White)
@@ -132,7 +119,7 @@ class WonderWiki : Component<WonderWikiState>
                         .VerticalTextAlignment(TextAlignment.End)
                         .HeightRequest(150),
 
-                    new Label(wikiConfig.RegionTitle.ToUpper())
+                    Label(wikiConfig.RegionTitle.ToUpper())
                         .BackgroundColor(Colors.Transparent)
                         .TextColor(Colors.White)
                         .FontSize(16)
@@ -143,7 +130,7 @@ class WonderWiki : Component<WonderWikiState>
 
                     Separator(isOpen: scrollY.Value < 10),
 
-                    new Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
+                    Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
                         .BackgroundColor(Colors.Transparent)
                         .TextColor(Colors.White)
                         .FontFamily("RalewayBold")
@@ -161,20 +148,20 @@ class WonderWiki : Component<WonderWikiState>
             .OnScrolled((sender, args) => scrollY.Set(s => args.ScrollY));
         });
 
-    VisualNode Separator(bool isOpen)
+    Grid Separator(bool isOpen)
     {
         var wonderConfig = Illustration.Config[_wonderType];
 
-        return new Grid("42", "*,42,*")
-        {
-            new Rectangle()
+        return Grid("42", "*,42,*",
+        
+            Rectangle()
                 .HeightRequest(2)
                 .Margin(isOpen ? new Thickness(20,0) : new Thickness(40, 0))
                 .WithAnimation(easing: Easing.CubicIn)
                 .Fill(wonderConfig.SecondaryColor)
                 .VCenter(),
 
-            new Image("common_compass_full.png")
+            Image("common_compass_full.png")
                 .GridColumn(1)
                 .Rotation(isOpen ? 0 : 360)
                 .WithAnimation(easing: Easing.BounceOut, duration: 1000)
@@ -182,15 +169,15 @@ class WonderWiki : Component<WonderWikiState>
                 .AnchorY(0.5f)
                 ,
 
-            new Rectangle()
+            Rectangle()
                 .GridColumn(2)
                 .HeightRequest(2)
                 .Margin(isOpen ? new Thickness(20,0) : new Thickness(40, 0))
                 .WithAnimation(easing: Easing.CubicIn)
                 .Fill(wonderConfig.SecondaryColor)
-                .VCenter(),
+                .VCenter()
 
-        }
+        )
         .HeightRequest(42);
     }
 

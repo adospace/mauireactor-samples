@@ -14,47 +14,32 @@ class WonderNavigatorState
     public bool Show { get; set; }
 }
 
-class WonderNavigator : Component<WonderNavigatorState>
+partial class WonderNavigator : Component<WonderNavigatorState>
 {
-    private WonderType _type;
-    private Action? _backToWonderSelectionAction;
-    private Action<NavigatorTabKey>? _onTabSelected;
-    private bool _show;
-    private static readonly NavigatorTabKey[] _navigatorTabKeys = Enum.GetValues<NavigatorTabKey>();
 
-    public WonderNavigator Type(WonderType type)
-    {
-        _type = type;
-        return this;
-    }
+    static readonly NavigatorTabKey[] _navigatorTabKeys = Enum.GetValues<NavigatorTabKey>();
 
-    public WonderNavigator OnBackToWonderSelect(Action action)
-    {
-        _backToWonderSelectionAction = action;
-        return this;
-    }
+    [Prop]
+    WonderType _type;
 
-    public WonderNavigator OnTabSelected(Action<NavigatorTabKey> action)
-    {
-        _onTabSelected = action;
-        return this;
-    }
+    [Prop]
+    Action? _onBackToWonderSelect;
 
-    public WonderNavigator Show(bool show)
-    {
-        _show = show;
-        return this;
-    }
+    [Prop]
+    Action<NavigatorTabKey>? _onTabSelected;
+
+    [Prop]
+    bool _show;
 
     protected override void OnMounted()
     {
-        MauiControls.Application.Current?.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(10), () => SetState(s => s.Show = _show));
+        MauiControls.Application.Current?.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(10), 
+            () => SetState(s => s.Show = _show));
         base.OnMounted();
     }
 
-    public override VisualNode Render()
-    {
-        return new CanvasView
+    public override VisualNode Render() 
+        => new CanvasView
         {
             new Box()
                 .Margin(0,20,0,0)
@@ -76,7 +61,6 @@ class WonderNavigator : Component<WonderNavigatorState>
                                 new Ellipse()
                                     .Margin(5)
                                     .FillColor(Theme.DarkTertiaryColor),
-
                             },
 
                             new Align
@@ -95,7 +79,7 @@ class WonderNavigator : Component<WonderNavigatorState>
                     .Width(70)
                     .Height(70)
                 }
-                .OnTap(_backToWonderSelectionAction),
+                .OnTap(_onBackToWonderSelect),
 
                 _navigatorTabKeys.Select(tabKey=>
                     new WonderNavigatorTab()
@@ -110,7 +94,6 @@ class WonderNavigator : Component<WonderNavigatorState>
         .HeightRequest(80)
         .VEnd()
         .BackgroundColor(Colors.Transparent);
-    }
 
 
     void OnTabSelected(NavigatorTabKey tabKey)
@@ -120,39 +103,25 @@ class WonderNavigator : Component<WonderNavigatorState>
     }
 }
 
-class WonderNavigatorTab : Component
+partial class WonderNavigatorTab : Component
 {
-    private NavigatorTabKey _key;
-    private bool _isActive;
-    private Action<NavigatorTabKey>? _onSelectedAction;
+    [Prop]
+    NavigatorTabKey _tabKey;
 
-    public WonderNavigatorTab TabKey(NavigatorTabKey key)
-    {
-        _key = key;
-        return this;
-    }
+    [Prop]
+    bool _isActive;
 
-    public WonderNavigatorTab IsActive(bool isActive)
-    {
-        _isActive = isActive;
-        return this;
-    }
-
-    public WonderNavigatorTab OnSelected(Action<NavigatorTabKey> action)
-    {
-        _onSelectedAction = action;
-        return this;
-    }
+    [Prop]
+    Action<NavigatorTabKey>? _onSelected;
 
     public override VisualNode Render()
-    {
-        return new PointInteractionHandler
+        => new PointInteractionHandler
         {
             new Align
             {
                 new Group
                 {
-                    new Picture($"Marvelous.Resources.Images.common_tab_{_key.ToString().ToLower()}{(_isActive ? "_active" : string.Empty)}.png"),
+                    new Picture($"Marvelous.Resources.Images.common_tab_{_tabKey.ToString().ToLower()}{(_isActive ? "_active" : string.Empty)}.png"),
 
                     new Align
                     {
@@ -170,7 +139,5 @@ class WonderNavigatorTab : Component
             .Height(72)
             .Width(24)
         }
-        .OnTap(()=>_onSelectedAction?.Invoke(_key))
-        ;
-    }
+        .OnTap(() => _onSelected?.Invoke(_tabKey));
 }

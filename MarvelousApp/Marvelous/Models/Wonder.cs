@@ -4,44 +4,44 @@ namespace Marvelous.Models;
 
 public class Wonder
 {
-    public WonderType Type { get; init; }
-    public string Title { get; init; }
-    public string SubTitle { get; init; }
-    public string RegionTitle { get; init; }
-    public string HistoryInfo1 { get; init; }
-    public string HistoryInfo2 { get; init; }
-    public string ConstructionInfo1 { get; init; }
-    public string ConstructionInfo2 { get; init; }
-    public string LocationInfo1 { get; init; }
-    public string LocationInfo2 { get; init; }
-    public string PullQuote1Top { get; init; }
-    public string PullQuote1Bottom { get; init; }
-    public string PullQuote1Author { get; init; }
-    public string PullQuote2 { get; init; }
-    public string PullQuote2Author { get; init; }
-    public string Callout1 { get; init; }
-    public string Callout2 { get; init; }
-    public string UnsplashCollectionId { get; init; }
-    public string VideoId { get; init; }
-    public string VideoCaption { get; init; }
-    public string MapCaption { get; init; }
-    public IList<string> ImageIds { get; init; }
-    public IList<string> Facts { get; init; }
-    public int StartYr { get; init; }
-    public int EndYr { get; init; }
-    public int ArtifactStartYr { get; init; }
-    public int ArtifactEndYr { get; init; }
-    public string ArtifactCulture { get; init; }
-    public string ArtifactGeolocation { get; init; }
-    public double Lat { get; init; }
-    public double Lng { get; init; }
-    public IList<string> HighlightArtifacts { get; init; } // IDs used to assemble HighlightsData, should not be used directly
-    public IList<string> HiddenArtifacts { get; init; } // IDs used to assemble CollectibleData, should not be used directly
-    public IDictionary<int, string> Events { get; init; }
+    public required WonderType Type { get; init; }
+    public required string Title { get; init; }
+    public required string SubTitle { get; init; }
+    public required string RegionTitle { get; init; }
+    public required string HistoryInfo1 { get; init; }
+    public required string HistoryInfo2 { get; init; }
+    public required string ConstructionInfo1 { get; init; }
+    public required string ConstructionInfo2 { get; init; }
+    public required string LocationInfo1 { get; init; }
+    public required string LocationInfo2 { get; init; }
+    public required string PullQuote1Top { get; init; }
+    public required string PullQuote1Bottom { get; init; }
+    public required string PullQuote1Author { get; init; }
+    public required string PullQuote2 { get; init; }
+    public required string PullQuote2Author { get; init; }
+    public required string Callout1 { get; init; }
+    public required string Callout2 { get; init; }
+    public required string UnsplashCollectionId { get; init; }
+    public required string VideoId { get; init; }
+    public required string VideoCaption { get; init; }
+    public required string MapCaption { get; init; }
+    public IList<string>? ImageIds { get; init; }
+    public IList<string>? Facts { get; init; }
+    public required int StartYr { get; init; }
+    public required int EndYr { get; init; }
+    public required int ArtifactStartYr { get; init; }
+    public required int ArtifactEndYr { get; init; }
+    public required string ArtifactCulture { get; init; }
+    public required string ArtifactGeolocation { get; init; }
+    public required double Lat { get; init; }
+    public required double Lng { get; init; }
+    public required IList<string> HighlightArtifacts { get; init; } // IDs used to assemble HighlightsData, should not be used directly
+    public required IList<string> HiddenArtifacts { get; init; } // IDs used to assemble CollectibleData, should not be used directly
+    public required IDictionary<int, string> Events { get; init; }
     public IList<Search> SearchData { get; set; } = new List<Search>();
     public IList<string> SearchSuggestions { get; set; } = new List<string>();
 
-    IList<object> Props => new List<object> { Type, Title, HistoryInfo1, ImageIds, Facts };
+    //IList<object> Props => new List<object> { Type, Title, HistoryInfo1, ImageIds, Facts };
     
     public static IReadOnlyDictionary<WonderType, Wonder> Config { get; } = new Dictionary<WonderType, Wonder>()
     {
@@ -107,12 +107,12 @@ public class Search
 {
     const string BaseImagePath = "https://images.metmuseum.org/CRDImages/";
 
-    public int Id { get; init; }
-    public int Year { get; init; }
-    public string Title { get; init; }
-    public string Keywords { get; init; }
-    public string ImagePath { get; init; }
-    public double AspectRatio { get; init; }
+    public required int Id { get; init; }
+    public required int Year { get; init; }
+    public required string Title { get; init; }
+    public required string Keywords { get; init; }
+    public required string ImagePath { get; init; }
+    public required double AspectRatio { get; init; }
 
     public string ImageUrl => BaseImagePath + ImagePath;
 

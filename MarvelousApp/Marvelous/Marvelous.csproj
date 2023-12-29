@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+    <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Marvelous</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -46,38 +46,7 @@
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg_ios.svg" Color="#252621" />
   </ItemGroup>
   <ItemGroup>
-    <MauiImage Remove="Resources\Images\chichen_itza_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\christ_the_redeemer_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\colosseum_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\common_tab_artifacts.png" />
-    <MauiImage Remove="Resources\Images\common_tab_artifacts_active.png" />
-    <MauiImage Remove="Resources\Images\common_tab_editorial.png" />
-    <MauiImage Remove="Resources\Images\common_tab_editorial_active.png" />
-    <MauiImage Remove="Resources\Images\common_tab_photos.png" />
-    <MauiImage Remove="Resources\Images\common_tab_photos_active.png" />
-    <MauiImage Remove="Resources\Images\common_tab_timeline.png" />
-    <MauiImage Remove="Resources\Images\common_tab_timeline_active.png" />
-    <MauiImage Remove="Resources\Images\great_wall_of_china_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\machu_picchu_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\petra_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\pyramids_wonder_button.png" />
-    <MauiImage Remove="Resources\Images\taj_mahal_wonder_button.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Resources\Fonts\B612Mono-Regular.ttf" />
-    <None Remove="Resources\Fonts\CinzelDecorative-Black.ttf" />
-    <None Remove="Resources\Fonts\CinzelDecorative-Bold.ttf" />
-    <None Remove="Resources\Fonts\CinzelDecorative-Regular.ttf" />
-    <None Remove="Resources\Fonts\Raleway-Bold.ttf" />
-    <None Remove="Resources\Fonts\Raleway-BoldItalic.ttf" />
-    <None Remove="Resources\Fonts\Raleway-ExtraBold.ttf" />
-    <None Remove="Resources\Fonts\Raleway-ExtraBoldItalic.ttf" />
-    <None Remove="Resources\Fonts\Raleway-Italic.ttf" />
-    <None Remove="Resources\Fonts\Raleway-Medium.ttf" />
-    <None Remove="Resources\Fonts\Raleway-MediumItalic.ttf" />
-    <None Remove="Resources\Fonts\Raleway-Regular.ttf" />
-    <None Remove="Resources\Fonts\TenorSans-Regular.ttf" />
-    <None Remove="Resources\Fonts\YesevaOne-Regular.ttf" />
+    <None Remove="Resources\AppIcon\appicon.svg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\chichen_itza_wonder_button.png" />
@@ -98,8 +67,19 @@
     <EmbeddedResource Include="Resources\Images\taj_mahal_wonder_button.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.140" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.140" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reactor.Maui" Version="2.0.12-beta" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.12-beta" />
+    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.12-beta" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
