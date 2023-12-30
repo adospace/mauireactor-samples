@@ -12,18 +12,27 @@ using System.Threading.Tasks;
 
 namespace Marvelous.Pages.Components;
 
-class MainCarouselViewState
+class DragStateInfo
 {
-    public WonderType CurrentType { get; set; }
     public DateTime? StartDrag { get; set; }
     public double PanX { get; set; }
     public double PanY { get; set; }
     public Size ContainerSize { get; set; }
     public ScrollOrientation DraggingOrientation { get; set; } = ScrollOrientation.Neither;
+    public WonderType CurrentType { get; set; }
+
+}
+
+class MainCarouselViewState
+{
+    //public WonderType CurrentType { get; set; }
+    public DragStateInfo DragInfo { get; set; } = new();
 }
 
 partial class MainCarouselView : Component<MainCarouselViewState>
 {
+    event EventHandler<DragStateInfo>? DragStateChanged;
+
     [Prop]
     Action<WonderType>? _onSelected;
 
@@ -38,11 +47,15 @@ partial class MainCarouselView : Component<MainCarouselViewState>
             [.. Enum.GetValues<WonderType>().Select(RenderViewItem),
 
             new MainCarouselViewIndicator()
-                .WonderType(State.CurrentType)]
+                .WonderType(State.DragInfo.CurrentType)]
         )
-        .OnSizeChanged(size => SetState(s => s.ContainerSize = size))
+        .OnSizeChanged(size =>
+        {
+            State.DragInfo.ContainerSize = size;
+            DragStateChanged?.Invoke(this, State.DragInfo);
+        })
         .OnPanUpdated(OnPan)
-        .Background(Illustration.Config[State.CurrentType].BackgroundBrush)
+        .Background(Illustration.Config[State.DragInfo.CurrentType].BackgroundBrush)
         .Opacity(_show ? 1 : 0)
         .WithAnimation()
         ;
@@ -50,10 +63,13 @@ partial class MainCarouselView : Component<MainCarouselViewState>
     MainCarouselViewItem? RenderViewItem(WonderType wonderType) 
         => new MainCarouselViewItem()
             .Type(wonderType)
-            .RelativePanX(State.PanX)
-            .RelativePanY(State.PanY)
-            .CurrentType(State.CurrentType)
-            .ContainerSize(State.ContainerSize);
+            //.CurrentType(State.CurrentType)
+            .OnDragStateChanged(handler => DragStateChanged += handler)
+            //.RelativePanX(State.PanX)
+            //.RelativePanY(State.PanY)
+            //.ContainerSize(State.ContainerSize)
+            //.IsDragging(State.StartDrag != null)
+        ;
 
     void OnPan(object? sender, MauiControls.PanUpdatedEventArgs args)
     {
@@ -63,161 +79,157 @@ partial class MainCarouselView : Component<MainCarouselViewState>
             return;
         }
 
+        var dragInfo = State.DragInfo;
+
         if (args.StatusType == GestureStatus.Started)
         {
-            State.StartDrag = DateTime.Now;
+            dragInfo.StartDrag = DateTime.Now;
         }
 
         if (args.StatusType == GestureStatus.Started)
         {
-            SetState(s =>
-            {
-                s.PanX = Math.Abs(args.TotalX) > Math.Abs(args.TotalY) ? args.TotalX : 0.0;
-                s.PanY = Math.Abs(args.TotalY) > Math.Abs(args.TotalX) ? args.TotalY : 0.0;
-                s.ContainerSize = container.Bounds.Size;
-            });
+            dragInfo.PanX = Math.Abs(args.TotalX) > Math.Abs(args.TotalY) ? args.TotalX : 0.0;
+            dragInfo.PanY = Math.Abs(args.TotalY) > Math.Abs(args.TotalX) ? args.TotalY : 0.0;
+            dragInfo.ContainerSize = container.Bounds.Size;
         }
         else if (args.StatusType == GestureStatus.Running)
         {
-            SetState(s =>
-            {
-                s.PanX = s.DraggingOrientation == ScrollOrientation.Horizontal ? args.TotalX : 0.0;
-                s.PanY = s.DraggingOrientation == ScrollOrientation.Vertical ? args.TotalY : 0.0;
-                s.ContainerSize = container.Bounds.Size;
-                s.DraggingOrientation = s.DraggingOrientation == ScrollOrientation.Neither ? Math.Abs(args.TotalX) > Math.Abs(args.TotalY) ? ScrollOrientation.Horizontal : ScrollOrientation.Vertical : s.DraggingOrientation;
-            });
+            dragInfo.PanX = dragInfo.DraggingOrientation == ScrollOrientation.Horizontal ? args.TotalX : 0.0;
+            dragInfo.PanY = dragInfo.DraggingOrientation == ScrollOrientation.Vertical ? args.TotalY : 0.0;
+            dragInfo.ContainerSize = container.Bounds.Size;
+            dragInfo.DraggingOrientation = dragInfo.DraggingOrientation == ScrollOrientation.Neither ? Math.Abs(args.TotalX) > Math.Abs(args.TotalY) ? ScrollOrientation.Horizontal : ScrollOrientation.Vertical : dragInfo.DraggingOrientation;
         }
         else if (args.StatusType == GestureStatus.Canceled)
         {
-            SetState(s =>
-            {
-                s.PanX = 0;
-                s.PanY = 0;
-                s.ContainerSize = container.Bounds.Size;
-                s.DraggingOrientation = ScrollOrientation.Neither;
-            });
+            dragInfo.PanX = 0;
+            dragInfo.PanY = 0;
+            dragInfo.ContainerSize = container.Bounds.Size;
+            dragInfo.DraggingOrientation = ScrollOrientation.Neither;
+            dragInfo.StartDrag = null;
         }
         else //Completed
         {
-            if (State.StartDrag.HasValue && 
-                (((DateTime.Now - State.StartDrag.Value < TimeSpan.FromMilliseconds(200)) && Math.Abs(State.PanY) < 10) || Math.Abs(State.PanX) > State.ContainerSize.Width / 3.0))
-            {
+            if (dragInfo.StartDrag.HasValue && 
+                (((DateTime.Now - dragInfo.StartDrag.Value < TimeSpan.FromMilliseconds(200)) && Math.Abs(dragInfo.PanY) < 10) || Math.Abs(dragInfo.PanX) > dragInfo.ContainerSize.Width / 3.0))
+            {                
                 SetState(s =>
                 {
-                    s.ContainerSize = container.Bounds.Size;
-                    s.CurrentType = s.PanX < 0 ?
-                        State.CurrentType.Next() :
-                        State.CurrentType.Previous();
-                    s.PanX = 0;
-                    s.PanY = 0;
-                    s.DraggingOrientation = ScrollOrientation.Neither;
+                    s.DragInfo.ContainerSize = container.Bounds.Size;
+                    s.DragInfo.CurrentType = dragInfo.PanX < 0 ?
+                            s.DragInfo.CurrentType.Next() :
+                            s.DragInfo.CurrentType.Previous();
+                    s.DragInfo.PanX = 0;
+                    s.DragInfo.PanY = 0;
+                    s.DragInfo.DraggingOrientation = ScrollOrientation.Neither;
+                    s.DragInfo.StartDrag = null;
                 });
             }
             else
             {
-                if (State.DraggingOrientation == ScrollOrientation.Vertical &&
-                    State.ContainerSize.Height > 0 &&
-                    Math.Abs(State.PanY) / State.ContainerSize.Height > 0.2)
+                if (dragInfo.DraggingOrientation == ScrollOrientation.Vertical &&
+                    dragInfo.ContainerSize.Height > 0 &&
+                    Math.Abs(dragInfo.PanY) / dragInfo.ContainerSize.Height > 0.2)
                 {
-                    _onSelected?.Invoke(State.CurrentType);
+                    _onSelected?.Invoke(State.DragInfo.CurrentType);
                 }
-                SetState(s =>
-                {
-                    s.PanX = 0;
-                    s.PanY = 0;
-                    s.ContainerSize = container.Bounds.Size;
-                    s.DraggingOrientation = ScrollOrientation.Neither;
-                });
 
+                dragInfo.PanX = 0;
+                dragInfo.PanY = 0;
+                dragInfo.ContainerSize = container.Bounds.Size;
+                dragInfo.DraggingOrientation = ScrollOrientation.Neither;
+                dragInfo.StartDrag = null;
             }
         }
+
+        DragStateChanged?.Invoke(this, dragInfo);
     }
 }
 
-partial class MainCarouselViewItem : Component
+class MainCarouselViewItemState
+{
+    public double Opacity { get; set;}
+
+    public double TranslationX { get; set;}
+
+    public Size ContainerSize { get; set;}
+
+    public double PercHorizontalPan { get; set; }
+
+    public double PercVerticalPan { get; set; }
+
+    public WonderType CurrentType { get; set; }
+}
+
+partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
 {
     [Prop]
     WonderType _type;
 
-    [Prop]
-    WonderType _currentType;
+    //[Prop]
+    //WonderType _currentType;
 
     [Prop]
-    double _relativePanX;
+    Action<EventHandler<DragStateInfo>>? _onDragStateChanged;
 
-    [Prop]
-    double _relativePanY;
+    //[Prop]
+    //double _relativePanX;
 
-    [Prop]
-    Size _containerSize;
+    //[Prop]
+    //double _relativePanY;
 
-    [Prop]
-    bool _isDragging;
+    //[Prop]
+    //Size _containerSize;
 
-    bool IsCurrent => _currentType == _type;
+    //[Prop]
+    //bool _isDragging;
+
+    bool IsCurrent => State.CurrentType == _type;
+
+    protected override void OnMountedOrPropsChanged()
+    {
+        _onDragStateChanged?.Invoke(OnDragStateChanged);
+        base.OnMountedOrPropsChanged();
+    }
 
     public override VisualNode Render()
     {
-        var config = Illustration.Config[_type];
-        var translationX = 0.0;
-        var opacity = 0.0;
+        var illustrationConfig = Illustration.Config[_type];
 
-        var percOpacity = _containerSize.Width > 0 ? Easing.CubicIn.Ease(Math.Abs(_relativePanX / _containerSize.Width)) : 0.0;
-        var percVerticalPan = _containerSize.Height > 0 ? (-_relativePanY / _containerSize.Height) : 0.0;
-        var percOpacityInverse = _containerSize.Width > 0 ? Easing.CubicOut.Ease(Math.Abs(_relativePanX / _containerSize.Width)) : 0.0;
+        //System.Diagnostics.Debug.WriteLine($"RenderIllustration({_type}(IsCurrent={IsCurrent}) Opacity:{State.Opacity}, TransX:{State.TranslationX}, PercHPan:{State.PercHorizontalPan}, PercVPan:{State.PercVerticalPan})");
 
-        if (IsCurrent)
+        if (State.ContainerSize.IsZero)
         {
-            translationX = _relativePanX;
-            opacity = 1.0 - percOpacity;
-        }
-        else if (_relativePanX < 0 && _type.IsNextOf(_currentType))
-        {
-            translationX = _containerSize.Width + _relativePanX;
-            opacity = percOpacity;
-        }
-        else if (_relativePanX > 0 && _type.IsPreviousOf(_currentType))
-        {
-            translationX = _relativePanX - _containerSize.Width;
-            opacity = percOpacity;
-        }
-        else if (_type.IsNextOf(_currentType))
-        {
-            translationX = _containerSize.Width;
-        }
-        else if (_type.IsPreviousOf(_currentType))
-        {
-            translationX = - _containerSize.Width;
+            return Grid();
         }
 
         return Grid(
             AbsoluteLayout(
-                [.. config.BackgroundImages?.Select(RenderIllustrationImage)]
+                [.. illustrationConfig.BackgroundImages?.Select(RenderIllustrationImage)]
             ),
 
             AbsoluteLayout(
-                config.MainObjectImage != null ?
-                RenderIllustrationImage(config.MainObjectImage)
-                    .TranslationX(translationX)
-                    .When(!_isDragging, _ => _.WithAnimation(duration: 400))
-                    .Opacity(opacity)
-                    :null
+                illustrationConfig.MainObjectImage != null ?
+                RenderIllustrationImage(illustrationConfig.MainObjectImage)
+                    .TranslationX(State.TranslationX)
+                    .Opacity(State.Opacity)
+                    .WithAnimation(duration: 300)
+                    : null
             ),
 
-            AbsoluteLayout([.. config.ForegroundImages?.Select(_=> 
+            AbsoluteLayout([.. illustrationConfig.ForegroundImages?.Select(_=> 
                 RenderIllustrationImage(_)
-                    .Scale(1.0 + (float)percVerticalPan * 0.3f)
+                    .Scale(1.0 + (float)State.PercVerticalPan * 0.3f)
                     .WithAnimation(duration: 300)
                     )]
             ),
 
             IsCurrent ?
             Rectangle()
-                .Background(Illustration.Config[_currentType].ForegroundBrush)
+                .Background(illustrationConfig.ForegroundBrush)
                 : null,
 
-            Label(Illustration.Config[_currentType].Title)
-                .Opacity(opacity)
+            Label(illustrationConfig.Title)
+                .Opacity(()=>State.Opacity)
                 .WithAnimation()
                 .TextColor(Colors.White)
                 .FontFamily("YesevaOne")
@@ -231,8 +243,8 @@ partial class MainCarouselViewItem : Component
                 ,
 
             Border()
-                .Background(new LinearGradient(180.0,
-                    (Colors.White.WithAlpha(0.0f), 1.0f - (float)percVerticalPan),
+                .Background(()=>new LinearGradient(180.0,
+                    (Colors.White.WithAlpha(0.0f), 1.0f - (float)State.PercVerticalPan),
                     (Colors.White, 1)
                 ))
                 .StrokeCornerRadius(30)
@@ -242,26 +254,79 @@ partial class MainCarouselViewItem : Component
                 .WidthRequest(50)
                 .HeightRequest(800)
                 .StrokeThickness(0)
-                .Opacity(opacity)
+                .Opacity(()=>State.Opacity)
                 ,
 
             Image("common_arrow_indicator.png")
                 .HCenter()
                 .VEnd()
                 .Margin(0,30)
-                .Opacity(opacity)
+                .Opacity(()=>State.Opacity)
 
         );
     }
 
     Image RenderIllustrationImage(IllustrationImage image) 
         => Image(image.Source)
-            .Opacity(IsCurrent ? image.Opacity : 0.0)
+            .Opacity(()=>image.Opacity * State.Opacity)
             .AbsoluteLayoutBounds(IsCurrent ?
-                image.GetFinalBounds(_containerSize) :
-                image.GetInitialBounds(_containerSize))
+                image.GetFinalBounds(State.ContainerSize) :
+                image.GetInitialBounds(State.ContainerSize))
             .WithAnimation(duration: 400)
             ;
+
+    void OnDragStateChanged(object? sender, DragStateInfo dragInfo)
+    {
+        var config = Illustration.Config[_type];
+        var translationX = 0.0;
+        var opacity = 0.0;
+
+        var percHorizontalPan = dragInfo.ContainerSize.Width > 0 ? Easing.CubicIn.Ease(Math.Abs(dragInfo.PanX / dragInfo.ContainerSize.Width)) : 0.0;
+        var percVerticalPan = dragInfo.ContainerSize.Height > 0 ? (-dragInfo.PanY / dragInfo.ContainerSize.Height) : 0.0;
+
+        if (_type == dragInfo.CurrentType)
+        {
+            translationX = dragInfo.PanX;
+            opacity = 1.0 - percHorizontalPan;
+        }
+        else if (dragInfo.PanX < 0 && _type.IsNextOf(dragInfo.CurrentType))
+        {
+            translationX = dragInfo.ContainerSize.Width + dragInfo.PanX;
+            opacity = percHorizontalPan;
+        }
+        else if (dragInfo.PanX > 0 && _type.IsPreviousOf(dragInfo.CurrentType))
+        {
+            translationX = dragInfo.PanX - dragInfo.ContainerSize.Width;
+            opacity = percHorizontalPan;
+        }
+        else if (_type.IsNextOf(dragInfo.CurrentType))
+        {
+            translationX = dragInfo.ContainerSize.Width;
+        }
+        else if (_type.IsPreviousOf(dragInfo.CurrentType))
+        {
+            translationX = -dragInfo.ContainerSize.Width;
+        }
+
+        if (State.ContainerSize != dragInfo.ContainerSize ||
+            State.CurrentType != dragInfo.CurrentType ||
+            State.Opacity != opacity ||
+            State.TranslationX != translationX ||
+            State.PercHorizontalPan != percHorizontalPan ||
+            State.PercVerticalPan != percVerticalPan)
+        {
+            bool containerSizeChanged = State.ContainerSize != dragInfo.ContainerSize;
+            SetState(s => 
+            {
+                s.Opacity = opacity;
+                s.TranslationX = translationX;
+                s.ContainerSize = dragInfo.ContainerSize;
+                s.PercVerticalPan = percVerticalPan;
+                s.PercHorizontalPan = percHorizontalPan;
+                s.CurrentType = dragInfo.CurrentType;
+            }, containerSizeChanged);
+        }
+    }
 }
 
 partial class MainCarouselViewIndicator : Component

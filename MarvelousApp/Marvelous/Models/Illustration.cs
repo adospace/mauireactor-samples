@@ -74,23 +74,23 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#1c746b"),
                 SecondaryColor: Color.FromArgb("#47a49b"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("colosseum_sun.png", new Rect(0.1, 0.1, 0.54, 0.54), new Rect(0.1, -0.02, 0.54, 0.54)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.13, 0.5, 0.5), new Rect(0.1, 0.13, 0.5, 0.5), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, 0.14, 0.34, 0.34), new Rect(-0.06, 0.14, 0.34, 0.34), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("colosseum_colosseum.png", new Rect(-0.38, -0.38, 1.76, 1.76), new Rect(-0.38, -0.38, 1.76, 1.76)),
                 MainObjectEditorialImage: new IllustrationImage("colosseum_colosseum.png", new Rect(0.05, 0.2, 0.9, 0.9), new Rect(0.05, 0.2, 0.9, 0.9)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("colosseum_foreground_left.png", new Rect(-1.4, 0.48, 0.6, 0.6), new Rect(-0.09, 0.48, 0.6, 0.6)),
                     new IllustrationImage("colosseum_foreground_right.png", new Rect(1, 0.48, 0.6, 0.6), new Rect(0.48, 0.56, 0.6, 0.6)),
-                }
+                ]
             )
         },
         {
@@ -111,25 +111,25 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#144f27"),
                 SecondaryColor: Color.FromArgb("#e0cfb7"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("chichen_itza_sun.png", new Rect(0.57, 0.3, 0.35, 0.4), new Rect(0.57, 0.20, 0.35, 0.4)),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0, 0.61, 0.6), new Rect(-0.05, 0, 0.61, 0.6), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, -0.1, 0.4, 0.4), new Rect(0.5, -0.1, 0.4, 0.4), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.25, 0.6, 0.6), new Rect(0, -0.25, 0.6, 0.6), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("chichen_itza_chichen.png", new Rect(-0.94, -0.94, 2.88, 2.88), new Rect(-0.94, -0.94, 2.88, 2.88)),
                 MainObjectEditorialImage: new IllustrationImage("chichen_itza_chichen.png", new Rect(-0.94, -0.94, 2.88, 2.88), new Rect(0, 0, 0.5, 0.5)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("chichen_itza_foreground_left.png", new Rect(-1, 0.20, 1.15, 1.15), new Rect(-0.46, 0.20, 1.15, 1.15)),
                     new IllustrationImage("chichen_itza_foreground_right.png", new Rect(1, 0.45, 0.7, 0.7), new Rect(0.65, 0.45, 0.7, 0.7)),
 
                     new IllustrationImage("chichen_itza_top_left.png", new Rect(-1, -0.55, 1.1, 1.1), new Rect(-0.4, -0.55, 1.1, 1.1)),
                     new IllustrationImage("chichen_itza_top_right.png", new Rect(1, -0.5, 1.1, 1.1), new Rect(0.4, -0.5, 1.1, 1.1)),
-                }
+                ]
             )
         },
         {
@@ -150,23 +150,23 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#194d43"),
                 SecondaryColor: Color.FromArgb("#eb7a65"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("christ_the_redeemer_sun.png", new Rect(0.45, -0.1, 0.43, 0.43), new Rect(0.46, 0.02, 0.43, 0.43)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.13, 0.5, 0.5), new Rect(0.1, 0.13, 0.5, 0.5), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, 0.14, 0.34, 0.34), new Rect(-0.06, 0.14, 0.34, 0.34), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(-0.94, -0.72, 2.88, 2.88), new Rect(-0.94, -0.72, 2.88, 2.88)),
                 MainObjectEditorialImage: new IllustrationImage("christ_the_redeemer_redeemer.png", new Rect(0, 0, 2.2, 2.2), new Rect(-0.6, 0.1, 2.2, 2.2)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("christ_the_redeemer_foreground_left.png", new Rect(-1.4, -0.05, 1.64, 1.64), new Rect(-0.74, -0.05, 1.64, 1.64), Opacity: 0.8),
                     new IllustrationImage("christ_the_redeemer_foreground_right.png", new Rect(1, 0.08, 1.6, 1.6), new Rect(0.13, 0.08, 1.6, 1.6)),
-                }
+                ]
             )
         },
         {
@@ -187,8 +187,8 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#612925"),
                 SecondaryColor: Color.FromArgb("#8faa7b"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("great_wall_of_china_sun.png", new Rect(0.16, 0.1, 0.34, 0.34), new Rect(0.16, -0.02, 0.34, 0.34)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(0.5, -0.05, 0.5, 0.5), new Rect(-0.05, -0.05, 0.5, 0.5), Opacity: 0.3),
@@ -196,16 +196,16 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.8, 0.10, 0.6, 0.6), new Rect(-0.45, 0.10, 0.6, 0.6), Opacity: 0.3),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.2, -0.06, 0.34, 0.34), new Rect(0.18, -0.06, 0.34, 0.34), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("great_wall_of_china_great_wall.png", new Rect(-0.1, -0.07, 1.2, 1.2), new Rect(-0.1, -0.07, 1.2, 1.2)),
                 MainObjectEditorialImage: new IllustrationImage("great_wall_of_china_great_wall.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("great_wall_of_china_foreground_left.png", new Rect(-1.4, 0.33, 0.9, 0.9), new Rect(-0.27, 0.33, 0.9, 0.9)),
                     new IllustrationImage("great_wall_of_china_foreground_right.png", new Rect(1, 0.16, 1.18, 1.18), new Rect(0.56, 0.16, 1.18, 1.18)),
-                }
+                ]
             )
         },
         {
@@ -226,8 +226,8 @@ record Illustration(
                 MarginLeft: -70,
                 PrimaryColor: Color.FromArgb("#0b4161"),
                 SecondaryColor: Color.FromArgb("#bfdace"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("machu_picchu_sun.png", new Rect(0.56, 0.1, 0.34, 0.34), new Rect(0.56, -0.02, 0.34, 0.34)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(0.5, -0.05, 0.5, 0.5), new Rect(0.3, -0.05, 0.5, 0.5), Opacity: 0.3),
@@ -235,17 +235,17 @@ record Illustration(
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.8, 0.10, 0.6, 0.6), new Rect(-0.45, 0.10, 0.6, 0.6), Opacity: 0.3),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.2, -0.06, 0.34, 0.34), new Rect(0.18, -0.06, 0.34, 0.34), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("machu_picchu_machu_picchu.png", new Rect(-1.04, -0.75, 2.9, 2.5), new Rect(-1.04, -0.75, 2.9, 2.5)),
                 MainObjectEditorialImage: new IllustrationImage("machu_picchu_machu_picchu.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("machu_picchu_foreground_back.png", new Rect(-0.18, 0.16, 1.46, 1.46), new Rect(-0.18, 0.12, 1.46, 1.46)),
 
                     new IllustrationImage("machu_picchu_foreground_front.png", new Rect(-0.8, 0.46, 1.1, 1.1), new Rect(-0.5, 0.46, 1.1, 1.1)),
-                }
+                ]
             )
         },
         {
@@ -266,23 +266,23 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#424c98"),
                 SecondaryColor: Color.FromArgb("#181a62"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("petra_moon.png", new Rect(0.2, -0.2, 0.24, 0.24), new Rect(0.2, -0.08, 0.24, 0.24)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.13, 0.5, 0.5), new Rect(0.1, -0.13, 0.5, 0.5), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, 0.14, 0.34, 0.34), new Rect(-0.06, 0.14, 0.34, 0.34), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.05, 0.6, 0.6), new Rect(0.2, -0.05, 0.6, 0.6), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("petra_petra.png", new Rect(-0.44, -0.50, 2.0, 2.0), new Rect(-0.44, -0.50, 2.0, 2.0)),
                 MainObjectEditorialImage: new IllustrationImage("petra_petra.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("petra_foreground_left.png", new Rect(-1.4, -0.04, 1, 1.1), new Rect(-0.4, -0.04, 1, 1.1)),
                     new IllustrationImage("petra_foreground_right.png", new Rect(1, -0.04, 1, 1.1), new Rect(0.38, -0.04, 1, 1.1)),
-                }
+                ]
             )
         },
         {
@@ -303,23 +303,23 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#14194c"),
                 SecondaryColor: Color.FromArgb("#424c98"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("pyramids_moon.png", new Rect(0.5, 0.2, 0.41, 0.41), new Rect(0.5, -0.0, 0.41, 0.41)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.13, 0.5, 0.5), new Rect(0.1, -0.13, 0.5, 0.5), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, -0.14, 0.65, 0.65), new Rect(0, -0.14, 0.65, 0.65), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.05, 0.5, 0.5), new Rect(0.2, 0.05, 0.5, 0.5), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("pyramids_pyramids.png", new Rect(-0.4, -0.4, 1.8, 1.8), new Rect(-0.4, -0.4, 1.8, 1.8)),
                 MainObjectEditorialImage: new IllustrationImage("pyramids_pyramids.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("pyramids_foreground_back.png", new Rect(0, 0.2, 1, 1), new Rect(0, 0.18, 1, 1)),
                     new IllustrationImage("pyramids_foreground_front.png", new Rect(-0.18, 0.15, 1.4, 1.4), new Rect(-0.18, 0.1, 1.4, 1.4)),
-                }
+                ]
             )
         },
         {
@@ -340,25 +340,25 @@ record Illustration(
                 MarginLeft: 0,
                 PrimaryColor: Color.FromArgb("#c86552"),
                 SecondaryColor: Color.FromArgb("#612925"),
-                BackgroundImages: new[]
-                {
+                BackgroundImages:
+                [
                     new IllustrationImage("taj_mahal_sun.png", new Rect(-0.4, 0.1, 0.5, 0.5), new Rect(-0.1, -0.14, 0.5, 0.5)),
 
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, -0.13, 0.5, 0.5), new Rect(0.1, -0.13, 0.5, 0.5), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(1.2, -0.14, 0.65, 0.65), new Rect(0, -0.14, 0.65, 0.65), Opacity: 0.3),
                     new IllustrationImage("common_cloud_white.png", new Rect(-0.5, 0.05, 0.5, 0.5), new Rect(0.2, 0.05, 0.5, 0.5), Opacity: 0.3),
-                },
+                ],
 
                 MainObjectImage: new IllustrationImage("taj_mahal_taj_mahal.png", new Rect(-0.4, -0.466, 1.8, 1.9), new Rect(-0.4, -0.466, 1.8, 1.9)),
                 MainObjectEditorialImage: new IllustrationImage("taj_mahal_taj_mahal.png", new Rect(0, 0, 2.88, 2.88), new Rect(0, 0, 2.88, 2.88)),
 
 
-                ForegroundImages: new[]
-                {
+                ForegroundImages:
+                [
                     new IllustrationImage("taj_mahal_pool.png", new Rect(-0.18, 0.25, 1.4, 1.4), new Rect(-0.18, 0.2, 1.4, 1.4)),
                     new IllustrationImage("taj_mahal_foreground_left.png", new Rect(-0.8, 0.31, 0.8, 0.8), new Rect(-0.35, 0.31, 0.8, 0.8)),
                     new IllustrationImage("taj_mahal_foreground_right.png", new Rect(0.8, 0.24, 0.9, 0.9), new Rect(0.48, 0.24, 0.9, 0.9)),
-                }
+                ]
             )
         },
     };
