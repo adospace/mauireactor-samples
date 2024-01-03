@@ -7,40 +7,37 @@ using System;
 
 namespace DigitsGame.Pages.Components;
 
-class GameBoardNumberButton : Component<GameBoardNumberButtonState>
+class GameBoardNumberButtonState
 {
+    public GameNumber Number { get; set; }
+
+    public int? PreviousValue { get; set; }
+
+    public bool OperationCompleted { get; set; }
+
+    public float Scale { get; set; } = 1.0f;
+
+    public bool IsPressed { get; set; }
+}
+
+partial class GameBoardNumberButton : Component<GameBoardNumberButtonState>
+{
+    [Prop]
     private GameNumber _number;
-    private Action _action;
+    
+    [Prop]
+    private Action _onClick;
+    
+    [Prop]
     private bool _isSelected;
+
+    [Prop]
     private bool _inError;
-
-    public GameBoardNumberButton Number(GameNumber number)
-    {
-        _number = number;
-        return this;
-    }
-
-    public GameBoardNumberButton OnClick(Action action)
-    {
-        _action = action;
-        return this;
-    }
-
-    public GameBoardNumberButton IsSelected(bool isSelected)
-    {
-        _isSelected = isSelected;
-        return this;
-    }
-
-    public GameBoardNumberButton InError(bool inError)
-    {
-        _inError = inError;
-        return this;
-    }
 
     protected override void OnMounted()
     {
         State.Number = _number;
+        System.Diagnostics.Debug.WriteLine($"GameBoardNumberButton.OnMounted(State.Number={State.Number})");
         base.OnMounted();
     }
 
@@ -48,9 +45,11 @@ class GameBoardNumberButton : Component<GameBoardNumberButtonState>
     {
         if (State.Number != _number && State.Number?.Value > 0)
         {
-            State.PreviousValue = State.Number?.Value;
+            State.PreviousValue = State.Number.Value;
         }
         State.Number = _number;
+
+        System.Diagnostics.Debug.WriteLine($"GameBoardNumberButton.OnPropsChanged(State.Number={State.Number} State.PreviousValue={State.PreviousValue})");
 
         base.OnPropsChanged();
     }
@@ -120,7 +119,7 @@ class GameBoardNumberButton : Component<GameBoardNumberButtonState>
             .OnTapDown(()=>
             {
                 SetState(s => s.IsPressed = true);
-                _action?.Invoke();
+                _onClick?.Invoke();
             })
             .OnTapUp(()=>SetState(s => s.IsPressed = false))
             .AutomationId($"Number_Button_PIH_{_number?.Id}")

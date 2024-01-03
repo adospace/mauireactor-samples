@@ -17,26 +17,15 @@ class FeedbackFlowState
     public FeedbackIcon?[] FeedbackIcons { get; set; } = new FeedbackIcon[20];
 }
 
-class FeedbackFlow : Component<FeedbackFlowState>
+partial class FeedbackFlow : Component<FeedbackFlowState>
 {
-    private string? _videoId;
+    [Prop]
+    string? _videoId;
 
-    public FeedbackFlow VideoId(string? videoId)
-    {
-        _videoId = videoId;
-        return this;
-    }
-
-    protected override void OnMounted()
+    protected override void OnMountedOrPropsChanged()
     {
         SetupFeedbackService();
-        base.OnMounted();
-    }
-
-    protected override void OnPropsChanged()
-    {
-        SetupFeedbackService();
-        base.OnPropsChanged();
+        base.OnMountedOrPropsChanged();
     }
 
     void SetupFeedbackService()
@@ -58,7 +47,7 @@ class FeedbackFlow : Component<FeedbackFlowState>
         }
     }
 
-    private void OnFeedbackReceived(FeedbackType type)
+    void OnFeedbackReceived(FeedbackType type)
     {
         SetState(s =>
         {
@@ -73,13 +62,10 @@ class FeedbackFlow : Component<FeedbackFlowState>
         });
     }
 
-    public override VisualNode Render()
-    {
-        return new Grid
-        {
-            State.FeedbackIcons.Select(RenderIcon)
-        };
-    }
+    public override VisualNode Render() 
+        => Grid(
+            [.. State.FeedbackIcons.Select(RenderIcon)]
+        );
 
     private VisualNode RenderIcon(FeedbackIcon? icon, int index)
     {
@@ -114,33 +100,20 @@ class FeedbackFlowIconState
     public FeedbackIcon? Icon { get; set; }
 }
 
-class FeedbackFlowIcon : Component<FeedbackFlowIconState>
+partial class FeedbackFlowIcon : Component<FeedbackFlowIconState>
 {
-    private FeedbackIcon? _icon;
-    private Action? _onEndedAction;
+    [Prop]
+    FeedbackIcon? _icon;
+
+    [Prop]
+    private Action? _onEnded;
+
     static readonly Random _rnd = new();
 
-    public FeedbackFlowIcon Icon(FeedbackIcon? icon)
-    {
-        _icon = icon;
-        return this;
-    }
-    public FeedbackFlowIcon OnEnded(Action onEndedAction)
-    {
-        _onEndedAction = onEndedAction;
-        return this;
-    }
-
-    protected override void OnMounted()
+    protected override void OnMountedOrPropsChanged()
     {
         InitializeState();
-        base.OnMounted();
-    }
-
-    protected override void OnPropsChanged()
-    {
-        InitializeState();
-        base.OnPropsChanged();
+        base.OnMountedOrPropsChanged();
     }
 
     void InitializeState()
@@ -169,8 +142,7 @@ class FeedbackFlowIcon : Component<FeedbackFlowIconState>
         }
     }
 
-
-    private static string GetEmoji(FeedbackIcon? icon)
+    static string GetEmoji(FeedbackIcon? icon)
         => icon?.Type switch
         {
             FeedbackType.Like => "👍",
@@ -180,10 +152,8 @@ class FeedbackFlowIcon : Component<FeedbackFlowIconState>
         };
 
     public override VisualNode Render()
-    {
-        return new Grid
-        {
-            new Label(GetEmoji(_icon))
+        => Grid(
+            Label(GetEmoji(_icon))
                 .FontSize(32)
                 .TranslationX(State.Translate.X)
                 .TranslationY(State.Translate.Y)
@@ -227,10 +197,8 @@ class FeedbackFlowIcon : Component<FeedbackFlowIconState>
             .OnIsEnabledChanged(enabled =>
             {
                 SetState(s => s.IsAnimating = false, false);
-                _onEndedAction?.Invoke();
+                _onEnded?.Invoke();
             })
             .IsEnabled(State.IsAnimating)
-        };
-    }
-
+        );
 }

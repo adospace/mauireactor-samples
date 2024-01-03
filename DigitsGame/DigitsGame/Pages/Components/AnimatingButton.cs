@@ -4,19 +4,23 @@ using MauiReactor.Canvas;
 
 namespace DigitsGame.Pages.Components;
 
-class AnimatingButton : Component<AnimatingButtonState>
+class AnimatingButtonState
 {
-    private bool _inError;
+    public float TranslateX { get; set; }
 
-    public AnimatingButton InError(bool inError)
-    {
-        _inError = inError;
-        return this;
-    }
+    public bool InError { get; set; }
+}
+
+partial class AnimatingButton : Component<AnimatingButtonState>
+{
+    [Prop]
+    bool _inError;
 
     protected override void OnPropsChanged()
     {
         State.InError = _inError;
+        System.Diagnostics.Debug.WriteLine($"AnimatingButton.OnPropsChanged(State.InError={State.InError})");
+
         base.OnPropsChanged();
     }
 

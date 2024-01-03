@@ -4,6 +4,7 @@ using Chateo.Controls;
 using MauiReactor;
 using MauiReactor.Shapes;
 using System;
+using System.Linq;
 
 namespace Chateo.Resources.Styles;
 
@@ -42,7 +43,7 @@ abstract class Theme
     public abstract Color Neutral { get; }
 
     public Label Label(string content)
-        => new Label(content)
+        => Component.Label(content)
             .FontFamily("MulishSemiBold")
             .TextColor(Foreground);
 
@@ -54,7 +55,7 @@ abstract class Theme
         ;
 
     public Button PrimaryButton(string content)
-        => new Button(content)
+        => Component.Button(content)
             .CornerRadius(30)
             .FontFamily("MulishSemiBold")
             .TextColor(ForegroundAccent)
@@ -62,34 +63,33 @@ abstract class Theme
 
 
     public ImageButton ImageButton(string image)
-        => new ImageButton(image)
+        => Component.ImageButton(image)
             .BackgroundColor(Colors.Transparent)
             .BorderWidth(0)
             .BorderColor(Colors.Transparent);
 
     public ImageButton ImageButton(Icon icon)
-        => new ImageButton($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+        => Component.ImageButton($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
             .BackgroundColor(Colors.Transparent)
             .BorderWidth(0)
             .BorderColor(Colors.Transparent);
 
     public Image Image(Icon icon)
-        => new Image($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
+        => Component.Image($"{icon.ToString().ToLowerInvariant()}_icon_{(Current == Light ? "light" : "dark")}.png")
             .VCenter()
             .HCenter()
             .HeightRequest(24)
             .WidthRequest(24);
 
     public Grid Avatar(string avatar, bool online = false)
-        => new Grid("*", "*")
-        {
-            new Image($"{avatar}.png")
+        => Component.Grid("*", "*",
+             Component.Image($"{avatar}.png")
                 .HeightRequest(48)
                 .WidthRequest(48)
                 .HCenter()
                 .VCenter(),
 
-            new Ellipse()
+             Component.Ellipse()
                 .Fill(Green)
                 .StrokeThickness(2)
                 .Stroke(Colors.White)
@@ -98,33 +98,31 @@ abstract class Theme
                 .HEnd()
                 .VStart()
                 .IsVisible(online)
-        }
+        )
         .HeightRequest(52)
         .WidthRequest(52);
 
     public Border BorderedImage(Icon icon)
-        => new Border
-        {
+        => Component.Border(
             Image(icon)
                 .HeightRequest(48)
                 .WidthRequest(48)
                 .VCenter()
                 .HCenter()
-        }
+        )
         .Margin(0)
         .Stroke(MediumForeground)
         .StrokeThickness(3)
         .StrokeCornerRadius(18);
 
     public Border BorderedImage(string image, bool highlighted = false)
-        => new Border
-        {
-            new Image(image)
+        => Component.Border(
+             Component.Image(image)
                 .HeightRequest(48)
                 .WidthRequest(48)
                 .VCenter()
                 .HCenter()
-        }
+        )
         .Margin(0)
         .Stroke(MediumForeground)
         .StrokeThickness(3)

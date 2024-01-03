@@ -51,23 +51,19 @@ public class ContactsPage : Component<ContactsPageState>
 
     public override VisualNode Render()
     {
-        return new Grid("56,68,*", "*")
-        {
-            new Grid("24", "*, 24")
-            {
+        return Grid("56,68,*", "*",
+            Grid("24", "*, 24",
                 Theme.Current.Label("Contacts")
                     .FontSize(18),
 
                 Theme.Current.Image(Icon.Plus)
                     .GridColumn(1)
-            }
+            )
             .VEnd()
             .Margin(0,13),
 
-            new Border
-            {
-                new Grid
-                {
+            Border(
+                Grid(
                     Theme.Current.Image(Icon.Search)
                         .HeightRequest(24)
                         .HStart()
@@ -76,39 +72,37 @@ public class ContactsPage : Component<ContactsPageState>
                     Theme.Current.Entry()
                         .Placeholder("Search")
                         .Margin(32,0,4,0)
-                }
-            }
+                )
+            )
             .BackgroundColor(Theme.Current.MediumBackground)
             .StrokeShape(new RoundRectangle().CornerRadius(4))
             .HeightRequest(36)
             .Margin(0, 16)
             .GridRow(1),
 
-            new CollectionView()
+            CollectionView()
                 .ItemsSource(State.Users, RenderContactItem)
                 .GridRow(2)
-        }
+        )
         .Margin(24, 16);
     }
 
-    private VisualNode RenderContactItem(UserViewModel user)
+    private Grid RenderContactItem(UserViewModel user)
     {
         var lastSeen = DateTime.Now - user.LastSeen;
         var online = lastSeen.TotalMinutes < 2;
 
-        return new Grid("68,2", "56, *")
-        {
-            new Rectangle()
+        return Grid("68,2", "56, *",
+            Rectangle()
                 .Fill(Theme.Current.Neutral)
                 .GridColumnSpan(2)
                 .GridRow(1)
                 .VEnd(),
 
-            new Image($"{user.Avatar}.png")
+            Image($"{user.Avatar}.png")
                 .Margin(0,0,0,12),
 
-            new VStack
-            {
+            VStack(
                 Theme.Current.Label($"{user.FirstName} {user.LastName}")
                     .FontSize(14)
                     .HeightRequest(24)
@@ -119,10 +113,10 @@ public class ContactsPage : Component<ContactsPageState>
                     .FontSize(12)
                     .HeightRequest(20)
                     .VerticalTextAlignment(TextAlignment.Center)
-            }
+            )
             .Margin(12,0,0,12)
-            .GridColumn (1),
-        }
+            .GridColumn (1)
+        )
         .OnTapped(()=> OnOpenUserChatPage(user));
     }
 

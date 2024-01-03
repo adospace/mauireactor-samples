@@ -17,36 +17,32 @@ class MainPage : Component<MainPageState>
 {
     public override VisualNode Render()
     {
-        return new ContentPage
-        {
-            new Grid
-            {
+        return ContentPage(
+             Grid(
                 new InfiniteScroller()
                     .SafeAreaExtent(State.SafeAreaExtent)
                     .OnCurrentVideoChanged(videoIndex => SetState(s => s.CurrentVideoIndex = videoIndex)),
 
                 new FeedbackFlow()
                     .VideoId(State.CurrentVideoIndex >= 0 ? VideoModel.All[State.CurrentVideoIndex].Source.ToString() : null)
-            }
-        }
+            )
+        )
         .OnAppearing(OnCalcSafeAreaSize)
         .OniOS(_ => _
-            .Set(MauiControls.PlatformConfiguration.iOSSpecific.Page.UseSafeAreaProperty, false))
-        ;
+            .Set(MauiControls.PlatformConfiguration.iOSSpecific.Page.UseSafeAreaProperty, false));
     }
 
     private void OnCalcSafeAreaSize(object? sender, EventArgs args)
     {
 #if IOS
-        var page = sender as MauiControls.ContentPage;
-        if (page != null)
+        if (sender is MauiControls.ContentPage page)
         {
             var safeAreaInsets = Microsoft.Maui.ApplicationModel.WindowStateManager.Default.GetCurrentUIWindow()?.SafeAreaInsets;
             if (safeAreaInsets != null)
             {
                 SetState(s => s.SafeAreaExtent = new Thickness(safeAreaInsets.Value.Left, safeAreaInsets.Value.Top, safeAreaInsets.Value.Right, safeAreaInsets.Value.Bottom));
-            }            
-        }           
+            }
+        }
 #endif
 
 
@@ -77,22 +73,13 @@ class InfiniteScrollerState
     public DateTime StartDragTime { get; set; }
 }
 
-class InfiniteScroller : Component<InfiniteScrollerState>
+partial class InfiniteScroller : Component<InfiniteScrollerState>
 {
-    private Action<int>? _currentVideoChangedAction;
+    [Prop]
+    private Action<int>? _onCurrentVideoChanged;
+
+    [Prop]
     private Thickness _safeAreaExtent;
-
-    public InfiniteScroller OnCurrentVideoChanged(Action<int> currentVideoChangedAction)
-    {
-        _currentVideoChangedAction = currentVideoChangedAction;
-        return this;
-    }
-
-    internal InfiniteScroller SafeAreaExtent(Thickness safeAreaExtent)
-    {
-        _safeAreaExtent = safeAreaExtent;
-        return this;
-    }
 
     public override VisualNode Render()
     {
@@ -100,8 +87,7 @@ class InfiniteScroller : Component<InfiniteScrollerState>
         var upVideo = VideoModel.All[State.VideoIndex > 0 ? State.VideoIndex - 1 : VideoModel.All.Length - 1];
         var downVideo = VideoModel.All[State.VideoIndex < VideoModel.All.Length - 1 ? State.VideoIndex + 1 : 0];
 
-        return new Grid
-        {
+        return Grid(
             new MediaElement()
                 .Aspect(Aspect.AspectFill)
                 .ShowsPlaybackControls(false)
@@ -156,11 +142,11 @@ class InfiniteScroller : Component<InfiniteScrollerState>
                         s.PanY = 0;
                         System.Diagnostics.Debug.WriteLine($"CurrentIndex = {s.VideoIndex}");
 
-                        _currentVideoChangedAction?.Invoke(s.VideoIndex);
+                        _onCurrentVideoChanged?.Invoke(s.VideoIndex);
                     }
                 });
             })
-        }
+        )
         .OnSizeChanged(videoSize =>
         {
             SetState(s => s.VideoSize = new Size(videoSize.Width, videoSize.Height - _safeAreaExtent.VerticalThickness));

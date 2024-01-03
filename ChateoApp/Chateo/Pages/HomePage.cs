@@ -5,7 +5,7 @@ using System;
 
 namespace Chateo.Pages;
 
-enum Page
+enum PageType
 {
     Contacts,
 
@@ -16,7 +16,7 @@ enum Page
 
 class HomePageState
 {
-    public Page CurrentPage { get; set; }
+    public PageType CurrentPage { get; set; }
 }
 
 class HomePage : Component<HomePageState>
@@ -31,31 +31,28 @@ class HomePage : Component<HomePageState>
 
     public override VisualNode Render()
     {
-        return new Shell
-        {
-            new ContentPage("Home")
-            {
-                new Grid("*, 83", "*")
-                {
+        return Shell(
+            ContentPage("Home",
+                Grid("*, 83", "*",
                     RenderCurrentPage(),
 
                     new TabBarComponent()
                         .Page(State.CurrentPage)
                         .OnPageChanged(page => SetState(s => s.CurrentPage = page))
                         .GridRow(1)
-                }
-            }
+                )
+            )
             .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
-        };
+        );
     }
 
     VisualNode RenderCurrentPage()
         => State.CurrentPage switch
         {
-            Page.Contacts => new ContactsPage(),
-            Page.Chats => new ChatsPage(),
-            Page.Settings => new SettingsPage(),
+            PageType.Contacts => new ContactsPage(),
+            PageType.Chats => new ChatsPage(),
+            PageType.Settings => new SettingsPage(),
             _ => throw new NotSupportedException(),
         };
 }

@@ -40,10 +40,7 @@ class ChatsPage : Component<ChatsPageState>
             .Where(_ => _.Messages.Any())
             .ToArray();
 
-        SetState(s =>
-        {
-            s.Items = new ObservableCollection<ChatItem>(items);
-        });
+        State.Items = new ObservableCollection<ChatItem>(items);
 
         chatServer.MessageCreated += OnMessageCreated;
         chatServer.MessageUpdated += OnMessageUpdated;
@@ -114,31 +111,29 @@ class ChatsPage : Component<ChatsPageState>
                 .Margin(0, 16)
                 .GridRow (3),
         }
-        .Margin(24, 16);
+        .Margin(24, 16)
+        
         ;
     }
 
-    VisualNode RenderTitleBar()
-    {
-        return new Grid("24", "*, 32, 24")
-        {
+
+    Grid RenderTitleBar()
+        => Grid("24", "*, 32, 24",
             Theme.Current.Label("Chats")
                 .FontSize(18),
 
             Theme.Current.Image(Icon.Comment)
                 .GridColumn(1)
-                .Margin(0,0,8,0),
+                .Margin(0, 0, 8, 0),
 
             Theme.Current.Image(Icon.Check)
                 .GridColumn(2)
-        }
+        )
         .VEnd()
         .Margin(0, 13);
-    }
 
-    VisualNode RenderStoryItem(string label, Border image)
-        => new Grid("56, 20", "56")
-        {
+    Grid RenderStoryItem(string label, Border image)
+        => Grid("56, 20", "56",
             image,
 
             Theme.Current.Label(label)
@@ -146,19 +141,17 @@ class ChatsPage : Component<ChatsPageState>
                 .Margin(0,4,0,0)
                 .HorizontalTextAlignment(TextAlignment.Center)
                 .GridRow(1)
-        };
+        );
 
-    VisualNode RenderChatItem(ChatItem item)
+    Grid RenderChatItem(ChatItem item)
     {
         var notSeen = item.Messages.Count(_ => _.ReadTimeStamp == null);
 
-        return new Grid("*, *", "56, *")
-        {
+        return Grid("*, *", "56, *",
             Theme.Current.Avatar(item.User.Avatar, (DateTime.Now - item.User.LastSeen).TotalMinutes < 2)
                 .GridRowSpan(2),
 
-            new Grid("*", "*, Auto")
-            {
+            Grid("*", "*, Auto",
                 Theme.Current.Label($"{item.User.FirstName} {item.User.LastName}")
                     .FontSize(14)
                     .VerticalTextAlignment(TextAlignment.Center),
@@ -167,41 +160,39 @@ class ChatsPage : Component<ChatsPageState>
                     .TextColor(Theme.Current.MediumForeground)
                     .VerticalTextAlignment(TextAlignment.Center)
                     .GridColumn(1)
-            }
+            )
             .Margin(12,0,0,0)
             .HFill()
             .GridColumn(1),
 
-            new Grid("*", "*, 22")
-            {
+            Grid("*", "*, 22",
                 Theme.Current.Label(item.Messages[0].Content)
                     .FontSize(12)
                     .TextColor(Theme.Current.MediumForeground)
                     .VerticalTextAlignment(TextAlignment.Center),
 
                 notSeen > 0 ?
-                new Grid
-                {
-                    new Ellipse()
+                Grid(
+                    Ellipse()
                         .Fill(Theme.Current.MediumBackground),
 
                     Theme.Current.Label(notSeen.ToString())
                         .VerticalTextAlignment(TextAlignment.Center)
                         .HorizontalTextAlignment(TextAlignment.Center)
-                }
+                )
                 .GridColumn(1)
                 : null
-            }
+            )
             .Margin(12,0,0,0)
             .HFill()
             .GridColumn(1)
             .GridRow(2)
-        }
+        )
         .OnTapped(() => OnOpenUserChatPage(item))
         .Margin(0, 16, 0, 0);
     }
 
-    private async void OnOpenUserChatPage(ChatItem item)
+    async void OnOpenUserChatPage(ChatItem item)
     {
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
@@ -213,7 +204,7 @@ class ChatsPage : Component<ChatsPageState>
         });
     }
 
-    private void OnMessageUpdated(object? sender, MessageViewModel message)
+    void OnMessageUpdated(object? sender, MessageViewModel message)
     {
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();

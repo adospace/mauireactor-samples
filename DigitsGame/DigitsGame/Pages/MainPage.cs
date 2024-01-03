@@ -38,39 +38,28 @@ class MainPageState
 
 class MainPage : Component<MainPageState>
 {
-    private IParameter<MainState> _mainStateParameter;
+    IParameter<MainState> _mainStateParameter;
 
     public MainPage()
     {
         _mainStateParameter = CreateParameter<MainState>();
     }
 
-    public override VisualNode Render()
-    {
-        if (DeviceIdiom.Desktop == DeviceInfo.Current.Idiom)
-        {
-            return RenderOnDesktop();
-        }
-        else
-        {
-            return RenderOnMobile();
-        }
-    }
+    public override VisualNode Render() 
+        => DeviceInfo.Current.Idiom == DeviceIdiom.Desktop ? RenderOnDesktop() : RenderOnMobile();
 
-    VisualNode RenderOnMobile()
+    ContentPage RenderOnMobile()
     {
         var currentView = _mainStateParameter?.Value.PageView ?? PageView.GameBoard;
-        return new ContentPage("Digits")
-        {
-            new Grid("100,400", "*,*")
-            {
-                new Button("Game Board")
+        return ContentPage("Digits",
+            Grid("100,400", "*,*",
+                Button("Game Board")
                     .TextColor(currentView == PageView.GameBoard ? Colors.White : Colors.Black)
                     .BackgroundColor(currentView == PageView.GameBoard ? Theme.GreenColor : Colors.LightGray)
                     .OnClicked(()=>_mainStateParameter?.Set(_ => _.PageView = PageView.GameBoard))
                     .Margin(10),
 
-                new Button("Operations")
+                Button("Operations")
                     .TextColor(currentView == PageView.OperationList ? Colors.White : Colors.Black)
                     .BackgroundColor(currentView == PageView.OperationList ? Theme.GreenColor : Colors.LightGray)
                     .OnClicked(()=>_mainStateParameter?.Set(_ => _.PageView = PageView.OperationList))
@@ -89,18 +78,14 @@ class MainPage : Component<MainPageState>
                     .Operations(State.Operations)
                     .GridRow(1)
                     .GridColumnSpan(2)
-            }
-        };
+            )
+        );
 
     }
 
-
-    VisualNode RenderOnDesktop()
-    {
-        return new ContentPage
-        {
-            new Grid("*", "*,*")
-            {
+    ContentPage RenderOnDesktop()
+        => ContentPage(
+            Grid("*", "*,*",
                 new GameBoard()
                     .Target(State.CurrentGame.TargetValue)
                     .Board(State.BoardStates.Count > 0 ? State.BoardStates.Peek() : State.CurrentGame.Values)
@@ -110,10 +95,8 @@ class MainPage : Component<MainPageState>
                 new OperationList()
                     .Operations(State.Operations)
                     .GridColumn(1)
-            }
-        };
-
-    }
+            )
+        );
 
     void OnNewOperationCreated(OperationItem newOperation)
     {
@@ -151,31 +134,4 @@ class MainPage : Component<MainPageState>
     }
 }
 
-class GameBoardState
-{
-    public Operation? CurrentOperation { get; set; }
 
-    public GameNumber CurrentNumber { get; set; }
-
-    public OperationItem OperationInError { get; set; }
-}
-
-class GameBoardNumberButtonState
-{
-    public GameNumber Number { get; set; }
-
-    public int? PreviousValue { get; set; }
-
-    public bool OperationCompleted { get; set; }
-
-    public float Scale { get; set; } = 1.0f;
-
-    public bool IsPressed { get; set; }
-}
-
-class AnimatingButtonState
-{
-    public float TranslateX { get; set; }
-
-    public bool InError { get; set; }
-}

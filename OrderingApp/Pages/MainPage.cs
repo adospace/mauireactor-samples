@@ -26,15 +26,13 @@ class MainPage : Component<MainPageState>
 
     public override VisualNode Render()
     {
-        return new ContentPage
-        {
-            new Grid("260, *", "*")
-            {
+        return ContentPage(
+            Grid("260, *", "*",
                 new Header()
                     .SelectedType(State.SelectedType)
                     .OnTypeSelected(productType => OnSelectedType(productType, true)),
 
-                new CollectionView(listView => _listView = listView)
+                CollectionView(listView => _listView = listView)
                     .ItemsSource(ProductItem.Items, RenderProductItem)
                     .OnScrolled(OnListViewScrolled)
                     .GridRow(1)
@@ -44,31 +42,28 @@ class MainPage : Component<MainPageState>
                     .Item(State.SelectedItemIndex == null ? null : ProductItem.Items[State.SelectedItemIndex.Value])
                     .OnClose(()=>SetState(s => s.SelectedItemIndex = null))
                     .GridRowSpan(2)
-            }
-        };
+            )
+        );
     }
 
     private VisualNode RenderProductItem(ProductItem item)
     {
-        return new Border
-        {
-            new Grid("*", "115,*")
-            {
-                new Image($"{item.Image}.png")
+        return Border(
+            Grid("*", "115,*",
+                Image($"{item.Image}.png")
                     .HeightRequest(140)
                     .WidthRequest(140)
                     .TranslationX(-20)
                     ,
 
-                new Grid("20,*,24", "*")
-                {
-                    new Label(item.Title)
+                Grid("20,*,24", "*",
+                    Label(item.Title)
                         .FontFamily("MulishSemiBold")
                         .FontSize(18)
                         .VStart()
                         .TextColor(Colors.Black),
                     
-                    new Label(item.Description)
+                    Label(item.Description)
                         .FontFamily("MulishRegular")
                         .FontSize(12)
                         .VCenter()
@@ -76,35 +71,34 @@ class MainPage : Component<MainPageState>
                         .GridRow(1),
 
 
-                    new Label($"${item.Cost}")
+                    Label($"${item.Cost}")
                         .FontFamily("MulishSemiBold")
                         .FontSize(16)
                         .VStart()
                         .TextColor(Colors.Black)
-                        .GridRow(2),
-                }
+                        .GridRow(2)
+                )
                 .GridColumn(1)
                 .Margin(12,15),
 
-                new Border
-                { 
-                    new Label("+ ADD")
+                Border(
+                    Label("+ ADD")
                         .FontFamily("MulishBold")
                         .TextColor(Colors.White)
                         .VCenter()
                         .HCenter()
-                }
+                )
                 .OnTapped(()=>SetState(s => s.SelectedItemIndex = ProductItem.Items.IndexOf(item)))
                 .WidthRequest(78)
                 .HeightRequest(34)
                 .BackgroundColor(Theme.PrimaryColor)
-                .StrokeShape(new RoundRectangle().CornerRadius(13,0,0,13))
+                .StrokeCornerRadius(13,0,0,13)
                 .GridColumn(1)
                 .HEnd()
                 .VEnd()
-            }
-        }
-        .StrokeShape(new RoundRectangle().CornerRadius(13))
+            )
+        )
+        .StrokeCornerRadius(13)
         .Background(new MauiControls.LinearGradientBrush(new MauiControls.GradientStopCollection
             {
                 new MauiControls.GradientStop(Theme.PrimaryLightColor, 0.0537f),
@@ -219,102 +213,92 @@ class Header : Component<HeaderState>
 
     public override VisualNode Render()
     {
-        return new Grid("62,49,130.0", "*")
-        {
-            new Grid("30", "39,30,*,110")
-            {
-                new Image("menu_icon.png")
+        return Grid("62,49,130.0", "*",
+            Grid("30", "39,30,*,110",
+                Image("menu_icon.png")
                     .Margin(0,3,12,3)
                     .Aspect(Aspect.AspectFit),
 
-                new Image("dodo.png")
+                Image("dodo.png")
                     .GridColumn(1),
 
-                new Image("title.png")
+                Image("title.png")
                     .GridColumn(2)
                     .Margin(12,0),
 
-                new HStack(spacing: 2)
-                {
-                    new Label("DELIVERY")
+                HStack(spacing: 2,
+                    Label("DELIVERY")
                         .VCenter()
                         .TextColor(Theme.PrimaryColor),
 
-                    new Image("chevron_down.png")
+                    Image("chevron_down.png")
                         .VCenter()
-                }
+                )
                 .HEnd()
                 .GridColumn(3)
-            }
+            )
             .Margin(24,32,24,0),
 
-            new Border
-            {
-                new Grid("32", "*")
-                {
-                    new Label("29 Hola street, California, USA")
+            Border(
+                Grid("32", "*",
+                    Label("29 Hola street, California, USA")
                         .Margin(8,0)
                         .FontSize(14)
                         .FontFamily("MulishSemiBold")
                         .TextColor(Theme.PrimaryColor)
                         .VerticalTextAlignment(TextAlignment.Center),
 
-                    new Image("pin.png")
+                    Image("pin.png")
                         .HeightRequest(16)
                         .Margin(8,0)
                         .HEnd()
                         .VCenter()
-                }
-            }
+                )
+            )
             .BackgroundColor(Theme.PrimaryColor.WithAlpha(0.1f))
             .StrokeThickness(0)
             .StrokeShape(new RoundRectangle().CornerRadius(4))
             .GridRow(1)
             .Margin(24, 16.5, 24, 0),
         
-            new ScrollView(scrollView => _scrollView = scrollView)
-            {
-                new Grid
-                {
-                    new HStack(spacing:10)
-                    {
-                        Enum.GetValues<ProductType>().Select(RenderProductType)
-                    },
+            ScrollView(scrollView => _scrollView = scrollView,
+                Grid(
+                    HStack(spacing:10,
+                        [.. Enum.GetValues<ProductType>().Select(RenderProductType)]
+                    ),
 
-                    RenderSelectedBorder(),
-                }
-            }
+                    RenderSelectedBorder()
+                )
+            )
             .Margin(0,20.5,0,0)
             .Orientation(ScrollOrientation.Horizontal)
             .Padding(24,0,24,4)
             .GridRow(2)
-        }
+        )
         .BackgroundColor(Theme.PrimaryLightColor);
     }
 
     Border RenderProductType(ProductType type)
     {
-        return new Border()
-        {
-            new Grid("*, 20", "*")
-            {
-                new Image($"{type.ToString().ToLowerInvariant()}.png")
+        return Border(
+            Grid("*, 20", "*",
+                Image($"{type.ToString().ToLowerInvariant()}.png")
                     .HeightRequest(64)
                     .WidthRequest(64)
                     .HCenter()
                     .VCenter(),
 
-                new Label(type.ToString())
+                Label(type.ToString())
                     .FontFamily("MulishSemiBold")
                     .TextColor(Colors.Black)
                     .FontSize(14)
                     .GridRow(1)
                     .HorizontalTextAlignment(TextAlignment.Center)
                     .VerticalTextAlignment(TextAlignment.Center)
-            }
+            )
             .Padding(8)
             .BackgroundColor(Theme.PrimaryLightColor)
-        }
+        )
         .WidthRequest(80)
         .OnTapped(()=>_selectAction?.Invoke(type))
         .BackgroundColor(Theme.PrimaryLightColor)
@@ -324,7 +308,7 @@ class Header : Component<HeaderState>
 
     VisualNode RenderSelectedBorder()
     {
-        return new Border()
+        return Border()
             .BackgroundColor(Colors.Transparent)
             .WidthRequest(80)
             .StrokeThickness(2)
@@ -350,67 +334,48 @@ class CartState
     public double AddOn2Cost { get; set; } = 0;
 }
 
-class Cart : Component<CartState>
+partial class Cart : Component<CartState>
 {
+    [Prop]
     private ProductItem? _item;
-    private Action? _onCloseAction;
 
-    public Cart Item(ProductItem? item)
-    {
-        _item = item;
-        return this;
-    }
+    [Prop]
+    private Action? _onClose;
 
-    public Cart OnClose(Action action)
-    {
-        _onCloseAction = action;
-        return this;
-    }
-
-    protected override void OnMounted()
+    protected override void OnMountedOrPropsChanged()
     {
         State.TranslateY = _item != null ? 0 : 660;
-        base.OnMounted();
-    }
-
-    protected override void OnPropsChanged()
-    {
-        State.TranslateY = _item != null ? 0 : 660;
-        base.OnPropsChanged();
+        base.OnMountedOrPropsChanged();
     }
 
     public override VisualNode Render()
     {
-        return new Grid
-        {
-            new Grid("*,78", "*")
-            {
+        return Grid(
+            Grid("*,78", "*",
                 RenderBody(),
 
                 RenderBottom()
-            }
+            )
             .TranslationY(State.TranslateY)
             .WithAnimation(duration: 300, easing: Easing.CubicOut)
             .HeightRequest(600)
             .VEnd()
             .BackgroundColor(Colors.White)
-        }
+        )
         .BackgroundColor(_item != null ? Colors.Black.WithAlpha(0.8f) : Colors.Transparent)
         .IsVisible(_item != null)
         ;
     }
 
-    private VisualNode? RenderBody()
+    private Grid? RenderBody()
     {
         if (_item == null)
         {
             return null;
         }
 
-        return new Grid("66,*", "*")
-        {
-            new Grid("*", "*,24")
-            {
+        return Grid("66,*", "*",
+            Grid("*", "*,24",
                 new Label(_item.Title)
                     .FontFamily("MulishBold")
                     .FontSize(18)
@@ -418,12 +383,11 @@ class Cart : Component<CartState>
 
                 new Image("close.png")                    
                     .GridColumn(1)
-                    .OnTapped(_onCloseAction)
-            }
+                    .OnTapped(_onClose)
+            )
             .Margin(24,20),
 
-            new VStack(spacing: 20)
-            {
+            VStack(spacing: 20,
                 new CartItemGroup
                 {
                     RenderCartItem("Small - 6''", 8, State.SizeCost == 8, ()=>SetState(s => s.SizeCost = 8)),
@@ -448,10 +412,10 @@ class Cart : Component<CartState>
                 .Title("Add ons")
                 .Optional(true)
 
-            }
+            )
             .Margin(24,0)
             .GridRow(1)
-        };
+        );
     }
 
     CartItem RenderCartItem(
@@ -469,9 +433,8 @@ class Cart : Component<CartState>
 
     private VisualNode RenderBottom()
     {
-        return new Grid("*", "*")
-        {
-            new Rectangle()
+        return Grid("*", "*",
+            Rectangle()
                 .Fill(Color.FromArgb("#E6E6E6"))
                 .HeightRequest(2)
                 .GridColumnSpan(2)
@@ -479,7 +442,7 @@ class Cart : Component<CartState>
 
             new Total()
                 .Cost(new[]{ State.SizeCost, State.CrustCost, State.AddOn1Cost, State.AddOn2Cost }.Where(_=>_>0).Sum())
-        }
+        )
         .GridRow(1);
     }
 }
@@ -543,51 +506,29 @@ class CartItemGroup : Component
     }
 }
 
-class CartItem : Component
+partial class CartItem : Component
 {
-    private Action? _selectedAction;
+    [Prop]
+    private Action? _onSelected;
+
+    [Prop]
     private string? _label;
+    
+    [Prop]
     private bool _checkBox;
+
+    [Prop]
     private double _cost;
+
+    [Prop]
     private bool _selected;
-
-    public CartItem Label(string label)
-    {
-        _label = label;
-        return this;
-    }
-
-    public CartItem Cost(double cost)
-    {
-        _cost = cost;
-        return this;
-    }
-
-    public CartItem Selected(bool selected)
-    {
-        _selected = selected;
-        return this;
-    }
-
-    public CartItem OnSelected(Action action)
-    {
-        _selectedAction = action;
-        return this;
-    }
-
-    public CartItem CheckBox(bool checkBox)
-    {
-        _checkBox = checkBox;
-        return this;
-    }
 
     public override VisualNode Render()
     {
-        return new Grid("40", "24,*,30")
-        {
+        return Grid("40", "24,*,30",
             _checkBox ? RenderCheckBox() : RenderRadio(),
 
-            new Label(_label)
+            Component.Label(_label)
                 .FontFamily("MulishRegular")
                 .FontSize(12)
                 .TextColor(Colors.Black)
@@ -595,18 +536,18 @@ class CartItem : Component
                 .VCenter()
                 .Margin(9,0),
 
-            new Label($"${_cost}")
+            Component.Label($"${_cost}")
                 .FontFamily("MulishRegular")
                 .FontSize(12)
                 .TextColor(Colors.Black)
                 .VCenter()
                 .GridColumn(2)
                 .IsVisible(_cost > 0)
-        }
-        .OnTapped(_selectedAction);
+        )
+        .OnTapped(_onSelected);
     }
 
-    private VisualNode RenderRadio()
+    CanvasView RenderRadio()
     {
         return new CanvasView
         {
@@ -629,7 +570,7 @@ class CartItem : Component
         .WidthRequest(24);
     }
 
-    private VisualNode RenderCheckBox()
+    CanvasView RenderCheckBox()
     {
         return new CanvasView
         {
@@ -647,7 +588,7 @@ class CartItem : Component
                 }
             }
         }
-        .OnTapped(_selectedAction)
+        .OnTapped(_onSelected)
         .BackgroundColor(Colors.Transparent)
         .HeightRequest(24)
         .WidthRequest(24);
@@ -691,9 +632,8 @@ class Total : Component<TotalState>
 
     public override VisualNode Render()
     {
-        return new Grid("*", "*, 120")
-        {
-            new Button("+ ADD TO CART")
+        return Grid("*", "*, 120",
+            Button("+ ADD TO CART")
                 .FontSize(14)
                 .FontFamily("MulishSemiBold")
                 .TextColor(Colors.White)
@@ -701,7 +641,7 @@ class Total : Component<TotalState>
                 .CornerRadius(8)
                 .HFill(),
 
-            new Label()
+            Label()
                 .FontFamily("MulishSemiBold")
                 .FontSize(16)
                 .TextColor(Colors.Black)
@@ -725,7 +665,7 @@ class Total : Component<TotalState>
             }
             .IsEnabled(State.IsConterAnimationEnabled)
             .OnIsEnabledChanged(enabled => SetState(s => s.IsConterAnimationEnabled = enabled))
-        }
+        )
         .Margin(24,20);
     }
 }

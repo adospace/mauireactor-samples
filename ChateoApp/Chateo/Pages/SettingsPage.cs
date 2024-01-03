@@ -14,64 +14,58 @@ class SettingsPage : Component
 {
     public override VisualNode Render()
     {
-        return new Grid
-        {
-            new Grid("56, 66, *, 83", "*")
-            {
-                RenderTitleBar(),
+        return Grid("56, 66, *, 83", "*",
+            RenderTitleBar(),
 
-                RenderUserItem(),
+            RenderUserItem(),
 
-                new VStack(spacing: 5)
-                {
-                    RenderSettingItem(Icon.Account, "Account"),
+            VStack(spacing: 5,
+                RenderSettingItem(Icon.Account, "Account"),
 
-                    RenderSettingItem(Icon.Chats, "Chats"),
+                RenderSettingItem(Icon.Chats, "Chats"),
 
-                    new Rectangle()
-                        .HeightRequest(2)
-                        .Margin(-24,0)
-                        .Fill(Theme.Current.MediumBackground),
+                Rectangle()
+                    .HeightRequest(2)
+                    .Margin(-24,0)
+                    .Fill(Theme.Current.MediumBackground),
 
-                    RenderSettingItem(Icon.Appearance, "Appearance", Theme.ToggleCurrentAppTheme),
+                RenderSettingItem(Icon.Appearance, "Appearance", Theme.ToggleCurrentAppTheme),
 
-                    RenderSettingItem(Icon.Notification, "Notification"),
+                RenderSettingItem(Icon.Notification, "Notification"),
 
-                    RenderSettingItem(Icon.Privacy, "Privacy"),
+                RenderSettingItem(Icon.Privacy, "Privacy"),
 
-                    RenderSettingItem(Icon.Folder, "Data Usage"),
+                RenderSettingItem(Icon.Folder, "Data Usage"),
 
-                    new Rectangle()
-                        .HeightRequest(2)
-                        .Margin(-24,0)
-                        .Fill(Theme.Current.MediumBackground),
+                Rectangle()
+                    .HeightRequest(2)
+                    .Margin(-24,0)
+                    .Fill(Theme.Current.MediumBackground),
 
-                    RenderSettingItem(Icon.Help, "Help"),
+                RenderSettingItem(Icon.Help, "Help"),
 
-                    RenderSettingItem(Icon.Email, "Invite Your Friends"),
-                }
-                .GridRow(2)
-                .Margin(0,16),
-            }
-        }
+                RenderSettingItem(Icon.Email, "Invite Your Friends")
+            )
+            .GridRow(2)
+            .Margin(0,16)
+        )
+        
         .Margin(24, 16);
         ;
     }
 
-    private VisualNode RenderUserItem()
+    private Grid RenderUserItem()
     {
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
 
-        return new Grid("66", "50, *, 42")
-        {
+        return Grid("66", "50, *, 42",
             Theme.Current.Avatar(currentUser.Avatar)
                 .HeightRequest(50)
                 .WidthRequest(50)
                 .Margin(0,8,0,8),
 
-            new VStack
-            {
+            VStack(
                 Theme.Current.Label($"{currentUser.FirstName} {currentUser.LastName}")
                     .FontSize(14),
 
@@ -79,7 +73,7 @@ class SettingsPage : Component
                     .FontSize(12)
                     .TextColor(Theme.Current.MediumForeground)
                     .VEnd()
-            }
+            )
             .Margin(20, 8)
             .GridColumn(1),
 
@@ -90,17 +84,16 @@ class SettingsPage : Component
                 .VCenter()
                 .Margin(16,0,0,0)
                 .GridColumn(2)
-        }
+        )
         .GridRow(1);
     }
 
-    private VisualNode RenderSettingItem(Icon icon, string text, Action? tapAction = null)
+    private Grid RenderSettingItem(Icon icon, string text, Action? tapAction = null)
     {
         var mainState = GetParameter<MainState>();
         var currentUser = mainState.Value.CurrentUser ?? throw new InvalidOperationException();
 
-        return new Grid("40", "50, *, 42")
-        {
+        return Grid("40", "50, *, 42",
             Theme.Current.Image(icon)
                 .HCenter()
                 .VCenter()
@@ -118,20 +111,15 @@ class SettingsPage : Component
                 .VCenter()
                 .Margin(16,0,0,0)
                 .GridColumn(2)
-        }
+        )
         .OnTapped(tapAction)
         .GridRow(1);
     }
 
-    VisualNode RenderTitleBar()
-    {
-        return new Grid("24", "*, 32, 24")
-        {
+    Grid RenderTitleBar() 
+        => Grid("24", "*, 32, 24",
             Theme.Current.Label("Settings")
-                .FontSize(18),
-
-        }
+                .FontSize(18))
         .VEnd()
         .Margin(0, 13);
-    }
 }

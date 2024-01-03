@@ -10,82 +10,70 @@ using System.Threading.Tasks;
 namespace Chateo.Pages.Components;
 
 
-class TabBarComponent : Component
+partial class TabBarComponent : Component
 {
-    private Page _page;
-    private Action<Page>? _action;
+    [Prop]
+    PageType _page;
 
-    public TabBarComponent Page(Page page)
-    {
-        _page = page;
-        return this;
-    }
-
-    public TabBarComponent OnPageChanged(Action<Page> action)
-    {
-        _action = action;
-        return this;
-    }
+    [Prop]
+    private Action<PageType>? _onPageChanged;
 
     public override VisualNode Render()
     {
-        return new Grid("*", "* * *")
-        {
-            new Rectangle()
+        return Grid("*", "* * *",
+            Border()
                 .HeightRequest(2)
-                .Fill(Theme.Current.MediumForeground)
+                .BackgroundColor(Theme.Current.MediumForeground)
                 .GridColumnSpan(3)
                 .VStart(),
 
-            RenderButtonIcon(Pages.Page.Contacts),
+            RenderButtonIcon(PageType.Contacts),
 
-            RenderButtonIcon(Pages.Page.Chats)
+            RenderButtonIcon(PageType.Chats)
                 .GridColumn(1),
 
-            RenderButtonIcon(Pages.Page.Settings)
-                .GridColumn(2),
-        }
+            RenderButtonIcon(PageType.Settings)
+                .GridColumn(2)
+        )
         .BackgroundColor(Theme.Current.Background);
     }
 
-    static Icon GetIconFromPage(Page page)
+    static Icon GetIconFromPage(PageType page)
         => page switch
         {
-            Pages.Page.Chats => Icon.ChatsMenu,
-            Pages.Page.Contacts => Icon.Contacts,
-            Pages.Page.Settings => Icon.Dots,
+            PageType.Chats => Icon.ChatsMenu,
+            PageType.Contacts => Icon.Contacts,
+            PageType.Settings => Icon.Dots,
             _ => throw new NotSupportedException(),
         };
 
-    Grid RenderButtonIcon(Page page)
+    Grid RenderButtonIcon(PageType page)
         => _page == page ?
-        new Grid
-        {
+        Grid(
             Theme.Current.Label(page.ToString())
                 .HorizontalTextAlignment(TextAlignment.Center)
                 .VerticalTextAlignment(TextAlignment.Center),
 
-            new Ellipse()
+            Ellipse()
                 .HeightRequest(8)
                 .WidthRequest(8)
                 .Fill(Theme.Current.Foreground)
                 .VEnd()
                 .Margin(16)
-        }
+        )
         :
-        new ()
-        {
-            new Button()
+        Grid(
+            Button()
                 .BackgroundColor(Colors.Transparent)
                 .BorderColor(Colors.Transparent)
                 .BorderWidth(0)
-                .OnClicked(()=> _action?.Invoke(page)),
+                .OnClicked(()=> _onPageChanged?.Invoke(page)),
 
             Theme.Current.Image(GetIconFromPage(page))
                 .HCenter()
                 .VCenter()
                 .HeightRequest(44)
                 .WidthRequest(58)
-                .OnTapped(()=> _action?.Invoke(page))
-        };
+                .OnTapped(()=> _onPageChanged?.Invoke(page))
+        );
 }

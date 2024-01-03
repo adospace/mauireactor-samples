@@ -18,54 +18,46 @@ class AvatarPageProps
 class AvatarPage : Component<AvatarPageState, AvatarPageProps>
 {
     public override VisualNode Render()
-    {
-        return new ContentPage()
-        {
-            new VStack
-            {
-                new Grid("*", "24, *")
-                {
+        => ContentPage(
+            VStack(
+                Grid("*", "24, *",
                     Theme.Current.Image(Icon.Back)
                         .VEnd()
                         .OnTapped(OnBackClicked),
 
                     Theme.Current.Label("Your Avatar")
                         .VEnd()
-                        .Margin(8,0)
+                        .Margin(8, 0)
                         .FontSize(18)
-                        .GridColumn(1),
-                }
-                .Padding(0,13),
+                        .GridColumn(1)
+                )
+                .Padding(0, 13),
 
-
-                new CollectionView()
+                CollectionView()
                     .ItemsLayout(new VerticalGridItemsLayout().HorizontalItemSpacing(16).VerticalItemSpacing(16).Span(4))
                     .ItemsSource(Enumerable.Range(1, 8), RenderAvatarItem)
                     .VFill()
-                    .Margin(0,16)
-            }
+                    .Margin(0, 16)
+            )
             .Margin(16)
-        }
+        )
         .BackgroundColor(Theme.Current.Background)
         .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
-    }
 
-    private VisualNode RenderAvatarItem(int avatarIndex)
-    {
-        return new Image($"avatar{avatarIndex}.png")
+    VisualNode RenderAvatarItem(int avatarIndex) 
+        => Image($"avatar{avatarIndex}.png")
             .HeightRequest(48)
             .WidthRequest(48)
-            .OnTapped(()=> OnAvatarSelected(avatarIndex))
+            .OnTapped(() => OnAvatarSelected(avatarIndex))
             ;
-    }
 
-    private void OnAvatarSelected(int avatarIndex)
+    void OnAvatarSelected(int avatarIndex)
     {
         Props.OnAvatarSelected?.Invoke($"avatar{avatarIndex}");
         OnBackClicked();
     }
 
-    private void OnBackClicked()
+    void OnBackClicked()
     {
         if (Navigation == null)
         {

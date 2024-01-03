@@ -6,37 +6,29 @@ using System;
 using System.Linq;
 
 namespace DigitsGame.Pages.Components;
-
-class GameBoard : Component<GameBoardState>
+class GameBoardState
 {
-    private GameNumber[] _gameNumbers;
+    public Operation? CurrentOperation { get; set; }
+
+    public GameNumber CurrentNumber { get; set; }
+
+    public OperationItem OperationInError { get; set; }
+}
+
+partial class GameBoard : Component<GameBoardState>
+{
+    [Prop]
+    private GameNumber[] _board;
+    
+    [Prop]
     private int _target;
-    private Action<OperationItem> _newOperationAction;
-    private Action _undoOperationAction;
 
-    public GameBoard Target(int target)
-    {
-        _target = target;
-        return this;
-    }
+    [Prop]
+    private Action<OperationItem> _onNewOperation;
 
-    public GameBoard Board(GameNumber[] gameNumbers)
-    {
-        _gameNumbers = gameNumbers;
-        return this;
-    }
+    [Prop]
+    private Action _onUndoOperation;
 
-    public GameBoard OnNewOperation(Action<OperationItem> action)
-    {
-        _newOperationAction = action;
-        return this;
-    }
-
-    public GameBoard OnUndoOperation(Action action)
-    {
-        _undoOperationAction = action;
-        return this;
-    }
 
     public override VisualNode Render()
     {
@@ -55,7 +47,7 @@ class GameBoard : Component<GameBoardState>
                 {
                     new Group
                     {
-                        _gameNumbers?.Select(RenderBoardNumberButton).ToArray()
+                        _board?.Select(RenderBoardNumberButton).ToArray()
                     }
                 }
                 .VCenter()
@@ -93,11 +85,10 @@ class GameBoard : Component<GameBoardState>
                 .IsSelected(State.CurrentOperation == operation || State.OperationInError?.Operation == operation)
                 .OnClick(() => OnOperationSelected(operation))
         }
-        .InError(State.OperationInError?.Operation == operation)
-        ;
+        .InError(State.OperationInError?.Operation == operation);
     }
 
-    VisualNode RenderUndoButton()
+    PointInteractionHandler RenderUndoButton()
     {
         return new PointInteractionHandler
         {
@@ -107,11 +98,10 @@ class GameBoard : Component<GameBoardState>
             }
             .Margin(5,0)
         }
-        .OnTap(_undoOperationAction);
+        .OnTap(_onUndoOperation);
     }
 
-
-    private void OnOperationSelected(Operation operation)
+    void OnOperationSelected(Operation operation)
     {
         if (State.CurrentNumber != null)
         {
@@ -119,7 +109,7 @@ class GameBoard : Component<GameBoardState>
         }
     }
 
-    VisualNode RenderBoardNumberButton(GameNumber number)
+    AnimatingButton RenderBoardNumberButton(GameNumber number)
     {
         return new AnimatingButton
         {
@@ -131,7 +121,7 @@ class GameBoard : Component<GameBoardState>
         .InError(State.OperationInError?.Left == number || State.OperationInError?.Right == number);
     }
 
-    private void OnNumberClicked(GameNumber number)
+    void OnNumberClicked(GameNumber number)
     {
         if (State.CurrentOperation == null)
         {
@@ -158,7 +148,7 @@ class GameBoard : Component<GameBoardState>
                     s.CurrentOperation = null;
                 });
 
-                _newOperationAction?.Invoke(newOperation);
+                _onNewOperation?.Invoke(newOperation);
             }
         }
     }

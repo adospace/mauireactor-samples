@@ -4,15 +4,10 @@ using System;
 
 namespace Chateo.Pages;
 
-class LandingPage : Component
+partial class LandingPage : Component
 {
-    private Action? _loggedAction;
-
-    public LandingPage OnLogged(Action loggedAction)
-    {
-        _loggedAction = loggedAction;
-        return this;
-    }
+    [Prop]
+    private Action? _onLogged;
 
     protected override void OnMountedOrPropsChanged()
     {
@@ -22,17 +17,14 @@ class LandingPage : Component
 
     public override VisualNode Render()
     {
-        return new Shell
-        {
-            new ContentPage
-            {
-                new Grid("*,*,24,70", "*")
-                {
-                    new Image("landing.png")
+        return Shell(
+            ContentPage(
+                Grid("*,*,24,70", "*",
+                    Image("landing.png")
                         .HeightRequest(262)
                         .WidthRequest(262),
 
-                    new Label("Connect easily with your family and friends over countries")
+                    Label("Connect easily with your family and friends over countries")
                         .HorizontalTextAlignment(TextAlignment.Center)
                         .FontFamily("MulishSemiBold")
                         .FontSize(24)
@@ -42,7 +34,7 @@ class LandingPage : Component
                         .GridRow(1)
                         .TextColor(Theme.Current.Foreground),
 
-                    new Label("Terms & Privacy Policy")
+                    Label("Terms & Privacy Policy")
                         .HorizontalTextAlignment(TextAlignment.Center)
                         .FontFamily("MulishSemiBold")
                         .HCenter()
@@ -54,20 +46,19 @@ class LandingPage : Component
                         .OnClicked(OnOpenLoginPage)
                         .GridRow(3)
                         .Margin(0,18,0,0)
-                }
+                )
                 .Margin(24, 90, 24, 54)
-            }
+            )
             .BackgroundColor(Theme.Current.Background)
             .Set(MauiControls.Shell.NavBarIsVisibleProperty, false)
-        }
-        ;
+        );
     }
 
     private async void OnOpenLoginPage()
     {
         await MauiControls.Shell.Current.GoToAsync<LoginPageProps>("register", props =>
         {
-            props.OnLogged = _loggedAction;
+            props.OnLogged = _onLogged;
         });
     }
 }

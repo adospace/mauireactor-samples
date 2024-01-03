@@ -107,17 +107,15 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 
     public override VisualNode Render()
     {
-        return new ContentPage()
-        {
+        return ContentPage(
             (State.IsLoading || Props.OtherUser == null || Props.CurrentUser == null) ?
-            new ActivityIndicator()
+            ActivityIndicator()
                 .IsVisible(true)
                 .IsRunning(true)
                 .HCenter()
                 .VCenter()
                 :
-            new Grid("Auto, *, Auto", "*")
-            {
+            Grid("Auto, *, Auto", "*",
                 RenderMessages()
                     .OniOS(_=>_.TranslationY(-State.KeyboardHeight))
                     .OnAndroid(_=>_.TranslationY(State.KeyboardHeight > 0 ? State.KeyboardHeight + EntryBoxHeight : 0))
@@ -127,12 +125,12 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                     .OnAndroid(_=>_.TranslationY(State.KeyboardHeight > 0 ? State.KeyboardHeight + EntryBoxHeight : 0)),
 
                 RenderEntryBox()
-                    .OniOS(_=>_.TranslationY(-State.KeyboardHeight)),
-            }
+                    .OniOS(_=>_.TranslationY(-State.KeyboardHeight))
+            )
             //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
             .OnSizeChanged(size => SetState(s => s.BodyHeight = size.Height, false))
             
-        }
+        )
 #if IOS
         .OnAppearing((sender, args) =>
         {
@@ -163,8 +161,7 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 
     private Grid RenderTitleBar()
     {
-        return new Grid("*", "24, 48, *, 32, 24")
-        {
+        return Grid("*", "24, 48, *, 32, 24",
             Theme.Current.Image(Icon.Back)
                 .OnTapped(OnBackClicked),
 
@@ -188,25 +185,23 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 
             Theme.Current.Image(Icon.Menu)
                 .GridColumn(4)
-        }
+        )
         .OnSizeChanged(size => SetState(s => s.TitleBarHeight = size.Height))
         .Padding(16, 13 - State.PagePadding.Top, 16, 13)
         .BackgroundColor(Theme.Current.Background)
         ;
     }
 
-    private Grid RenderMessages()
-    {
-        return new Grid
-        {
-            new Border()
+    private Grid RenderMessages() 
+        => Grid(
+            Border()
                 .BackgroundColor(Theme.Current.MediumBackground)
                 .Margin(-16, 0),
 
-            new CollectionView()
+            CollectionView()
                 .ItemsSource(State.Messages, RenderMessageItem)
                 .ItemsUpdatingScrollMode(MauiControls.ItemsUpdatingScrollMode.KeepLastItemInView)
-                .OnLoaded((sender, args) => 
+                .OnLoaded((sender, args) =>
                 {
                     if (State.Messages.Count > 0)
                     {
@@ -217,17 +212,14 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                 //Hack also required for CollectionView under iOS .net7 (https://github.com/dotnet/maui/pull/14951)
                 .OniOS(_=>_.HeightRequest(() => State.BodyHeight - State.TitleBarHeight - State.EntryBoxHeight - State.KeyboardHeight))
                 .Margin(0, 16)
-        }
+        )
         .GridRow(1);
-    }
 
-    private Grid RenderEntryBox()
-    {
-        return new Grid("*", "48,*,48")
-        {
+    private Grid RenderEntryBox() 
+        => Grid("*", "48,*,48",
             Theme.Current.Image(Icon.Plus)
-                .OnAndroid(_=>_.Margin(12,5))
-                .OniOS(_=>_.Margin(12,12))
+                .OnAndroid(_ => _.Margin(12, 5))
+                .OniOS(_ => _.Margin(12, 12))
                 .VStart()
                 ,
 
@@ -237,30 +229,29 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
                 .Placeholder("Message")
                 .FontSize(14)
                 .VerticalTextAlignment(TextAlignment.Center)
-                
+
                 .VStart()
                 .GridColumn(1)
-                .OnAndroid(_=>_.Margin(0, -5))
-                .OniOS(_=>_.Margin(0,5))
+                .OnAndroid(_ => _.Margin(0, -5))
+                .OniOS(_ => _.Margin(0, 5))
                 ,
 
             Theme.Current.ImageButton(Icon.Send)
-                .IsEnabled(()=> !string.IsNullOrWhiteSpace(State.CurrentMessage))
-                .OniOS(_=>_.Padding(12,0))
-                .OnAndroid(_=>_.WidthRequest(24))
-                
+                .IsEnabled(() => !string.IsNullOrWhiteSpace(State.CurrentMessage))
+                .OniOS(_ => _.Padding(12, 0))
+                .OnAndroid(_ => _.WidthRequest(24))
+
                 .OnClicked(SendMessage)
                 .VStart()
                 .GridColumn(2)
-        
-        }
+
+        )
         .HeightRequest(EntryBoxHeight - State.PagePadding.Bottom)
         .OnSizeChanged(size => SetState(s => s.EntryBoxHeight = size.Height))
         .BackgroundColor(Theme.Current.Background)
-        
+
         .Padding(16, 13, 16, 13)
         .GridRow(2);
-    }
 
     private VisualNode RenderMessageItem(MessageViewModel item)
     {
@@ -276,11 +267,9 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
             return timeStamp.ToString("d");
         }
 
-        return new Border
-        {
-            new VStack
-            {
-                new Label(item.Content)
+        return Border(
+            VStack(
+                Label(item.Content)
                     .TextColor(myMessage ? Theme.Current.ForegroundAccent : Theme.Current.Foreground)
                     .FontSize(14)
                     .HeightRequest(24)
@@ -291,11 +280,11 @@ class UserChatPage : Component<UserChatPageState, UserChatPageProps>
 #endif
                     ,
 
-                new Label(!myMessage ? FormatTimeStamp(item.TimeStamp) : (item.ReadTimeStamp != null ? $"{FormatTimeStamp(item.TimeStamp)} - Read" : FormatTimeStamp(item.TimeStamp)))
+                Label(!myMessage ? FormatTimeStamp(item.TimeStamp) : (item.ReadTimeStamp != null ? $"{FormatTimeStamp(item.TimeStamp)} - Read" : FormatTimeStamp(item.TimeStamp)))
                     .TextColor(myMessage ? Theme.Current.ForegroundAccent : Theme.Current.Foreground)
-                    .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start),
-            }
-        }
+                    .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start)
+            )
+        )
         .BackgroundColor(myMessage ? Theme.Current.Accent : Theme.Current.Background)
         .HorizontalOptions(myMessage ? MauiControls.LayoutOptions.End : MauiControls.LayoutOptions.Start)
         .StrokeCornerRadius(myMessage ? new CornerRadius(16, 16, 16, 0) : new CornerRadius(16, 16, 0, 16))

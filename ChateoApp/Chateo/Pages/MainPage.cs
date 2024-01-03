@@ -65,14 +65,13 @@ class MainPage : Component<MainPageState>
     {
         if (State.Loading)
         {
-            return new ContentPage
-            {
-                new ActivityIndicator()
+            return ContentPage(
+                ActivityIndicator()
                     .IsVisible(true)
                     .IsRunning(true)
                     .HCenter()
                     .VCenter()
-            }
+            )
             .BackgroundColor(Theme.Current.Background);
         }
 
@@ -84,14 +83,14 @@ class MainPage : Component<MainPageState>
         return RenderHome();
     }
 
-    private VisualNode RenderLogin()
+    private LandingPage RenderLogin()
     {
         return new LandingPage()
             .OnLogged(() => _mainState.Set(s => s.CurrentUser = Preferences.Default.GetFromJson<UserViewModel?>("current_user", null)));
     }
 
-    private VisualNode RenderHome()
+    private HomePage RenderHome()
     {
-        return new HomePage();
+        return new();
     }
 }

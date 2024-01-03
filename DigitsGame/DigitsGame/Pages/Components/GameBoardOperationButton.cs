@@ -5,29 +5,16 @@ using System;
 
 namespace DigitsGame.Pages.Components;
 
-class GameBoardOperationButton : Component
+partial class GameBoardOperationButton : Component
 {
+    [Prop]
     Operation _operation;
-    Action _action;
-    private bool _isSelected;
+    
+    [Prop]
+    Action _onClick;
 
-    public GameBoardOperationButton Operation(Operation operation)
-    {
-        _operation = operation;
-        return this;
-    }
-
-    public GameBoardOperationButton IsSelected(bool isSelected)
-    {
-        _isSelected = isSelected;
-        return this;
-    }
-
-    public GameBoardOperationButton OnClick(Action action)
-    {
-        _action = action;
-        return this;
-    }
+    [Prop]
+    bool _isSelected;
 
     public override VisualNode Render()
     {
@@ -39,7 +26,7 @@ class GameBoardOperationButton : Component
             }
             .Margin(5,0),
         }
-        .OnTap(_action)
+        .OnTap(_onClick)
         .AutomationId($"Operation_Button_PIH_{_operation}");
     }
 }

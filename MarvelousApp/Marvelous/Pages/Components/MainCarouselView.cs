@@ -147,6 +147,8 @@ partial class MainCarouselView : Component<MainCarouselViewState>
 
 class MainCarouselViewItemState
 {
+    public bool IsDragging { get; set; }
+
     public double Opacity { get; set;}
 
     public double TranslationX { get; set;}
@@ -165,23 +167,8 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
     [Prop]
     WonderType _type;
 
-    //[Prop]
-    //WonderType _currentType;
-
     [Prop]
     Action<EventHandler<DragStateInfo>>? _onDragStateChanged;
-
-    //[Prop]
-    //double _relativePanX;
-
-    //[Prop]
-    //double _relativePanY;
-
-    //[Prop]
-    //Size _containerSize;
-
-    //[Prop]
-    //bool _isDragging;
 
     bool IsCurrent => State.CurrentType == _type;
 
@@ -204,19 +191,17 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
 
         return Grid(
             AbsoluteLayout(
-                [.. illustrationConfig.BackgroundImages?.Select(RenderIllustrationImage)]
+                [.. illustrationConfig.BackgroundImages.Select(RenderIllustrationImage)]
             ),
 
             AbsoluteLayout(
-                illustrationConfig.MainObjectImage != null ?
                 RenderIllustrationImage(illustrationConfig.MainObjectImage)
                     .TranslationX(State.TranslationX)
                     .Opacity(State.Opacity)
-                    .WithAnimation(duration: 300)
-                    : null
+                    .When(!State.IsDragging, _=>_.WithAnimation(duration: 300))
             ),
 
-            AbsoluteLayout([.. illustrationConfig.ForegroundImages?.Select(_=> 
+            AbsoluteLayout([.. illustrationConfig.ForegroundImages.Select(_=> 
                 RenderIllustrationImage(_)
                     .Scale(1.0 + (float)State.PercVerticalPan * 0.3f)
                     .WithAnimation(duration: 300)
@@ -229,7 +214,7 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 : null,
 
             Label(illustrationConfig.Title)
-                .Opacity(()=>State.Opacity)
+                .Opacity(State.Opacity)
                 .WithAnimation()
                 .TextColor(Colors.White)
                 .FontFamily("YesevaOne")
@@ -243,7 +228,7 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 ,
 
             Border()
-                .Background(()=>new LinearGradient(180.0,
+                .Background(new LinearGradient(180.0,
                     (Colors.White.WithAlpha(0.0f), 1.0f - (float)State.PercVerticalPan),
                     (Colors.White, 1)
                 ))
@@ -254,21 +239,21 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 .WidthRequest(50)
                 .HeightRequest(800)
                 .StrokeThickness(0)
-                .Opacity(()=>State.Opacity)
+                .Opacity(State.Opacity)
                 ,
 
             Image("common_arrow_indicator.png")
                 .HCenter()
                 .VEnd()
                 .Margin(0,30)
-                .Opacity(()=>State.Opacity)
+                .Opacity(State.Opacity)
 
         );
     }
 
     Image RenderIllustrationImage(IllustrationImage image) 
         => Image(image.Source)
-            .Opacity(()=>image.Opacity * State.Opacity)
+            .Opacity(image.Opacity * State.Opacity)
             .AbsoluteLayoutBounds(IsCurrent ?
                 image.GetFinalBounds(State.ContainerSize) :
                 image.GetInitialBounds(State.ContainerSize))
@@ -280,6 +265,7 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
         var config = Illustration.Config[_type];
         var translationX = 0.0;
         var opacity = 0.0;
+        var dragging = dragInfo.StartDrag != null && _type == dragInfo.CurrentType;
 
         var percHorizontalPan = dragInfo.ContainerSize.Width > 0 ? Easing.CubicIn.Ease(Math.Abs(dragInfo.PanX / dragInfo.ContainerSize.Width)) : 0.0;
         var percVerticalPan = dragInfo.ContainerSize.Height > 0 ? (-dragInfo.PanY / dragInfo.ContainerSize.Height) : 0.0;
@@ -316,6 +302,7 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
             State.PercVerticalPan != percVerticalPan)
         {
             bool containerSizeChanged = State.ContainerSize != dragInfo.ContainerSize;
+            bool draggingChanged = State.IsDragging != dragging;
             SetState(s => 
             {
                 s.Opacity = opacity;
@@ -324,7 +311,8 @@ partial class MainCarouselViewItem : Component<MainCarouselViewItemState>
                 s.PercVerticalPan = percVerticalPan;
                 s.PercHorizontalPan = percHorizontalPan;
                 s.CurrentType = dragInfo.CurrentType;
-            }, containerSizeChanged);
+                s.IsDragging = dragging;
+            }, containerSizeChanged || dragging);
         }
     }
 }

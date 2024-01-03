@@ -34,12 +34,8 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
 
     public override VisualNode Render()
     {
-        return new ContentPage()
-        {
-            new VStack
-            {
-                new Grid("*", "24, *")
-                {
+        return ContentPage(
+            VStack(Grid("*", "24, *",
                     Theme.Current.Image(Icon.Back)
                         .VEnd()
                         .OnTapped(OnBackClicked),
@@ -48,11 +44,11 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                         .VEnd()
                         .Margin(8,0)
                         .FontSize(18)
-                        .GridColumn(1),
-                }
+                        .GridColumn(1)
+                )
                 .Padding(0,13),
 
-                (State.Avatar != null ? new Image($"{State.Avatar}.png") : Theme.Current.Image(Icon.UserPlus))
+                (State.Avatar != null ? Image($"{State.Avatar}.png") : Theme.Current.Image(Icon.UserPlus))
                     .HeightRequest(100)
                     .WidthRequest(100)
                     .Margin(0,46,0,32)
@@ -74,9 +70,9 @@ class RegisterPage : Component<LoginPageState, LoginPageProps>
                     .Margin(8,68,8,0)
                     .IsEnabled(!string.IsNullOrWhiteSpace(State.FirstName) && !string.IsNullOrWhiteSpace(State.LastName) && State.Avatar != null)
                     .OnClicked(OnSaveClicked)
-            }
+            )
             .Margin(16)
-        }
+        )
         .BackgroundColor(Theme.Current.Background)
         .Set(MauiControls.Shell.NavBarIsVisibleProperty, false);
 

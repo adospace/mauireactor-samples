@@ -24,40 +24,21 @@ class RecipeComponentState
     public double HeaderHeight { get; set; } = 300;
 }
 
-class RecipeComponent : Component<RecipeComponentState>
+partial class RecipeComponent : Component<RecipeComponentState>
 {
+    [Prop]
     Recipe _recipe;
+    
+    [Prop]
     Rect _originalViewPort;
-    Action _backAction;
 
-    public RecipeComponent Recipe(Recipe recipe)
-    {
-        _recipe = recipe;
-        return this;
-    }
+    [Prop]
+    Action _onCancelSelection;
 
-    public RecipeComponent OriginalViewPort(Rect selectedRecipeViewPort)
-    {
-        _originalViewPort = selectedRecipeViewPort;
-        return this;
-    }
-
-    public RecipeComponent OnCancelSelection(Action action)
-    {
-        _backAction = action;
-        return this;
-    }
-
-    protected override void OnMounted()
+    protected override void OnMountedOrPropsChanged()
     {
         InitializeState();
-        base.OnMounted();
-    }
-
-    protected override void OnPropsChanged()
-    {
-        InitializeState();
-        base.OnPropsChanged();
+        base.OnMountedOrPropsChanged();
     }
 
     void InitializeState()
@@ -80,15 +61,14 @@ class RecipeComponent : Component<RecipeComponentState>
 
     public override VisualNode Render()
     {
-        return new Grid("*", "*")
-        {
-            RenderPageContent(),
+        return Grid(
+            [.. RenderPageContent(),
 
             new CanvasView()
             {
                 new Align
                 {
-                    new PointInterationHandler
+                    new PointInteractionHandler
                     {
                         new Group
                         {
@@ -111,7 +91,7 @@ class RecipeComponent : Component<RecipeComponentState>
                                 .StrokeSize(2)
                         }
                     }
-                    .OnTap(_backAction)
+                    .OnTap(_onCancelSelection)
                 }
                 .Margin(10)
                 .Height(42)
@@ -122,8 +102,9 @@ class RecipeComponent : Component<RecipeComponentState>
             .HeightRequest(52)
             .VStart()
             .BackgroundColor(Colors.Transparent)
-            .OnTapped(_backAction),
-        }
+            .OnTapped(_onCancelSelection)
+            ]
+        )
         .IsVisible(_recipe != null)
         .BackgroundColor(Colors.White)
         ;
@@ -141,7 +122,7 @@ class RecipeComponent : Component<RecipeComponentState>
         yield return RenderHeader();
     }
 
-    VisualNode RenderHeader()
+    CanvasView RenderHeader()
         => new CanvasView
         {
             new DropShadow
@@ -179,9 +160,8 @@ class RecipeComponent : Component<RecipeComponentState>
         .TranslationY(State.HeaderTranslationY)
         .WithAnimation(easing: ExtendedEasing.InOutCubic, duration: 400);
 
-    VisualNode RenderBody()
-        => new ScrollView
-        {
+    ScrollView RenderBody()
+        => ScrollView(
             new CanvasView()
             {
                 new Column($"48, 128, 32, {_recipe.ingredients.Length * 42}, 32, {_recipe.instructions.Length * 128}")
@@ -224,13 +204,12 @@ class RecipeComponent : Component<RecipeComponentState>
             .HeightRequest(48 + 128 + 32 + _recipe.ingredients.Length * 42 + 32 + _recipe.instructions.Length * 128)
             .TranslationY(State.BodyTranslationY)
             .WithAnimation(easing: ExtendedEasing.InOutCubic, duration: 400)
-        }
+        )
         .Padding(() => new Thickness(0, State.HeaderHeight, 0, 0))
         .OnScrolled(OnBodyScrolled);
 
-    private VisualNode RenderIngredientItem(string ingredient)
-    {
-        return new Row("42, *")
+    VisualNode RenderIngredientItem(string ingredient) 
+        => new Row("42, *")
         {
             new Group
             {
@@ -252,13 +231,11 @@ class RecipeComponent : Component<RecipeComponentState>
                 .Margin(10,0)
                 .VerticalAlignment(VerticalAlignment.Center)
         }
-        .Margin(15,5)
+        .Margin(15, 5)
         ;
-    }
 
-    private VisualNode RenderStepItem(IndexItem step)
-    {
-        return new Row("32,*")
+    VisualNode RenderStepItem(IndexItem step) 
+        => new Row("32,*")
         {
             new Align
             {
@@ -289,7 +266,6 @@ class RecipeComponent : Component<RecipeComponentState>
                 .VerticalAlignment(VerticalAlignment.Top)
         }
         .Margin(15, 5);
-    }
 
     void OnBodyScrolled(object sender, MauiControls.ScrolledEventArgs scrolledArgs)
     {

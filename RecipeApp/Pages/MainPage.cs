@@ -28,11 +28,9 @@ class MainPage : Component<MainPageState>
 {
     public override VisualNode Render()
     {
-        return new ContentPage
-        {
-            new Grid("*", "*")
-            {
-                new CollectionView()
+        return ContentPage(
+            Grid(
+                CollectionView()
                     .ItemsSource(RecipesData.dessertMenu, RenderRecipe)
                     .OnScrolled(OnListScrolled)
                     .OnSizeChanged(size => State.ListWidth = size.Width),
@@ -41,8 +39,8 @@ class MainPage : Component<MainPageState>
                     .Recipe(State.SelectedRecipeId != null ? RecipesData.dessertMenu[State.SelectedRecipeId.Value - 1] : null)
                     .OriginalViewPort(State.SelectedRecipeViewPort)
                     .OnCancelSelection(()=>SetState(s => s.SelectedRecipeId = null))
-            }
-        };
+            )
+        );
     }
 
     private void OnListScrolled(object sender, MauiControls.ItemsViewScrolledEventArgs args)
@@ -78,49 +76,25 @@ class RecipeItemComponentState
     public double RotationX { get; set; }
 }
 
-class RecipeItemComponent : Component<RecipeItemComponentState>
+partial class RecipeItemComponent : Component<RecipeItemComponentState>
 {
+    [Prop]
     private Recipe _recipe;
-    private int _distance;
+
+    [Prop]
+    private int _distanceFromCenterItem;
+
+    [Prop]
     private double _verticalOffset;
-    private Action _onSelectedAction;
 
-    public RecipeItemComponent Recipe(Recipe recipe)
-    {
-        _recipe = recipe;
-        return this;
-    }
+    [Prop]
+    private Action _onSelected;
 
-    public RecipeItemComponent DistanceFromCenterItem(int distance)
+    protected override void OnMountedOrPropsChanged()
     {
-        _distance = distance;
-        return this;
-    }
-
-    public RecipeItemComponent VerticalOffset(double verticalOffset)
-    {
-        _verticalOffset = verticalOffset;
-        return this;
-    }
-
-    public RecipeItemComponent OnSelected(Action action)
-    {
-        _onSelectedAction = action;
-        return this;
-    }
-
-    protected override void OnMounted()
-    {
-        State.RotationX = _distance * 10;
+        State.RotationX = _distanceFromCenterItem * 10;
         MauiControls.Application.Current.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(60), () => SetState(s => s.RotationX = 0.0));
-        base.OnMounted();
-    }
-
-    protected override void OnPropsChanged()
-    {
-        State.RotationX = _distance * 10;
-        MauiControls.Application.Current.Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(60), () => SetState(s => s.RotationX = 0.0));
-        base.OnPropsChanged();
+        base.OnMountedOrPropsChanged();
     }
 
     public override VisualNode Render()
@@ -167,7 +141,7 @@ class RecipeItemComponent : Component<RecipeItemComponentState>
         .Scale(1.0 - (Math.Abs(State.RotationX) / 120.0))
         .RotationX(State.RotationX)
         .WithAnimation(easing: ExtendedEasing.OutCubic, duration: 800)
-        .OnTapped(_onSelectedAction);
+        .OnTapped(_onSelected);
     }
 }
 

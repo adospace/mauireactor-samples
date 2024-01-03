@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+    <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>SurfingApp</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -34,25 +34,15 @@
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Remove="Resources\Images\post01.jpg" />
-    <None Remove="Resources\Images\post02.jpg" />
-    <None Remove="Resources\Images\post03.jpg" />
-    <None Remove="Resources\Images\post04.jpg" />
-    <None Remove="Resources\Images\post05.jpg" />
-    <None Remove="Resources\Images\post06.jpg" />
-    <None Remove="Resources\Images\post07.jpg" />
-    <None Remove="Resources\Images\post08.jpg" />
-    <None Remove="Resources\Images\user01.jpg" />
-    <None Remove="Resources\Images\user02.jpg" />
-    <None Remove="Resources\Images\user03.jpg" />
-    <None Remove="Resources\Images\user04.jpg" />
-    <None Remove="Resources\Images\user05.jpg" />
-    <None Remove="Resources\Images\user06.jpg" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="1.0.129" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="1.0.129" />
-    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="1.0.129" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Reactor.Maui" Version="2.0.14-beta" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.14-beta" />
+    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.14-beta" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

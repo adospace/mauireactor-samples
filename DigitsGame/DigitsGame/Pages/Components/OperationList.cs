@@ -9,44 +9,36 @@ using System.Linq;
 
 namespace DigitsGame.Pages.Components;
 
-class OperationList : Component
+partial class OperationList : Component
 {
-    private IEnumerable<OperationItem> _operations;
-
-    public OperationList Operations(IEnumerable<OperationItem> operations)
-    {
-        _operations = operations;
-        return this;
-    }
+    [Prop]
+    IEnumerable<OperationItem> _operations;
 
     public override VisualNode Render()
     {
         var mainState = GetParameter<MainState>();
-        return new Grid("50, 400", "*")
-        {
-            new Label("Your operations:")
+        return Grid("50, 400", "*",
+            Label("Your operations:")
                 .HorizontalTextAlignment(TextAlignment.Center)
                 .TextColor(Colors.Black)
                 .FontSize(24),
 
-            new CollectionView()
+            CollectionView()
                 .ItemsSource(_operations?.Reverse().ToArray() ?? Array.Empty<OperationItem>(), RenderOperation)
                 .GridRow(1)
                 .AutomationId("Operations_List")
-        }
+        )
         .Margin(100)
         .IsVisible(DeviceIdiom.Desktop == DeviceInfo.Current.Idiom || mainState.Value.PageView == PageView.OperationList);
     }
 
     private VisualNode RenderOperation(OperationItem operation)
     {
-        return new VStack(spacing: 5)
-        {
-            new Label($"{operation.Left.Value} {GetOperationSign(operation.Operation)} {operation.Right.Value} = {operation.CalcValue()}")
+        return VStack(spacing: 5,
+            Label($"{operation.Left.Value} {GetOperationSign(operation.Operation)} {operation.Right.Value} = {operation.CalcValue()}")
                 .TextColor(Colors.Black)
                 .FontSize(24),
-
-            new Line()
+            Line()
                 .Stroke(Colors.Black)
                 .StrokeThickness(1)
                 .X1(0)
@@ -54,7 +46,7 @@ class OperationList : Component
                 .Y1(2)
                 .Y2(2)
                 .HeightRequest(3)
-        }
+        )
         .Margin(0, 8);
     }
 
