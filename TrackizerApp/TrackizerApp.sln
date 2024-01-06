@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackizerApp", "TrackizerApp.csproj", "{CC91D548-12D5-452F-8129-A64ABAE1715E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A551A30C-EF64-406F-A2C7-BF165CC4DC95}
+	EndGlobalSection
+EndGlobal
