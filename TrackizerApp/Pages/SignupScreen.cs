@@ -1,18 +1,15 @@
 ﻿using MauiReactor;
 using MauiReactor.Parameters;
+using TrackizerApp.Models;
 using TrackizerApp.Pages.Components;
 
 namespace TrackizerApp.Pages;
 
 
-class SignupScreen : Component
+partial class SignupScreen : Component
 {
-    IParameter<UserModel> _loggedUser;
-
-    public SignupScreen()
-    {
-        _loggedUser = GetOrCreateParameter<UserModel>();
-    }
+    [Param]
+    IParameter<User> _loggedUser;
 
     public override VisualNode Render()
         => new BaseScreenLayout

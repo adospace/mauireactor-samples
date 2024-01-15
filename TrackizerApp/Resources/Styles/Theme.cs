@@ -44,15 +44,28 @@ static class Theme
     public static double FontSizeBodyLarge => 16;
     public static double FontSizeBodyMedium => 14;
     public static double FontSizeBodySmall => 12;
+    public static double FontSizeBodyExtraSmall => 10;
 
-    public static Label H1(string? text)
+    public static Label H1(string? text = null)
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeH1);
-    public static Label H2(string? text)
+    public static Label H2(string? text = null)
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeH2);
+    public static Label H3(string? text = null)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeH3);
+    public static Label H7(string? text = null)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeH7);
+    public static Label H5(string? text = null)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeH5);
     public static Label BodySmall(string? text)
         => Component.Label(text)
             .FontFamily("InterRegular")
@@ -61,6 +74,10 @@ static class Theme
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeBodyMedium);
+    public static Label BodyExtraSmall(string? text)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeBodyExtraSmall);
 
     public static Button Button(string text, Action? onClicked)
         => Component.Button(text)
@@ -126,7 +143,7 @@ static class Theme
                 .BorderWidth(1)
                 .OnClicked(onClicked)
             )
-        .Shadow(new Shadow()
+        .Shadow(Component.Shadow()
             .Brush(new MauiControls.SolidColorBrush(baseColor.WithLuminosity(0.5f).WithAlpha(0.5f))));
 
 

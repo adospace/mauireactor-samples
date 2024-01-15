@@ -1,54 +1,73 @@
 ﻿using MauiReactor;
 using MauiReactor.Parameters;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using TrackizerApp.Models;
 using TrackizerApp.Pages.Components;
 using TrackizerApp.Pages.Views;
 
 namespace TrackizerApp.Pages;
 
-class UserModel
-{
-    public bool IsLoggedIn { get; set; } = true;
 
-    public string? Email { get; set; }
-
-    public string? Name { get; set; }
-}
 
 public enum HomeScreenView
 {
+    [Display(Name = "")]
     Home,
 
+    [Display(Name = "Spending & Budgets")]
     Budgets,
 
+    [Display(Name = "Calendar")]
     Calendar,
 
+    [Display(Name = "Credit Cards")]
     CreditCards
 }
 
 class HomeScreenState
 {
     public HomeScreenView View { get; set; }
+
 }
 
-class HomeScreen : Component<HomeScreenState>
+partial class HomeScreen : Component<HomeScreenState>
 {
-    IParameter<UserModel> _loggedUser;
-
-    public HomeScreen()
-    {
-        _loggedUser = GetOrCreateParameter<UserModel>();
-    }
+    [Param]
+    IParameter<User> _loggedUser;
 
     public override VisualNode Render()
         => new BaseScreenLayout
         {
-            !_loggedUser.Value.IsLoggedIn ?
-            Grid()
-            :
-            RenderPageBody()
+            Grid(
+                !_loggedUser.Value.IsLoggedIn ?
+                Grid()
+                :
+                RenderPageBody(),
+
+                Theme.H3(State.View.GetDisplayName())
+                    .VStart()
+                    .HCenter()
+                    .TextColor(Theme.Grey30)
+                    .Margin(23,32),
+
+                Image("icons/settings_dark.png")
+                    .HeightRequest(24)
+                    .VStart()
+                    .HEnd()
+                    .Margin(23,32)
+                    .OnTapped(ShowSettings)
+                )
         }
-        .OnAppearing(OnAppearing);
+        .OnAppearing(OnAppearing)
+        .StatusBarColor(State.View == HomeScreenView.Home ? Theme.Grey70 : Theme.Grey80)
+        ;
+
+    void ShowSettings()
+    {
+        
+    }
 
     async void OnAppearing()
     {
@@ -80,11 +99,6 @@ class HomeScreen : Component<HomeScreenState>
         };
 }
 
-class BudgetsView : Component
-{
-    public override VisualNode Render()
-        => Grid(Label("BudgetsView"));
-}
 class CalendarView : Component
 {
     public override VisualNode Render()

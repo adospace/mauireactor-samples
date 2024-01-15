@@ -33,7 +33,8 @@ class MainPage : Component<MainPageState>
         var person4 = new Person("Bob", "Williams", new DateTime(2000, 8, 15));
         var person5 = new Person("Charlie", "Brown", new DateTime(1995, 9, 25));
 
-        State.Persons = new[] { person1, person2, person3, person4, person5 };
+        State.Persons = [person1, person2, person3, person4, person5];
+        State.SelectedPersonIndex = 1;
         base.OnMounted();
     }
 
