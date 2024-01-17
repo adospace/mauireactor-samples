@@ -6,11 +6,4 @@ using System.Threading.Tasks;
 
 namespace TrackizerApp.Models;
 
-class User
-{
-    public bool IsLoggedIn { get; set; }
-
-    public string? Email { get; set; }
-
-    public string? Name { get; set; }
-}
+record CreditCard(string Holder, string Number, string ExpiringDate, string Type);

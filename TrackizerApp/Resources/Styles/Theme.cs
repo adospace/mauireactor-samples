@@ -58,14 +58,18 @@ static class Theme
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeH3);
-    public static Label H7(string? text = null)
+    public static Label H4(string? text = null)
         => Component.Label(text)
             .FontFamily("InterRegular")
-            .FontSize(FontSizeH7);
+            .FontSize(FontSizeH4);
     public static Label H5(string? text = null)
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeH5);
+    public static Label H7(string? text = null)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeH7);
     public static Label BodySmall(string? text)
         => Component.Label(text)
             .FontFamily("InterRegular")
@@ -74,6 +78,10 @@ static class Theme
         => Component.Label(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeBodyMedium);
+    public static Label BodyLarge(string? text)
+        => Component.Label(text)
+            .FontFamily("InterRegular")
+            .FontSize(FontSizeBodyLarge);
     public static Label BodyExtraSmall(string? text)
         => Component.Label(text)
             .FontFamily("InterRegular")

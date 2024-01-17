@@ -17,6 +17,7 @@ partial class BaseScreenLayout : Component
                 new StatusBarBehavior()
                     .StatusBarColor(_statusBarColor)
                     .StatusBarStyle(StatusBarStyle.LightContent)])
+        .Padding(-1)
         .BackgroundColor(Theme.Grey80)
         .HasNavigationBar(false)
         .OnAppearing(_onAppearing)

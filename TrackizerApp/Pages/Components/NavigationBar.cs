@@ -49,12 +49,12 @@ partial class NavigationBar : Component<NavigationBarState>
                 )
                 .Margin(36, 0)
                 .GridColumn(1)
-                
+
             )
+            .BackgroundColor(Colors.Transparent)
             .HeightRequest(82)
-        .VEnd()
-        .OnSizeChanged(size => base.SetState(s => s.Width = size.Width))
-        ;
+            .VEnd()
+            .OnSizeChanged(size => base.SetState(s => s.Width = size.Width));
 
     private Grid ViewButton(string imageSource, HomeScreenView view) 
         => Grid(
@@ -79,6 +79,7 @@ partial class NavigationBar : Component<NavigationBarState>
                 .Stroke(new LinearGradient(90, Color.FromRgba("#CFCFFC"), Colors.Transparent))
                 .StrokeThickness(1)
                 .Data(pathData)
-                .Margin(23, 11);
+                .Margin(23, 11)
+                .BackgroundColor(Colors.Transparent);
     }
 }

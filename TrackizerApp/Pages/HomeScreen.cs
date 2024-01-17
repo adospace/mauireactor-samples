@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using TrackizerApp.Models;
 using TrackizerApp.Pages.Components;
+using TrackizerApp.Pages.Dialogs;
 using TrackizerApp.Pages.Views;
 
 namespace TrackizerApp.Pages;
@@ -61,7 +62,7 @@ partial class HomeScreen : Component<HomeScreenState>
                 )
         }
         .OnAppearing(OnAppearing)
-        .StatusBarColor(State.View == HomeScreenView.Home ? Theme.Grey70 : Theme.Grey80)
+        .StatusBarColor(State.View == HomeScreenView.Home || State.View == HomeScreenView.Calendar ? Theme.Grey70 : Theme.Grey80)
         ;
 
     void ShowSettings()
@@ -85,27 +86,21 @@ partial class HomeScreen : Component<HomeScreenState>
             new NavigationBar()
                 .View(State.View)
                 .OnViewChanged(view => SetState(s => s.View = view))
-
+                .OnNewSubscription(OnNewSubscription)
             );
+
+    void OnNewSubscription()
+    {
+        Navigation?.PushModalAsync<NewSubscription>();
+    }
 
     VisualNode RenderView() 
         => State.View switch
         {
-            HomeScreenView.Home => new HomeView(),
+            HomeScreenView.Home => new HomeView().OnShowBudgetView(()=>SetState(s => s.View = HomeScreenView.Budgets)),
             HomeScreenView.Budgets => new BudgetsView(),
             HomeScreenView.Calendar => new CalendarView(),
             HomeScreenView.CreditCards => new CreditCardsView(),
             _ => throw new NotSupportedException(),
         };
-}
-
-class CalendarView : Component
-{
-    public override VisualNode Render()
-        => Grid(Label("CalendarView"));
-}
-class CreditCardsView : Component
-{
-    public override VisualNode Render()
-        => Grid(Label("CreditCardsView"));
 }

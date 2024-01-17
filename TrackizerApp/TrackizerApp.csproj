@@ -57,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\Icons\add.svg" />
     <None Remove="Resources\Images\Icons\car.svg" />
     <None Remove="Resources\Images\Icons\confetti.svg" />
     <None Remove="Resources\Images\Icons\finger_print.svg" />
@@ -72,13 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="2.0.18-beta" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.18-beta" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj" />
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor.ScaffoldGenerator\MauiReactor.ScaffoldGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="False" />
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
+    <PackageReference Include="Reactor.Maui" Version="2.0.19" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.19" />
   </ItemGroup>
 </Project>

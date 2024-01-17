@@ -50,7 +50,13 @@ partial class HomeView : Component<HomeViewState>
                     .IsVisible(() => State.ListType == HomeViewListType.UpcomingBills)
                     .Margin(24, 8, 24, 72)
             )
-            .GridRow(1)
+            .GridRow(1),
+
+            Border()
+                .GridRow(1)
+                .VEnd()
+                .HeightRequest(90)
+                .Background(new LinearGradient(0, (Theme.Grey80, 0.7f), (Colors.Transparent, 1.0f)))
         );
 
     VisualNode BudgetIndicator(double monthBudget, double monthBills)
@@ -60,6 +66,7 @@ partial class HomeView : Component<HomeViewState>
                     .HeightRequest(429)
                     .StrokeCornerRadius(0, 0, 24, 24)
                     .VStart()
+                    .StrokeThickness(0)
                     .BackgroundColor(Theme.Grey70),
 
                     new CanvasView()

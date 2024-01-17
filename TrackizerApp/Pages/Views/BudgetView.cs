@@ -178,9 +178,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .GridColumn(1)
                                     .GridRow(1),
 
-                                //Theme.H2($"${budget.MonthBills}")
-                                Theme.H2()
-                                    .Text(()=> state.Value.ToString())
+                                Theme.H2($"${budget.MonthBills}")
                                     .TextColor(Theme.White)
                                     .Margin(16,0)
                                     .VEnd()
@@ -194,32 +192,57 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .GridColumn(2)
                                     .GridRow(1),
 
-                                Rectangle()
-                                    .BackgroundColor(Theme.Grey30)
-                                    .HeightRequest(4)
-                                    .RadiusX(9)
-                                    .RadiusY(9)
-                                    .GridRow(2)
-                                    .GridColumnSpan(3)
-                                    .Margin(16, 0, 16, 11),
-
-                                Rectangle()
-                                    .BackgroundColor(Theme.Primary100)
-                                    .HeightRequest(4)
-                                    .RadiusX(9)
-                                    .RadiusY(9)
-                                    .ScaleX(() =>
+                                new CanvasView
+                                {
+                                    new Group
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"scale: {state.Value / budget.MonthBudget}");
-                                        return state.Value / budget.MonthBudget;
-                                    })
-                                    .GridRow(2)
-                                    .GridColumnSpan(3)
-                                    .Margin(16, 0, 16, 11)
-                                    .Shadow(Shadow().Brush(
-                                        new MauiControls.SolidColorBrush(
-                                            Theme.Primary100.WithLuminosity(0.5f).WithAlpha(0.5f))
-                                        )),
+                                        new Box()
+                                            .BackgroundColor(Theme.Grey30)
+                                            .CornerRadius(9),
+
+                                        new DropShadow
+                                        {
+                                            new Box()
+                                                .CornerRadius(9)
+                                                .ScaleX(() => (float)(state.Value / budget.MonthBudget))
+                                                .BackgroundColor(budget.Category == Category.AutoTransport ? Theme.Accents100 : (budget.Category == Category.Entertainment ? Theme.Accentp100 : Theme.Primary100))
+                                        }
+                                        .Color(Theme.White.WithLuminosity(0.7f))
+                                        .Blur(5)
+                                    }
+                                }
+                                .BackgroundColor(Colors.Transparent)
+                                .HeightRequest(4)
+                                .GridRow(2)
+                                .GridColumnSpan(3)
+                                .Margin(16, 0, 16, 11),
+
+                                //Rectangle()
+                                //    .BackgroundColor(Theme.Grey30)
+                                //    .HeightRequest(4)
+                                //    .RadiusX(9)
+                                //    .RadiusY(9)
+                                //    .GridRow(2)
+                                //    .GridColumnSpan(3)
+                                //    .Margin(16, 0, 16, 11),
+
+                                //Rectangle()
+                                //    .BackgroundColor(Theme.Primary100)
+                                //    .HeightRequest(4)
+                                //    .RadiusX(9)
+                                //    .RadiusY(9)
+                                //    .ScaleX(() =>
+                                //    {
+                                //        System.Diagnostics.Debug.WriteLine($"scale: {state.Value / budget.MonthBudget}");
+                                //        return state.Value / budget.MonthBudget;
+                                //    })
+                                //    .GridRow(2)
+                                //    .GridColumnSpan(3)
+                                //    .Margin(16, 0, 16, 11)
+                                //    .Shadow(Shadow().Brush(
+                                //        new MauiControls.SolidColorBrush(
+                                //            Theme.Primary100.WithLuminosity(0.5f).WithAlpha(0.5f))
+                                //        )),
 
                                 new AnimationController
                                 {
@@ -230,11 +253,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                             .TargetValue(budget.MonthBills)
                                             .Duration(1000)
                                             .Easing(Easing.CubicOut)
-                                            .OnTick(v =>
-                                            {
-                                                System.Diagnostics.Debug.WriteLine(v);
-                                                state.Set(s => v, false);
-                                            })
+                                            .OnTick(v => state.Set(s => v, false))
                                     }
                                 }
                                 .IsEnabled(state.Value != budget.MonthBills)
