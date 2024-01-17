@@ -164,7 +164,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                         Border(
                             Grid("*,*,Auto", "Auto, *, Auto",
 
-                                Image($"icons/{budget.Category.ToString().ToLower()}.png")
+                                Image($"{budget.Category.ToString().ToLower()}.png")
                                     .GridRowSpan(2)
                                     .Margin(16),
 

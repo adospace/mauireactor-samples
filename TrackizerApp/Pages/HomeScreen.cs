@@ -53,7 +53,7 @@ partial class HomeScreen : Component<HomeScreenState>
                     .TextColor(Theme.Grey30)
                     .Margin(23,32),
 
-                Image("icons/settings_dark.png")
+                Image("settings_dark.png")
                     .HeightRequest(24)
                     .VStart()
                     .HEnd()

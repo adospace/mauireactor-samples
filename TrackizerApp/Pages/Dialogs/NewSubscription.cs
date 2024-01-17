@@ -41,7 +41,7 @@ class NewSubscription : Component<NewSubscriptionState>
                     .HeightRequest(476)
                     .VStart(),
 
-                Image("icons/back.png")
+                Image("back.png")
                     .HeightRequest(24)
                     .VStart()
                     .HStart()
