@@ -46,7 +46,7 @@ partial class HomeView : Component<HomeViewState>
                     .IsVisible(() => State.ListType == HomeViewListType.Subscriptions)
                     .Margin(24, 8, 24, 72),
 
-                UpcomginBills()
+                UpcomingBills()
                     .IsVisible(() => State.ListType == HomeViewListType.UpcomingBills)
                     .Margin(24, 8, 24, 72)
             )
@@ -268,7 +268,7 @@ partial class HomeView : Component<HomeViewState>
                 )
             .Margin(24,8);
 
-    CollectionView UpcomginBills()
+    CollectionView UpcomingBills()
         => CollectionView()
                 .ItemsSource(State.Subscriptions, (subscription) =>
                     Border(

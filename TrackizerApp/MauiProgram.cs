@@ -29,12 +29,12 @@ public static class MauiProgram
     		builder.Logging.AddDebug();
 #endif
 
-        RemoveBorders();
+        RemoveBordersFromEntry();
 
         return builder.Build();
     }
 
-    static void RemoveBorders()
+    static void RemoveBordersFromEntry()
     {
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
         {
