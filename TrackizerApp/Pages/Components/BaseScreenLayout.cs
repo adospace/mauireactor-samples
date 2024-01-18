@@ -14,9 +14,12 @@ partial class BaseScreenLayout : Component
     public override VisualNode Render()
          => ContentPage([..
                 Children(),
+                #if !IOS
                 new StatusBarBehavior()
                     .StatusBarColor(_statusBarColor)
-                    .StatusBarStyle(StatusBarStyle.LightContent)])
+                    .StatusBarStyle(StatusBarStyle.LightContent)
+                #endif
+                    ])
         .Padding(-1)
         .BackgroundColor(Theme.Grey80)
         .HasNavigationBar(false)

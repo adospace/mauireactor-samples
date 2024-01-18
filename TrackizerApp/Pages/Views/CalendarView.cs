@@ -70,7 +70,7 @@ class CalendarView : Component<CalendarViewState>
                 .ItemsSource(State.Subscriptions, subscription =>
                     Border(
                         Grid(
-                            Image($"{subscription.Type}.png")
+                            Image($"{subscription.Type.ToString().ToLower()}.png")
                                 .WidthRequest(40)
                                 .HStart()
                                 .VStart(),
@@ -134,8 +134,8 @@ class CalendarView : Component<CalendarViewState>
                         .StrokeThickness(0)
                         .HEnd()
                     )
-                    .VStart()
-                    .Margin(24, 200),
+                    .VEnd()
+                    .Margin(24, 145),
 
 
                     CollectionView()

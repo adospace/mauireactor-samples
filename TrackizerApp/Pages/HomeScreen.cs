@@ -72,9 +72,10 @@ partial class HomeScreen : Component<HomeScreenState>
 
     async void OnAppearing()
     {
-        if (!_loggedUser.Value.IsLoggedIn)
+        if (!_loggedUser.Value.IsLoggedIn && 
+            Navigation?.ModalStack.Count == 0)
         {
-            await Navigation!.PushModalAsync<WelcomeScreen>();
+            await Navigation.PushModalAsync<WelcomeScreen>();
         }
     }
 

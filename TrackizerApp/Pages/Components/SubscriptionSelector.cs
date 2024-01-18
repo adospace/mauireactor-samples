@@ -62,7 +62,7 @@ partial class SubscriptionSelector : Component<SubscriptionSelectorState>
                 var translationX = GetTranslationX(type);
 
                 return Grid(
-                    Image($"{type}.png")
+                    Image($"{type.ToString().ToLower()}.png")
                         .HeightRequest(GetSize(translationX))
                         .Center()
                 )

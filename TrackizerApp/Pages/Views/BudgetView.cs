@@ -103,11 +103,11 @@ partial class BudgetsView : Component<BudgetsViewState>
                             .Blur(10),
 
                         }
-                        .TranslationY(75)
+                        .TranslationY(60)
+                        .Margin(15)
                     }
-                    .WidthRequest(210)
-                    .HeightRequest(210)
-                    .BackgroundColor(Colors.Red),
+                    .WidthRequest(225)
+                    .HeightRequest(225),
 
                     Theme.H5()
                         .Text(()=> $"${state.Value?.Sum():0}")

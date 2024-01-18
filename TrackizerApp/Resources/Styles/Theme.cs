@@ -92,6 +92,7 @@ static class Theme
             .FontFamily("InterRegular")
             .FontSize(FontSizeH2)
             .CornerRadius(45)
+            .OniOS(_=>_.CornerRadius(25))
             .BackgroundColor(White.WithAlpha(0.1f))
             .BorderColor(White.WithAlpha(0.15f))
             .BorderWidth(1)
@@ -113,6 +114,7 @@ static class Theme
                 .FontFamily("InterRegular")
                 .FontSize(FontSizeH2)
                 .CornerRadius(45)
+                .OniOS(_=>_.CornerRadius(25))
                 .BackgroundColor(Colors.Transparent)
                 .HeightRequest(48)
                 .BorderColor(White.WithAlpha(0.15f))
@@ -145,6 +147,7 @@ static class Theme
 
             Component.Button()
                 .CornerRadius(45)
+                .OniOS(_=>_.CornerRadius(25))
                 .BackgroundColor(Colors.Transparent)
                 .HeightRequest(48)
                 .BorderColor(White.WithAlpha(0.15f))
