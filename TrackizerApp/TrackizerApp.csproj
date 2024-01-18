@@ -20,7 +20,7 @@
     <Nullable>enable</Nullable>
 
     <!-- Display name -->
-    <ApplicationTitle>TrackizerApp</ApplicationTitle>
+    <ApplicationTitle>Trackizer</ApplicationTitle>
 
     <!-- App Identifier -->
     <ApplicationId>com.companyname.trackizerapp</ApplicationId>
@@ -39,10 +39,10 @@
 
   <ItemGroup>
     <!-- App Icon -->
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1C1C23" BaseSize="72,77" />
 
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#1C1C23" BaseSize="456,77" />
 
     <!-- Images -->
     <MauiImage Include="Resources\Images\*" />
@@ -53,15 +53,6 @@
 
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Images\Icons\add.svg" />
-    <None Remove="Resources\Images\Icons\car.svg" />
-    <None Remove="Resources\Images\Icons\confetti.svg" />
-    <None Remove="Resources\Images\Icons\finger_print.svg" />
-    <None Remove="Resources\Images\Icons\like.svg" />
-    <None Remove="Resources\Images\Icons\settings_dark.svg" />
   </ItemGroup>
 
   <ItemGroup>
