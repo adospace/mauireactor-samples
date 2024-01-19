@@ -91,6 +91,7 @@ static class Theme
         => Component.Button(text)
             .FontFamily("InterRegular")
             .FontSize(FontSizeH2)
+            .TextColor(White)
             .CornerRadius(45)
             .OniOS(_=>_.CornerRadius(25))
             .BackgroundColor(White.WithAlpha(0.1f))
@@ -111,6 +112,7 @@ static class Theme
 
             Component.Button()
                 .Text(text)
+                .TextColor(White)
                 .FontFamily("InterRegular")
                 .FontSize(FontSizeH2)
                 .CornerRadius(45)

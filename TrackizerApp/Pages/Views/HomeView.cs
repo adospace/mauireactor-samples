@@ -144,6 +144,7 @@ partial class HomeView : Component<HomeViewState>
                     .Margin(0, 200),
 
                 Theme.Button("See your budget", _onShowBudgetView)
+                    .TextColor(Theme.White)
                     .HCenter()
                     .VEnd()
                     .Margin(110)
