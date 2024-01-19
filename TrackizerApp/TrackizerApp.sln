@@ -5,12 +5,6 @@ VisualStudioVersion = 17.9.34310.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackizerApp", "TrackizerApp.csproj", "{CC91D548-12D5-452F-8129-A64ABAE1715E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiReactor", "..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj", "{95EEBBD7-BC25-4577-AE0E-5835F3DA7A3E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiReactor.Canvas", "..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj", "{92E39DA6-E202-4F2D-A6C9-9FC7687B9808}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiReactor.ScaffoldGenerator", "..\..\reactorui-maui\src\MauiReactor.ScaffoldGenerator\MauiReactor.ScaffoldGenerator.csproj", "{94ED5F0A-CF4B-49B7-93B3-0AA74F84881A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,18 +17,6 @@ Global
 		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC91D548-12D5-452F-8129-A64ABAE1715E}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{95EEBBD7-BC25-4577-AE0E-5835F3DA7A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95EEBBD7-BC25-4577-AE0E-5835F3DA7A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95EEBBD7-BC25-4577-AE0E-5835F3DA7A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95EEBBD7-BC25-4577-AE0E-5835F3DA7A3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92E39DA6-E202-4F2D-A6C9-9FC7687B9808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92E39DA6-E202-4F2D-A6C9-9FC7687B9808}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92E39DA6-E202-4F2D-A6C9-9FC7687B9808}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92E39DA6-E202-4F2D-A6C9-9FC7687B9808}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94ED5F0A-CF4B-49B7-93B3-0AA74F84881A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94ED5F0A-CF4B-49B7-93B3-0AA74F84881A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94ED5F0A-CF4B-49B7-93B3-0AA74F84881A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94ED5F0A-CF4B-49B7-93B3-0AA74F84881A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

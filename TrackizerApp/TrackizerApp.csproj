@@ -66,10 +66,4 @@
     <PackageReference Include="Reactor.Maui" Version="2.0.19" />
     <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.19" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj" />
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor.ScaffoldGenerator\MauiReactor.ScaffoldGenerator.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="False" />
-    <ProjectReference Include="..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
-  </ItemGroup>
 </Project>
