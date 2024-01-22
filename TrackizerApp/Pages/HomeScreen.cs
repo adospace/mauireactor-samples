@@ -29,7 +29,7 @@ public enum HomeScreenView
 
 class HomeScreenState
 {
-    public HomeScreenView View { get; set; }
+    //public HomeScreenView View { get; set; }
 
 }
 
@@ -39,15 +39,24 @@ partial class HomeScreen : Component<HomeScreenState>
     IParameter<User> _loggedUser;
 
     public override VisualNode Render()
+        => Shell(
+            TabBar(
+                Tab(
+                    ShellContent(RenderTabPage(HomeScreenView.Home)),
+                    ShellContent().RenderContent(() => RenderTabPage(HomeScreenView.Budgets)),
+                    ShellContent().RenderContent(() => RenderTabPage(HomeScreenView.Calendar)),
+                    ShellContent().RenderContent(() => RenderTabPage(HomeScreenView.CreditCards))
+                    )
+                )
+            );
+
+    VisualNode RenderTabPage(HomeScreenView view)
         => new BaseScreenLayout
         {
             Grid(
-                !_loggedUser.Value.IsLoggedIn ?
-                Grid()
-                :
-                RenderPageBody(),
+                RenderPageBody(view),
 
-                Theme.H3(State.View.GetDisplayName())
+                Theme.H3(view.GetDisplayName())
                     .VStart()
                     .HCenter()
                     .TextColor(Theme.Grey30)
@@ -62,7 +71,7 @@ partial class HomeScreen : Component<HomeScreenState>
                 )
         }
         .OnAppearing(OnAppearing)
-        .StatusBarColor(State.View == HomeScreenView.Home || State.View == HomeScreenView.Calendar ? Theme.Grey70 : Theme.Grey80)
+        .StatusBarColor(view == HomeScreenView.Home || view == HomeScreenView.Calendar ? Theme.Grey70 : Theme.Grey80)
         ;
 
     void ShowSettings()
@@ -79,14 +88,14 @@ partial class HomeScreen : Component<HomeScreenState>
         }
     }
 
-    Grid RenderPageBody()
+    Grid RenderPageBody(HomeScreenView view)
         => Grid(
 
-            RenderView(),
+            RenderView(view),
 
             new NavigationBar()
-                .View(State.View)
-                .OnViewChanged(view => SetState(s => s.View = view))
+                .View(view)
+                //.OnViewChanged(view => SetState(s => s.View = view))
                 .OnNewSubscription(OnNewSubscription)
             );
 
@@ -95,10 +104,10 @@ partial class HomeScreen : Component<HomeScreenState>
         Navigation?.PushModalAsync<NewSubscription>();
     }
 
-    VisualNode RenderView() 
-        => State.View switch
+    VisualNode RenderView(HomeScreenView view) 
+        => view switch
         {
-            HomeScreenView.Home => new HomeView().OnShowBudgetView(()=>SetState(s => s.View = HomeScreenView.Budgets)),
+            HomeScreenView.Home => new HomeView()/*.OnShowBudgetView(()=>SetState(s => s.View = HomeScreenView.Budgets))*/,
             HomeScreenView.Budgets => new BudgetsView(),
             HomeScreenView.Calendar => new CalendarView(),
             HomeScreenView.CreditCards => new CreditCardsView(),

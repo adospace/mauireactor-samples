@@ -42,8 +42,8 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="2.0.5-beta" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.5-beta" />
-    <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.5-beta" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Reactor.Maui" Version="2.0.*" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.*" />
+    
   </ItemGroup>
 </Project>
