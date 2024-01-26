@@ -56,7 +56,8 @@ partial class CardSelector : Component<CardSelectorState>
                             });
                         }))
                     .ToArray()
-            );
+            )
+            .VStart();
     }
 }
 

@@ -14,20 +14,49 @@ namespace TrackizerApp.Pages.Views;
 
 class BudgetsViewState
 {
-    public ObservableCollection<BudgetByCategory> BudgetByCategories { get; set; } = [
+    public BudgetByCategory[] BudgetByCategories { get; set; } = [
         new BudgetByCategory(Category.AutoTransport, 125.99, 400),
         new BudgetByCategory(Category.Entertainment, 350.99, 600),
         new BudgetByCategory(Category.Security, 475.99, 600)
     ];
+
+    public bool IsVisible { get; set; }
 }
 
 partial class BudgetsView : Component<BudgetsViewState>
 {
+    [Prop]
+    bool _isVisible;
+
+    protected override void OnPropsChanged()
+    {
+        //simulate calculations, remote call etc
+        if (State.IsVisible != _isVisible &&
+            _isVisible)
+        {
+            State.BudgetByCategories = [
+                new BudgetByCategory(Category.AutoTransport, 0, 400),
+                new BudgetByCategory(Category.Entertainment, 0, 600),
+                new BudgetByCategory(Category.Security, 0, 600)
+            ];
+
+            SetState(s => s.BudgetByCategories = [
+                new BudgetByCategory(Category.AutoTransport, 125.99, 400),
+                new BudgetByCategory(Category.Entertainment, 350.99, 600),
+                new BudgetByCategory(Category.Security, 475.99, 600)
+            ], delayMilliseconds: 1500);
+        }
+
+        State.IsVisible = _isVisible;
+
+        base.OnPropsChanged();
+    }
+
     public override VisualNode Render()
         => Grid("Auto,*", "*",
 
             VStack(
-                BudgetIndicator(),
+                BudgetIndicator([.. State.BudgetByCategories.Select(_=>_.MonthBills)], State.BudgetByCategories.Sum(_ => _.MonthBudget)),
 
                 Border(
                     HStack(spacing: 8,
@@ -47,7 +76,7 @@ partial class BudgetsView : Component<BudgetsViewState>
         )
         .Margin(24);
 
-    VisualNode BudgetIndicator()
+    VisualNode BudgetIndicator(double[] monthBills, double total)
         => Render<double[]>(state =>
                 Grid(
                     new CanvasView()
@@ -70,7 +99,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
                                     .StartAngle(180)
-                                    .EndAngle(() => 180 - (float)Math.Min(180, state.Value![0] / State.BudgetByCategories.Sum(_=>_.MonthBudget) * 180) + 4)
+                                    .EndAngle(() => 180 - (float)Math.Min(180, state.Value![0] / total * 180) + 4)
                                     .Clockwise(true)
                             }
                             .Color(Theme.White.WithLuminosity(0.7f))
@@ -82,8 +111,8 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .StrokeColor(Theme.Accentp100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
-                                    .StartAngle(() => 180 - (float)Math.Min(180, state.Value![0] / State.BudgetByCategories.Sum(_=>_.MonthBudget) * 180) - 4)
-                                    .EndAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) / State.BudgetByCategories.Sum(_=>_.MonthBudget) * 180) + 4)
+                                    .StartAngle(() => 180 - (float)Math.Min(180, state.Value![0] /total * 180) - 4)
+                                    .EndAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) /total * 180) + 4)
                                     .Clockwise(true)
                             }
                             .Color(Theme.White.WithLuminosity(0.7f))
@@ -95,8 +124,8 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .StrokeColor(Theme.Primary100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
-                                    .StartAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) / State.BudgetByCategories.Sum(_=>_.MonthBudget) * 180) - 4)
-                                    .EndAngle(() => 180 - (float)Math.Min(180, state.Value!.Sum() / State.BudgetByCategories.Sum(_=>_.MonthBudget) * 180))
+                                    .StartAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) /total * 180) - 4)
+                                    .EndAngle(() => 180 - (float)Math.Min(180, state.Value!.Sum() /total * 180))
                                     .Clockwise(true)
                             }
                             .Color(Theme.White.WithLuminosity(0.7f))
@@ -129,29 +158,27 @@ partial class BudgetsView : Component<BudgetsViewState>
                         {
                             new DoubleAnimation()
                                 .StartValue(0)
-                                .TargetValue(State.BudgetByCategories[0].MonthBills)
+                                .TargetValue(monthBills[0])
                                 .Duration(1000)
                                 .Easing(Easing.CubicOut)
                                 .OnTick(v => state.Set(s => [v, s![1], s[2]])),
 
                             new DoubleAnimation()
                                 .StartValue(0)
-                                .TargetValue(State.BudgetByCategories[1].MonthBills)
+                                .TargetValue(monthBills[1])
                                 .Duration(1000)
                                 .Easing(Easing.CubicOut)
                                 .OnTick(v => state.Set(s => [s![0], v, s[2]])),
 
                             new DoubleAnimation()
                                 .StartValue(0)
-                                .TargetValue(State.BudgetByCategories[2].MonthBills)
+                                .TargetValue(monthBills[2])
                                 .Duration(1000)
                                 .Easing(Easing.CubicOut)
                                 .OnTick(v => state.Set(s => [s![0], s[1], v]))
                         }
                     }
-                    .IsEnabled(state.Value![0] != State.BudgetByCategories[0].MonthBills ||
-                        state.Value[1] != State.BudgetByCategories[1].MonthBills ||
-                        state.Value[2] != State.BudgetByCategories[2].MonthBills)
+                    .IsEnabled(!state.Value!.SequenceEqual(monthBills))
                     
                 )
             , [0,0,0]);
@@ -216,33 +243,6 @@ partial class BudgetsView : Component<BudgetsViewState>
                                 .GridRow(2)
                                 .GridColumnSpan(3)
                                 .Margin(16, 0, 16, 11),
-
-                                //Rectangle()
-                                //    .BackgroundColor(Theme.Grey30)
-                                //    .HeightRequest(4)
-                                //    .RadiusX(9)
-                                //    .RadiusY(9)
-                                //    .GridRow(2)
-                                //    .GridColumnSpan(3)
-                                //    .Margin(16, 0, 16, 11),
-
-                                //Rectangle()
-                                //    .BackgroundColor(Theme.Primary100)
-                                //    .HeightRequest(4)
-                                //    .RadiusX(9)
-                                //    .RadiusY(9)
-                                //    .ScaleX(() =>
-                                //    {
-                                //        System.Diagnostics.Debug.WriteLine($"scale: {state.Value / budget.MonthBudget}");
-                                //        return state.Value / budget.MonthBudget;
-                                //    })
-                                //    .GridRow(2)
-                                //    .GridColumnSpan(3)
-                                //    .Margin(16, 0, 16, 11)
-                                //    .Shadow(Shadow().Brush(
-                                //        new MauiControls.SolidColorBrush(
-                                //            Theme.Primary100.WithLuminosity(0.5f).WithAlpha(0.5f))
-                                //        )),
 
                                 new AnimationController
                                 {

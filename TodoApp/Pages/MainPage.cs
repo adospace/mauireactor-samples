@@ -39,9 +39,7 @@ partial class MainPage : Component<MainPageState>
                     .OnClicked(OnClearList)
                     .GridRow(2)
 
-            ));
-
-    
+            ));    
 
     VisualNode RenderItem(Todo item)
         => Grid("54", "Auto, *",

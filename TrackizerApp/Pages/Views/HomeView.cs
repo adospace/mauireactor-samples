@@ -25,6 +25,10 @@ class HomeViewState
         new Subscription(SubscriptionType.OneDrive, 29.99, DateOnly.FromDateTime(DateTime.Now.AddDays(-5))),
         new Subscription(SubscriptionType.Netflix, 9.99, DateOnly.FromDateTime(DateTime.Now.AddDays(-7)))
         ];
+
+    public double TargetMonthBills { get; set; } = 1235;
+
+    public bool IsVisible { get; set; }
 }
 
 
@@ -33,10 +37,29 @@ partial class HomeView : Component<HomeViewState>
     [Prop]
     Action? _onShowBudgetView;
 
+    [Prop]
+    bool _isVisible;
+
+    protected override void OnPropsChanged()
+    {
+        //simulate calculations, remote call etc
+        if (State.TargetMonthBills != 0 &&
+            State.IsVisible != _isVisible &&
+            _isVisible)
+        {
+            State.TargetMonthBills = 0;
+            SetState(s => s.TargetMonthBills = 1235, delayMilliseconds: 500);
+        }
+
+        State.IsVisible = _isVisible;
+
+        base.OnPropsChanged();
+    }
+
     public override VisualNode Render()
         => Grid("Auto,*", "*",
             VStack(
-                BudgetIndicator(2230, 1235),
+                BudgetIndicator(2230, State.TargetMonthBills),
 
                 ListTypeTab()
                 ),

@@ -2,6 +2,7 @@
 using MauiReactor.Parameters;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using TrackizerApp.Models;
 using TrackizerApp.Pages.Components;
@@ -82,7 +83,15 @@ partial class HomeScreen : Component<HomeScreenState>
     Grid RenderPageBody()
         => Grid(
 
-            RenderView(),
+            new SlidingView
+            {
+                RenderView(HomeScreenView.Home),
+                RenderView(HomeScreenView.Budgets),
+                RenderView(HomeScreenView.Calendar),
+                RenderView(HomeScreenView.CreditCards),
+            }
+            .SelectedIndex((int)State.View)
+            .OnSelectedViewIndex(view => SetState(s => s.View = (HomeScreenView)view)),
 
             new NavigationBar()
                 .View(State.View)
@@ -95,11 +104,14 @@ partial class HomeScreen : Component<HomeScreenState>
         Navigation?.PushModalAsync<NewSubscription>();
     }
 
-    VisualNode RenderView()
-        => State.View switch
+    VisualNode RenderView(HomeScreenView view)
+        => view switch
         {
-            HomeScreenView.Home => new HomeView().OnShowBudgetView(() => SetState(s => s.View = HomeScreenView.Budgets)),
-            HomeScreenView.Budgets => new BudgetsView(),
+            HomeScreenView.Home => new HomeView()
+                .IsVisible(State.View == view)
+                .OnShowBudgetView(() => SetState(s => s.View = HomeScreenView.Budgets)),
+            HomeScreenView.Budgets => new BudgetsView()
+                .IsVisible(State.View == view),
             HomeScreenView.Calendar => new CalendarView(),
             HomeScreenView.CreditCards => new CreditCardsView(),
             _ => throw new NotSupportedException(),
