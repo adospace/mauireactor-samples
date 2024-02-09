@@ -23,6 +23,9 @@ partial class SlidingView : Component<SlidingViewState>
     [Prop]
     int _selectedIndex;
 
+    [Prop]
+    bool _enablePan;
+
     protected override void OnMountedOrPropsChanged()
     {
         if (State.SelectedIndex != _selectedIndex)
@@ -65,7 +68,7 @@ partial class SlidingView : Component<SlidingViewState>
                     new DoubleAnimation()
                         .StartValue(State.PanningX)
                         .TargetValue(0)
-                        .Duration(1200)
+                        .Duration(300)
                         .OnTick(v => SetState(s => s.PanningX = v, false))
                 }
             }
@@ -84,7 +87,7 @@ partial class SlidingView : Component<SlidingViewState>
             .IsEnabled(State.AnimatingPan)
             ]
         )
-        .OnPanUpdated(PanUpdated)
+        .When(_enablePan, _ => _.OnPanUpdated(PanUpdated))
         .OnSizeChanged(size => SetState(s => s.ViewportWidth = size.Width));
 
     void PanUpdated(MauiControls.PanUpdatedEventArgs args)

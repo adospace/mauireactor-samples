@@ -83,15 +83,17 @@ partial class HomeScreen : Component<HomeScreenState>
     Grid RenderPageBody()
         => Grid(
 
-            new SlidingView
-            {
-                RenderView(HomeScreenView.Home),
-                RenderView(HomeScreenView.Budgets),
-                RenderView(HomeScreenView.Calendar),
-                RenderView(HomeScreenView.CreditCards),
-            }
-            .SelectedIndex((int)State.View)
-            .OnSelectedViewIndex(view => SetState(s => s.View = (HomeScreenView)view)),
+            RenderView(State.View),
+
+            //new SlidingView
+            //{
+            //    RenderView(HomeScreenView.Home),
+            //    RenderView(HomeScreenView.Budgets),
+            //    RenderView(HomeScreenView.Calendar),
+            //    RenderView(HomeScreenView.CreditCards),
+            //}
+            //.SelectedIndex((int)State.View)
+            //.OnSelectedViewIndex(view => SetState(s => s.View = (HomeScreenView)view)),
 
             new NavigationBar()
                 .View(State.View)

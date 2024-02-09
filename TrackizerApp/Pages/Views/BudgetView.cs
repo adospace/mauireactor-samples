@@ -94,6 +94,7 @@ partial class BudgetsView : Component<BudgetsViewState>
 
                             new DropShadow
                             {
+                                state.Value![0] < 0.1 ? null :
                                 new Arc()
                                     .StrokeColor(Theme.Accents100)
                                     .StrokeSize(12)
@@ -107,6 +108,7 @@ partial class BudgetsView : Component<BudgetsViewState>
 
                             new DropShadow
                             {
+                                (state.Value![0] + state.Value![1]) < 0.1 ? null :
                                 new Arc()
                                     .StrokeColor(Theme.Accentp100)
                                     .StrokeSize(12)
@@ -120,6 +122,7 @@ partial class BudgetsView : Component<BudgetsViewState>
 
                             new DropShadow
                             {
+                                state.Value!.Sum() < 0.1 ? null :
                                 new Arc()
                                     .StrokeColor(Theme.Primary100)
                                     .StrokeSize(12)
@@ -177,6 +180,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                 .Easing(Easing.CubicOut)
                                 .OnTick(v => state.Set(s => [s![0], s[1], v]))
                         }
+                        .InitialDelay(0)
                     }
                     .IsEnabled(!state.Value!.SequenceEqual(monthBills))
                     
