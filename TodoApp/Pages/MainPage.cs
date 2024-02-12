@@ -83,7 +83,7 @@ partial class MainPage : Component<MainPageState>
 
     void OnClearList()
     {
-        _modelContext.DeleteRange(State.TodoItems);
+        _modelContext.Delete([.. State.TodoItems]);
         _modelContext.Save();
     }
 }

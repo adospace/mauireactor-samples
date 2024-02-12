@@ -70,8 +70,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactorData" Version="1.0.3-beta" />
-    <PackageReference Include="ReactorData.Sqlite" Version="1.0.3-beta" />
+    <PackageReference Include="ReactorData" Version="1.0.7-beta" />
+    <PackageReference Include="ReactorData.Sqlite" Version="1.0.7-beta" />
   </ItemGroup>
 
 
