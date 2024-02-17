@@ -46,4 +46,9 @@
     <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.*" />
     
   </ItemGroup>
+  <ItemGroup>
+    <MauiXaml Update="Resources\Styles\FixTabStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
 </Project>

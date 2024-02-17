@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:styles="clr-namespace:ShellTestPage.Resources.Styles">
+    <Style x:Key="FixIOSDatabaseTabStyle" TargetType="Tab">
+        <Style.Triggers>
+            <Trigger TargetType="Tab" Property="IsChecked" Value="True">
+                <Setter Property="Icon">
+                    <Setter.Value>
+                        <FontImageSource 
+                           Size="20"
+                           Color="{DynamicResource Primary}"
+                           Glyph="{x:Static styles:AwesomeIconFont.Database}"
+                           FontFamily="Fas"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <Trigger TargetType="Tab" Property="IsChecked" Value="False">
+                <Setter Property="Icon">
+                    <Setter.Value>
+                        <FontImageSource 
+                           Size="20" 
+                           Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                           Glyph="{x:Static styles:AwesomeIconFont.Database}"
+                           FontFamily="Fas"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="FixIOSNotificationsTabStyle" TargetType="Tab">
+        <Style.Triggers>
+            <Trigger TargetType="Tab" Property="IsChecked" Value="True">
+                <Setter Property="Icon">
+                    <Setter.Value>
+                        <FontImageSource 
+                           Size="20"
+                           Color="{DynamicResource Primary}"
+                           Glyph="{x:Static styles:AwesomeIconFont.Bell}"
+                           FontFamily="Fas"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <Trigger TargetType="Tab" Property="IsChecked" Value="False">
+                <Setter Property="Icon">
+                    <Setter.Value>
+                        <FontImageSource 
+                           Size="20" 
+                           Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                           Glyph="{x:Static styles:AwesomeIconFont.Bell}"
+                           FontFamily="Fas"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
