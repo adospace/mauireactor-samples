@@ -11,7 +11,7 @@
                            Size="20"
                            Color="{DynamicResource Primary}"
                            Glyph="{x:Static styles:AwesomeIconFont.Database}"
-                           FontFamily="Fas"/>
+                           FontFamily="FontSolid"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>
@@ -23,7 +23,7 @@
                            Size="20" 
                            Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                            Glyph="{x:Static styles:AwesomeIconFont.Database}"
-                           FontFamily="Fas"/>
+                           FontFamily="FontSolid"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>
@@ -38,7 +38,7 @@
                            Size="20"
                            Color="{DynamicResource Primary}"
                            Glyph="{x:Static styles:AwesomeIconFont.Bell}"
-                           FontFamily="Fas"/>
+                           FontFamily="FontSolid"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>
@@ -50,7 +50,7 @@
                            Size="20" 
                            Color="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                            Glyph="{x:Static styles:AwesomeIconFont.Bell}"
-                           FontFamily="Fas"/>
+                           FontFamily="FontSolid"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>
