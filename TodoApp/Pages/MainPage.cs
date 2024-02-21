@@ -69,9 +69,7 @@ partial class MainPage : Component<MainPageState>
 
     void OnItemDoneChanged(Todo item, bool done)
     {
-        item.Done = done;
-
-        _modelContext.Update(item);
+        _modelContext.Replace(item, new Todo { Id = item.Id, Task = item.Task, Done = done });
         _modelContext.Save();
     }
 
