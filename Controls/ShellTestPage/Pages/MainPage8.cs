@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShellTestPage.Pages;
 
-class MainPage8 : Component
+public class MainPage8 : Component
 {
     public override VisualNode Render()
         => Shell(
@@ -23,13 +23,14 @@ class MainPage8 : Component
                         Glyph = AwesomeIconFont.Bell,
                         Size = 20,
                     }))
-                .OniOS(_=>_.Style(ResourceManager.FindStyle("FixIOSNotificationsTabStyle")))
-
+                .OniOS(_=>_.Style("FixIOSNotificationsTabStyle"))
+                .AutomationId("NotificationsItem")
                 .Title("Notifications"),
 
                 Tab(
                     ShellContent()
                         .RenderContent(() => new DatabasePage())
+                        .Route("Database")
                 )
                 .OnAndroid(_ => _.Icon(new MauiControls.FontImageSource
                 {
@@ -37,8 +38,9 @@ class MainPage8 : Component
                     Glyph = AwesomeIconFont.Database,
                     Size = 20,
                 }))
-                .OniOS(_ => _.Style(ResourceManager.FindStyle("FixIOSDatabaseTabStyle")))
-
+                .OniOS(_ => _.Style("FixIOSDatabaseTabStyle"))
+                .AutomationId("DatabaseItem")
                 .Title("Database")
-            ));
+            ))
+            .AutomationId("MainShell");
 }

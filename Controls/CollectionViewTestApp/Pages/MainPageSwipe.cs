@@ -24,38 +24,31 @@ class MainPageSwipe : Component<MainPageSwipeState>
     }
 
     public override VisualNode Render()
-    {
-        return new ContentPage
-        {
-            new CollectionView()
+        => ContentPage(
+            CollectionView()
                 .ItemsSource(State.Persons, RenderPerson)
-        };
-    }
+                );
 
-    private VisualNode RenderPerson(Person person)
-    {
-        return new SwipeView
-        {
-            new VStack(spacing: 5)
-            {
-                new Label($"{person.FirstName} {person.LastName}"),
-                new Label(person.DateOfBirth.ToShortDateString())
+    private VisualNode RenderPerson(Person person) 
+        => SwipeView(
+            VStack(spacing: 5,
+                Label($"{person.FirstName} {person.LastName}"),
+                Label(person.DateOfBirth.ToShortDateString())
                     .FontSize(12)
-            }
+            )
             .VCenter()
-        }
-        .LeftItems(new SwipeItems
-        {
-            new SwipeItem()
+        )
+        .LeftItems(
+        [
+            SwipeItem()
                 .IconImageSource("archive.png")
                 .Text("Archive")
                 .BackgroundColor(Colors.Green),
-            new SwipeItem()
+            SwipeItem()
                 .IconImageSource("delete.png")
                 .Text("Delete")
                 .BackgroundColor(Colors.Red)
                 .OnInvoked(()=>State.Persons.Remove(person))
-        })
+        ])
         .HeightRequest(60);
-    }
 }

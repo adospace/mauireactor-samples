@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellTestPage", "ShellTestP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellNavTestPage", "ShellNavTestPage\ShellNavTestPage.csproj", "{7F074030-87D8-44BF-B48B-72A31B67AA70}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleTests", "SampleTests\SampleTests.csproj", "{0CE051DF-7CA7-4D09-87C6-2D8C07F27326}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{7F074030-87D8-44BF-B48B-72A31B67AA70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F074030-87D8-44BF-B48B-72A31B67AA70}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F074030-87D8-44BF-B48B-72A31B67AA70}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0CE051DF-7CA7-4D09-87C6-2D8C07F27326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE051DF-7CA7-4D09-87C6-2D8C07F27326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE051DF-7CA7-4D09-87C6-2D8C07F27326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE051DF-7CA7-4D09-87C6-2D8C07F27326}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

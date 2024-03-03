@@ -10,7 +10,7 @@ namespace ShellTestPage
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiReactorApp<MainPage8>(app =>
+                .UseMauiReactorApp<MainPageIssue218>(app =>
                 {
                     app.AddResource("Resources/Styles/Colors.xaml");
                     app.AddResource("Resources/Styles/Styles.xaml");
