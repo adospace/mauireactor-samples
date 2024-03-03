@@ -52,5 +52,32 @@ namespace SampleTests
             tabBar.CurrentItem.ShouldBe(shellItem2);
         }
 
+        [Test]
+        public void TestNavigationMainPage2()
+        {
+            var mainPageNode = TemplateHost.Create(new MainPage2());
+
+            var shell = mainPageNode.Find<MauiControls.Shell>("MainShell");
+            var tab = shell.Find<MauiControls.Tab>("tab");
+
+            var notifications_item = shell.Find<MauiControls.ShellContent>("notifications_item");
+            var home_item = shell.Find<MauiControls.ShellContent>("home_item");
+            var settings_item = shell.Find<MauiControls.ShellContent>("settings_item");
+            var flyout_item = shell.Find<MauiControls.FlyoutItem>("flyout_item");
+            var database_item = shell.Find<MauiControls.ShellContent>("database_item");
+
+
+            shell.CurrentItem.ShouldBe(flyout_item);
+
+            flyout_item.CurrentItem.ShouldBe(tab);
+
+            tab.CurrentItem.ShouldBe(home_item);
+
+            //Navigate to database page
+            flyout_item.CurrentItem = database_item;
+
+            flyout_item.CurrentItem.ShouldBe(database_item);
+        }
+
     }
 }

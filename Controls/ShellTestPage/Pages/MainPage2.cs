@@ -7,40 +7,45 @@ using System.Threading.Tasks;
 
 namespace ShellTestPage.Pages;
 
-class MainPage2 : Component
+public class MainPage2 : Component
 {
     public override VisualNode Render()
-        => new Shell
-        {
-            new FlyoutItem
-            {
-                new Tab
-                {
-                    new ShellContent("Home")
+        => Shell(
+            FlyoutItem(
+                Tab(
+                    ShellContent("Home")
                         .Icon("home.png")
-                        .RenderContent(()=> new HomePage()),
+                        .RenderContent(()=> new HomePage())
+                        .AutomationId("home_item"),
 
-                    new ShellContent("Comments")
+                    ShellContent("Comments")
                         .Icon("comments.png")
-                        .RenderContent(()=> new CommentsPage()),
-                }
+                        .RenderContent(()=> new CommentsPage())
+                        .AutomationId("comments_item")
+                )
                 .Title("Notifications")
-                .Icon("bell.png"),
+                .Icon("bell.png")
+                .AutomationId("tab"),
 
 
-                new ShellContent("Home")
+                ShellContent("Database")
                     .Icon("database.png")
-                    .RenderContent(()=> new DatabasePage()),
+                    .RenderContent(()=> new DatabasePage())
+                    .AutomationId("database_item"),
 
-                new ShellContent("Comments")
+                ShellContent("Notifications")
                     .Icon("bell.png")
-                    .RenderContent(()=> new NotificationsPage()),
-            }
+                    .RenderContent(()=> new NotificationsPage())
+                    .AutomationId("notifications_item")
+            )
+            .AutomationId("flyout_item")
             .FlyoutDisplayOptions(MauiControls.FlyoutDisplayOptions.AsMultipleItems),
 
 
-            new ShellContent("Settings")
+            ShellContent("Settings")
                 .Icon("gear.png")
-                .RenderContent(()=> new SettingsPage()),
-        };
+                .RenderContent(()=> new SettingsPage())
+                .AutomationId("settings_item")
+        )
+        .AutomationId("MainShell");
 }
