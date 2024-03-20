@@ -1,6 +1,7 @@
 ﻿using MauiReactor;
 using Microsoft.Extensions.Logging;
 using ReactorData;
+using ReactorData.Maui;
 using ReactorData.Sqlite;
 using System;
 using System.IO;
@@ -41,25 +42,20 @@ public static class MauiProgram
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
         //ReactorData
-        builder.Services.AddReactorDataWithSqlite(
-            connectionString: $"Data Source={_dbPath}",
-            configure: _ => _.Model<Todo>(),
-            modelContextConfigure: options =>
-            {
-                options.Dispatcher = action =>
+        builder.UseReactorData(services =>
+        {
+            services.AddReactorData(
+                connectionStringOrDatabaseName: $"Data Source={_dbPath}",
+                configure: _ => _.Model<Todo>(),
+                modelContextConfigure: options =>
                 {
-                    if (MauiControls.Application.Current?.Dispatcher.IsDispatchRequired == true)
-                    {
-                        MauiControls.Application.Current?.Dispatcher.Dispatch(action);
-                    }
-                    else
-                    {
-                        action();
-                    }
-                };
-                options.ConfigureContext = context => context.Load<Todo>();
-            });
+                    options.ConfigureContext = context => context.Load<Todo>();
+                });
+        });
+
+
 
 
         return builder.Build();
