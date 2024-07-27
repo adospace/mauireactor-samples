@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34707.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskApp", "TaskApp.csproj", "{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DF206FF-D89C-4537-A9B3-C1E2C13F9A6F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD2EB1EE-FD7C-476B-98B2-D018F5A20027}
+	EndGlobalSection
+EndGlobal
