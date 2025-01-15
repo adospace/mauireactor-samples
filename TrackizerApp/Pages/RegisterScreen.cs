@@ -30,22 +30,22 @@ partial class RegisterScreen : Component
 
                 VStack(spacing: 16,
 
-                    Theme.PrimaryImageButton("Sign up with Apple", null, Colors.Black, Colors.White, "apple.png"),
+                    ApplicationTheme.PrimaryImageButton("Sign up with Apple", null, Colors.Black, Colors.White, "apple.png"),
 
-                    Theme.PrimaryImageButton("Sign up with Google", null, Colors.White, Colors.Black, "google.png"),
+                    ApplicationTheme.PrimaryImageButton("Sign up with Google", null, Colors.White, Colors.Black, "google.png"),
 
-                    Theme.PrimaryImageButton("Sign up with Facebook", null, Color.FromRgba("#1771E6"), Colors.White, "facebook.png"),
+                    ApplicationTheme.PrimaryImageButton("Sign up with Facebook", null, Color.FromRgba("#1771E6"), Colors.White, "facebook.png"),
 
-                    Theme.H2("or")
-                        .TextColor(Theme.White)
+                    ApplicationTheme.H2("or")
+                        .TextColor(ApplicationTheme.White)
                         .Margin(0,40)
                         .HCenter()
                         ,
 
-                    Theme.Button("Sign up with E-mail", OnSignupWithEmail),
+                    ApplicationTheme.Button("Sign up with E-mail", OnSignupWithEmail),
 
-                    Theme.BodySmall("By registering, you agree to our Terms of Use. Learn how we collect, use and share your data.")
-                        .TextColor(Theme.Grey50)
+                    ApplicationTheme.BodySmall("By registering, you agree to our Terms of Use. Learn how we collect, use and share your data.")
+                        .TextColor(ApplicationTheme.Grey50)
                         .HorizontalTextAlignment(TextAlignment.Center)
                         .Margin(0,24)
                     )

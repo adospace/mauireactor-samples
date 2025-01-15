@@ -16,11 +16,11 @@ partial class RoundedEntry : Component
 
     public override VisualNode Render()
         => VStack(spacing: 4,
-            Theme.BodySmall(_labelText)
-                .TextColor(Theme.Grey50),
+            ApplicationTheme.BodySmall(_labelText)
+                .TextColor(ApplicationTheme.Grey50),
             Grid(
                 Border()
-                    .Stroke(Theme.Grey70)
+                    .Stroke(ApplicationTheme.Grey70)
                     .StrokeCornerRadius(16),
 
                 Entry(entry => _entry = entry)
@@ -29,7 +29,7 @@ partial class RoundedEntry : Component
                     .HeightRequest(48)
                     .Margin(5, 0)
                     .Keyboard(Keyboard.Email)
-                    .TextColor(Theme.White)
+                    .TextColor(ApplicationTheme.White)
                 
                 )
             )
@@ -57,34 +57,34 @@ partial class RoundedPasswordEntry : Component<RoundedPasswordEntryState>
 
     public override VisualNode Render()
         => VStack(spacing: 4,
-            Theme.BodySmall(_labelText)
-                .TextColor(Theme.Grey50),
+            ApplicationTheme.BodySmall(_labelText)
+                .TextColor(ApplicationTheme.Grey50),
             Grid(
                 Border()
-                    .Stroke(Theme.Grey70)
+                    .Stroke(ApplicationTheme.Grey70)
                     .StrokeCornerRadius(16),
 
                 Entry(entry => _entry = entry)
                     .Text(_text ?? string.Empty)
                     .OnTextChanged(OnPasswordChanged)
                     .HeightRequest(48)
-                    .TextColor(Theme.White)
+                    .TextColor(ApplicationTheme.White)
                     .Margin(5,0)
                     .IsPassword(true)
                 ),
 
             Grid("5", "* * * *",
-                Border().GridColumn(0).StrokeCornerRadius(9, 0, 9, 0).BackgroundColor(() => State.Password.Length > 8 ? Theme.Accents100 : State.Password.Length > 0 ? Theme.Primary100 : Theme.Grey70),
-                Border().GridColumn(1).BackgroundColor(() => State.Password.Length > 8 ? Theme.Accents100 : State.Password.Length > 4 ? Theme.Primary100 : Theme.Grey70),
-                Border().GridColumn(2).BackgroundColor(() => State.Password.Length > 8 ? Theme.Accents100 : Theme.Grey70),
-                Border().GridColumn(3).StrokeCornerRadius(0, 9, 0, 9).BackgroundColor(() => State.Password.Length > 8 ? Theme.Accents100 : Theme.Grey70)
+                Border().GridColumn(0).StrokeCornerRadius(9, 0, 9, 0).BackgroundColor(() => State.Password.Length > 8 ? ApplicationTheme.Accents100 : State.Password.Length > 0 ? ApplicationTheme.Primary100 : ApplicationTheme.Grey70),
+                Border().GridColumn(1).BackgroundColor(() => State.Password.Length > 8 ? ApplicationTheme.Accents100 : State.Password.Length > 4 ? ApplicationTheme.Primary100 : ApplicationTheme.Grey70),
+                Border().GridColumn(2).BackgroundColor(() => State.Password.Length > 8 ? ApplicationTheme.Accents100 : ApplicationTheme.Grey70),
+                Border().GridColumn(3).StrokeCornerRadius(0, 9, 0, 9).BackgroundColor(() => State.Password.Length > 8 ? ApplicationTheme.Accents100 : ApplicationTheme.Grey70)
                 )
                 .ColumnSpacing(3)
                 .Margin(0,24,0,0)
             ,
 
-            Theme.BodySmall("Use 8 or more characters with a mix of letters, numbers & symbols.")
-                .TextColor(Theme.Grey50)
+            ApplicationTheme.BodySmall("Use 8 or more characters with a mix of letters, numbers & symbols.")
+                .TextColor(ApplicationTheme.Grey50)
                 .Margin(0,16,0,0)
                 
 

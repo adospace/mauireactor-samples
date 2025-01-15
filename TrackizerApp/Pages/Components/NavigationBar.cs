@@ -40,21 +40,20 @@ partial class NavigationBar : Component<NavigationBarState>
             Grid("*", "* *",
                 ViewButton("home.png", HomeScreenView.Home),
                 ViewButton("budgets.png", HomeScreenView.Budgets).GridColumn(1)
-                )
-            .Margin(32, 0),
+            )
+            .Margin(32, 22),
 
             Grid("*", "* *",
                 ViewButton("calendar.png", HomeScreenView.Calendar),
                 ViewButton("credit_cards.png", HomeScreenView.CreditCards).GridColumn(1)
-                )
-                .Margin(36, 0)
-                .GridColumn(1)
-
             )
-            .BackgroundColor(Colors.Transparent)
-            .HeightRequest(82)
-            .VEnd()
-            .OnSizeChanged(size => base.SetState(s => s.Width = size.Width));
+            .Margin(32, 22)
+            .GridColumn(1)
+        )
+        .BackgroundColor(Colors.Transparent)
+        .HeightRequest(82)
+        .VEnd()
+        .OnSizeChanged(size => SetState(s => s.Width = size.Width));
 
     private Grid ViewButton(string imageSource, HomeScreenView view) 
         => Grid(

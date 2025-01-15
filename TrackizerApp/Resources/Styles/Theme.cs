@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TrackizerApp.Resources.Styles;
 
-static class Theme
+static class ApplicationTheme
 {
     public static Color Grey100 => Color.FromArgb("#0E0E12");
     public static Color Grey80 => Color.FromArgb("#1C1C23");

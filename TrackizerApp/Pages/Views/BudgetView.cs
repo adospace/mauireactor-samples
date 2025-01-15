@@ -60,15 +60,15 @@ partial class BudgetsView : Component<BudgetsViewState>
 
                 Border(
                     HStack(spacing: 8,
-                        Theme.H2("Your budgets are on track")
-                            .TextColor(Theme.White),
+                        ApplicationTheme.H2("Your budgets are on track")
+                            .TextColor(ApplicationTheme.White),
                         Image("images/like.png")
                     )
                     .Center()
                 )
                 .StrokeCornerRadius(16)
                 .HeightRequest(60)
-                .Stroke(Theme.Grey60)
+                .Stroke(ApplicationTheme.Grey60)
             ),
 
             BudgetByCategory()
@@ -84,7 +84,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                         new Group
                         {
                             new Arc()
-                                .StrokeColor(Theme.Grey60)
+                                .StrokeColor(ApplicationTheme.Grey60)
                                 .StrokeSize(8)
                                 .StartAngle(-180)
                                 .StrokeLineCap(LineCap.Round)
@@ -96,42 +96,42 @@ partial class BudgetsView : Component<BudgetsViewState>
                             {
                                 state.Value![0] < 0.1 ? null :
                                 new Arc()
-                                    .StrokeColor(Theme.Accents100)
+                                    .StrokeColor(ApplicationTheme.Accents100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
                                     .StartAngle(180)
                                     .EndAngle(() => 180 - (float)Math.Min(180, state.Value![0] / total * 180) + 4)
                                     .Clockwise(true)
                             }
-                            .Color(Theme.White.WithLuminosity(0.7f))
+                            .Color(ApplicationTheme.White.WithLuminosity(0.7f))
                             .Blur(10),
 
                             new DropShadow
                             {
                                 (state.Value![0] + state.Value![1]) < 0.1 ? null :
                                 new Arc()
-                                    .StrokeColor(Theme.Accentp100)
+                                    .StrokeColor(ApplicationTheme.Accentp100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
                                     .StartAngle(() => 180 - (float)Math.Min(180, state.Value![0] /total * 180) - 4)
                                     .EndAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) /total * 180) + 4)
                                     .Clockwise(true)
                             }
-                            .Color(Theme.White.WithLuminosity(0.7f))
+                            .Color(ApplicationTheme.White.WithLuminosity(0.7f))
                             .Blur(10),
 
                             new DropShadow
                             {
                                 state.Value!.Sum() < 0.1 ? null :
                                 new Arc()
-                                    .StrokeColor(Theme.Primary100)
+                                    .StrokeColor(ApplicationTheme.Primary100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
                                     .StartAngle(() => 180 - (float)Math.Min(180, (state.Value![0] + state.Value![1]) /total * 180) - 4)
                                     .EndAngle(() => 180 - (float)Math.Min(180, state.Value!.Sum() /total * 180))
                                     .Clockwise(true)
                             }
-                            .Color(Theme.White.WithLuminosity(0.7f))
+                            .Color(ApplicationTheme.White.WithLuminosity(0.7f))
                             .Blur(10),
 
                         }
@@ -141,18 +141,18 @@ partial class BudgetsView : Component<BudgetsViewState>
                     .WidthRequest(225)
                     .HeightRequest(225),
 
-                    Theme.H5()
+                    ApplicationTheme.H5()
                         .Text(()=> $"${state.Value?.Sum():0}")
                         .VStart()
                         .HCenter()
-                        .TextColor(Theme.White)
+                        .TextColor(ApplicationTheme.White)
                         .Margin(0, 120, 0, 0)
                         .OnTapped(() => state.Set(s => [0, 0, 0])),
 
-                    Theme.H1("of $2,000 budget")
+                    ApplicationTheme.H1("of $2,000 budget")
                         .VCenter()
                         .HCenter()
-                        .TextColor(Theme.Grey40)
+                        .TextColor(ApplicationTheme.Grey40)
                         .Margin(0, 120, 0, 0),
 
                     new AnimationController
@@ -199,25 +199,25 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     .GridRowSpan(2)
                                     .Margin(16),
 
-                                Theme.H2(budget.Category.GetDisplayName())
-                                    .TextColor(Theme.White)
+                                ApplicationTheme.H2(budget.Category.GetDisplayName())
+                                    .TextColor(ApplicationTheme.White)
                                     .VEnd()
                                     .GridColumn(1),
 
-                                Theme.H1("$375 left to spend")
-                                    .TextColor(Theme.Grey30)
+                                ApplicationTheme.H1("$375 left to spend")
+                                    .TextColor(ApplicationTheme.Grey30)
                                     .GridColumn(1)
                                     .GridRow(1),
 
-                                Theme.H2($"${budget.MonthBills}")
-                                    .TextColor(Theme.White)
+                                ApplicationTheme.H2($"${budget.MonthBills}")
+                                    .TextColor(ApplicationTheme.White)
                                     .Margin(16,0)
                                     .VEnd()
                                     .HEnd()
                                     .GridColumn(2),
 
-                                Theme.H1($"of ${budget.MonthBudget}")
-                                    .TextColor(Theme.Grey30)
+                                ApplicationTheme.H1($"of ${budget.MonthBudget}")
+                                    .TextColor(ApplicationTheme.Grey30)
                                     .Margin(16, 0)
                                     .HEnd()
                                     .GridColumn(2)
@@ -228,7 +228,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                     new Group
                                     {
                                         new Box()
-                                            .BackgroundColor(Theme.Grey30)
+                                            .BackgroundColor(ApplicationTheme.Grey30)
                                             .CornerRadius(9),
 
                                         new DropShadow
@@ -236,9 +236,9 @@ partial class BudgetsView : Component<BudgetsViewState>
                                             new Box()
                                                 .CornerRadius(9)
                                                 .ScaleX(() => (float)(state.Value / budget.MonthBudget))
-                                                .BackgroundColor(budget.Category == Category.AutoTransport ? Theme.Accents100 : (budget.Category == Category.Entertainment ? Theme.Accentp100 : Theme.Primary100))
+                                                .BackgroundColor(budget.Category == Category.AutoTransport ? ApplicationTheme.Accents100 : (budget.Category == Category.Entertainment ? ApplicationTheme.Accentp100 : ApplicationTheme.Primary100))
                                         }
-                                        .Color(Theme.White.WithLuminosity(0.7f))
+                                        .Color(ApplicationTheme.White.WithLuminosity(0.7f))
                                         .Blur(5)
                                     }
                                 }
@@ -270,7 +270,7 @@ partial class BudgetsView : Component<BudgetsViewState>
                                 new MauiControls.GradientStop(Color.FromArgb("#CFCFFC"), 0.0f),
                                 new MauiControls.GradientStop(Colors.Transparent, 1.0f)
                             ], new Point(), new Point(0.5, 1.0)))
-                        .BackgroundColor(Theme.Grey60.WithAlpha(0.2f))
+                        .BackgroundColor(ApplicationTheme.Grey60.WithAlpha(0.2f))
                         .HeightRequest(84)
                         .Margin(0,0,0,8)   
                     )

@@ -6,7 +6,7 @@ namespace TrackizerApp.Pages.Components;
 partial class BaseScreenLayout : Component
 {
     [Prop]
-    Color _statusBarColor = Theme.Grey80;
+    Color _statusBarColor = ApplicationTheme.Grey80;
 
     [Prop]
     Action? _onAppearing;
@@ -21,7 +21,7 @@ partial class BaseScreenLayout : Component
                 #endif
                     ])
         .Padding(-1)
-        .BackgroundColor(Theme.Grey80)
+        .BackgroundColor(ApplicationTheme.Grey80)
         .HasNavigationBar(false)
         .OnAppearing(_onAppearing)
         ;

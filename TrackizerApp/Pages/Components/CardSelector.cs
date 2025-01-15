@@ -105,22 +105,22 @@ partial class CardPage : Component<CardState>
         return Grid(
             Grid(
                 Image("card_plate.png"),
-                Theme.BodyLarge(_card.CreditCard.Type)
+                ApplicationTheme.BodyLarge(_card.CreditCard.Type)
                     .HCenter()
                     .Margin(0, 82)
-                    .TextColor(Theme.White),
+                    .TextColor(ApplicationTheme.White),
 
-                Theme.H1(_card.CreditCard.Holder)
+                ApplicationTheme.H1(_card.CreditCard.Holder)
                     .HCenter()
                     .VEnd()
                     .Margin(0, 136)
-                    .TextColor(Theme.Grey20),
+                    .TextColor(ApplicationTheme.Grey20),
 
-                Theme.BodyMedium(_card.CreditCard.ExpiringDate)
+                ApplicationTheme.BodyMedium(_card.CreditCard.ExpiringDate)
                     .HCenter()
                     .VEnd()
                     .Margin(0, 76)
-                    .TextColor(Theme.White),
+                    .TextColor(ApplicationTheme.White),
 
                 new AnimationController
                 {

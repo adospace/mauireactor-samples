@@ -48,10 +48,10 @@ partial class HomeScreen : Component<HomeScreenState>
                 :
                 RenderPageBody(),
 
-                Theme.H3(State.View.GetDisplayName())
+                ApplicationTheme.H3(State.View.GetDisplayName())
                     .VStart()
                     .HCenter()
-                    .TextColor(Theme.Grey30)
+                    .TextColor(ApplicationTheme.Grey30)
                     .Margin(23,32),
 
                 Image("settings_dark.png")
@@ -63,7 +63,7 @@ partial class HomeScreen : Component<HomeScreenState>
                 )
         }
         .OnAppearing(OnAppearing)
-        .StatusBarColor(State.View == HomeScreenView.Home || State.View == HomeScreenView.Calendar ? Theme.Grey70 : Theme.Grey80)
+        .StatusBarColor(State.View == HomeScreenView.Home || State.View == HomeScreenView.Calendar ? ApplicationTheme.Grey70 : ApplicationTheme.Grey80)
         ;
 
     void ShowSettings()

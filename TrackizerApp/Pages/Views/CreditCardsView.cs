@@ -28,7 +28,7 @@ partial class CreditCardsView : Component<CreditCardsViewState>
                 .Cards(State.Cards),
 
             VStack(spacing: 16,
-                Theme.H3("Subscriptions").TextColor(Theme.White).HCenter(),
+                ApplicationTheme.H3("Subscriptions").TextColor(ApplicationTheme.White).HCenter(),
                 HStack(spacing: 8,
                     [.. Enum.GetValues<SubscriptionType>().Select(type => Image($"{type.ToString().ToLower()}.png").HeightRequest(40))]
                     )
@@ -40,14 +40,14 @@ partial class CreditCardsView : Component<CreditCardsViewState>
             Border(
                 Border(
                     HStack(spacing: 10,
-                        Theme.H2("Add new card").TextColor(Theme.Grey30).VCenter(),
+                        ApplicationTheme.H2("Add new card").TextColor(ApplicationTheme.Grey30).VCenter(),
                         Image("add.png").HeightRequest(16)                            
                         )
                         .Center()
                     )
                     .StrokeCornerRadius(16)
                     .StrokeDashArray([5, 5])
-                    .Stroke(Theme.Grey60)
+                    .Stroke(ApplicationTheme.Grey60)
                     .VStart()
                     .Margin(24)
                     .HeightRequest(52)
@@ -55,7 +55,7 @@ partial class CreditCardsView : Component<CreditCardsViewState>
                 .HeightRequest(185)
                 .VEnd()
                 .StrokeThickness(0)
-                .BackgroundColor(Theme.Grey70)
+                .BackgroundColor(ApplicationTheme.Grey70)
                 .StrokeCornerRadius(24, 24, 0, 0)
             );
 }

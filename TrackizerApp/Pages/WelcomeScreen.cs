@@ -21,7 +21,7 @@ partial class WelcomeScreen : Component
                     .RotationY(200)
                     .Rotation(180)
                     .TranslationX(200)
-                    .Background(new RadialGradient(Theme.Accentp100.WithAlpha(0.2f), Colors.Transparent)),
+                    .Background(new RadialGradient(ApplicationTheme.Accentp100.WithAlpha(0.2f), Colors.Transparent)),
 
                 Image("full_logo.png")
                     .WidthRequest(178)
@@ -62,9 +62,9 @@ partial class WelcomeScreen : Component
                     .TranslationY(100),
 
                 VStack(spacing: 16,
-                    Theme.PrimaryButton("Get Started", OnGetStarted),
+                    ApplicationTheme.PrimaryButton("Get Started", OnGetStarted),
 
-                    Theme.Button("I have an account", OnHaveAnAccount)
+                    ApplicationTheme.Button("I have an account", OnHaveAnAccount)
                     )
                 .VEnd()
                 .Margin(25,30)

@@ -79,7 +79,7 @@ partial class HomeView : Component<HomeViewState>
                 .GridRow(1)
                 .VEnd()
                 .HeightRequest(90)
-                .Background(new LinearGradient(0, (Theme.Grey80, 0.7f), (Colors.Transparent, 1.0f)))
+                .Background(new LinearGradient(0, (ApplicationTheme.Grey80, 0.7f), (Colors.Transparent, 1.0f)))
         );
 
     VisualNode BudgetIndicator(double monthBudget, double monthBills)
@@ -90,14 +90,14 @@ partial class HomeView : Component<HomeViewState>
                     .StrokeCornerRadius(0, 0, 24, 24)
                     .VStart()
                     .StrokeThickness(0)
-                    .BackgroundColor(Theme.Grey70),
+                    .BackgroundColor(ApplicationTheme.Grey70),
 
                     new CanvasView()
                     {
                         new Group
                         {
                             new Arc()
-                                .StrokeColor(Theme.Grey60)
+                                .StrokeColor(ApplicationTheme.Grey60)
                                 .StrokeSize(2)
                                 .StrokeDashPattern([0.5f, 10.0f])
                                 .StrokeLineCap(LineCap.Round)
@@ -107,7 +107,7 @@ partial class HomeView : Component<HomeViewState>
                                 .Margin(10),
 
                             new Arc()
-                                .StrokeColor(Theme.Grey30)
+                                .StrokeColor(ApplicationTheme.Grey30)
                                 .StrokeSize(12)
                                 .StrokeLineCap(LineCap.Round)
                                 .StartAngle(-180 + 40)
@@ -116,7 +116,7 @@ partial class HomeView : Component<HomeViewState>
                                 .Margin(30),
 
                             new Arc()
-                                .StrokeColor(Theme.Grey60)
+                                .StrokeColor(ApplicationTheme.Grey60)
                                 .StrokeSize(2)
                                 .StrokeDashPattern([0.5f, 10.0f])
                                 .StrokeLineCap(LineCap.Round)
@@ -128,7 +128,7 @@ partial class HomeView : Component<HomeViewState>
                             new DropShadow
                             {
                                 new Arc()
-                                    .StrokeColor(Theme.Accentp100)
+                                    .StrokeColor(ApplicationTheme.Accentp100)
                                     .StrokeSize(12)
                                     .StrokeLineCap(LineCap.Round)
                                     .StartAngle(-180 + 40)
@@ -136,7 +136,7 @@ partial class HomeView : Component<HomeViewState>
                                     .Clockwise(true)
                                     .Margin(30)
                             }
-                            .Color(Theme.White.WithLuminosity(0.7f))
+                            .Color(ApplicationTheme.White.WithLuminosity(0.7f))
                             .Blur(10),
                         }
                         .Margin(10)
@@ -152,31 +152,31 @@ partial class HomeView : Component<HomeViewState>
                     .HCenter()
                     .Margin(0,110),
 
-                Theme.H7()
+                ApplicationTheme.H7()
                     .Text(()=> $"${state.Value.AnimatingMonthBills:0}")
                     .VStart()
                     .HCenter()
-                    .TextColor(Theme.White)
+                    .TextColor(ApplicationTheme.White)
                     .Margin(0,140)
                     .OnTapped(() => state.Set(s => (s.Width, 0))),
 
-                Theme.H1("This month bills")
+                ApplicationTheme.H1("This month bills")
                     .VCenter()
                     .HCenter()
-                    .TextColor(Theme.Grey40)
+                    .TextColor(ApplicationTheme.Grey40)
                     .Margin(0, 200),
 
-                Theme.Button("See your budget", _onShowBudgetView)
-                    .TextColor(Theme.White)
+                ApplicationTheme.Button("See your budget", _onShowBudgetView)
+                    .TextColor(ApplicationTheme.White)
                     .HCenter()
                     .VEnd()
                     .Margin(110)
                     .HeightRequest(38),
 
                 Grid("68", "* * *",
-                    BudgetItem(Theme.Accentp100, "Active subs", "12"),
-                    BudgetItem(Theme.Primary100, "Highest subs", "$19.99").GridColumn(1),
-                    BudgetItem(Theme.Accents50, "Lowest subs", "$5.99").GridColumn(2)
+                    BudgetItem(ApplicationTheme.Accentp100, "Active subs", "12"),
+                    BudgetItem(ApplicationTheme.Primary100, "Highest subs", "$19.99").GridColumn(1),
+                    BudgetItem(ApplicationTheme.Accents50, "Lowest subs", "$5.99").GridColumn(2)
                 )
                 .VEnd()
                 .Margin(24)
@@ -206,13 +206,13 @@ partial class HomeView : Component<HomeViewState>
                         .BackgroundColor(topColor)
                         .HeightRequest(1)
                         .Margin(30, 0),
-                    Theme.H1(topText)
-                        .TextColor(Theme.Grey40)
+                    ApplicationTheme.H1(topText)
+                        .TextColor(ApplicationTheme.Grey40)
                         .VEnd()
                         .HCenter()
                         .GridRow(1),
-                    Theme.H2(bottomText)
-                        .TextColor(Theme.White)
+                    ApplicationTheme.H2(bottomText)
+                        .TextColor(ApplicationTheme.White)
                         .VStart()
                         .HCenter()
                         .HorizontalTextAlignment(TextAlignment.Center)
@@ -226,14 +226,14 @@ partial class HomeView : Component<HomeViewState>
                     new MauiControls.GradientStop(Color.FromArgb("#CFCFFC"), 0.0f),
                     new MauiControls.GradientStop(Colors.Transparent, 1.0f)
                 ], new Point(), new Point(0.5, 1.0)))
-            .BackgroundColor(Theme.Grey60);
+            .BackgroundColor(ApplicationTheme.Grey60);
 
     VisualNode ListTypeTab()
         => Render<double>(state =>
             Grid("50", "*,*",
                 Border()
                     .GridColumnSpan(2)
-                    .BackgroundColor(Theme.Grey100)
+                    .BackgroundColor(ApplicationTheme.Grey100)
                     .StrokeCornerRadius(16),
 
                 Border()
@@ -243,15 +243,15 @@ partial class HomeView : Component<HomeViewState>
                     .TranslationX(State.ListType == HomeViewListType.Subscriptions ? 0 : (state.Value / 2))
                     .WithAnimation(easing: Easing.CubicIn, duration: 200),
 
-                Theme.H1("Your subscriptions")
-                    .TextColor(State.ListType == HomeViewListType.Subscriptions ? Theme.White : Theme.Grey30)
+                ApplicationTheme.H1("Your subscriptions")
+                    .TextColor(State.ListType == HomeViewListType.Subscriptions ? ApplicationTheme.White : ApplicationTheme.Grey30)
                     .VerticalTextAlignment(TextAlignment.Center)
                     .HorizontalTextAlignment(TextAlignment.Center)
                     .BackgroundColor(Colors.Transparent)
                     .OnTapped(()=>SetState(s => s.ListType = HomeViewListType.Subscriptions)),
 
-                Theme.H1("Upcoming bills")
-                    .TextColor(State.ListType == HomeViewListType.UpcomingBills ? Theme.White : Theme.Grey30)
+                ApplicationTheme.H1("Upcoming bills")
+                    .TextColor(State.ListType == HomeViewListType.UpcomingBills ? ApplicationTheme.White : ApplicationTheme.Grey30)
                     .VerticalTextAlignment(TextAlignment.Center)
                     .HorizontalTextAlignment(TextAlignment.Center)
                     .BackgroundColor(Colors.Transparent)
@@ -272,20 +272,20 @@ partial class HomeView : Component<HomeViewState>
                                 .HeightRequest(40)
                                 .Center(),
 
-                            Theme.H2($"{subscription.Type.GetDisplayName()}")
+                            ApplicationTheme.H2($"{subscription.Type.GetDisplayName()}")
                                 .GridColumn(1)
-                                .TextColor(Theme.White)
+                                .TextColor(ApplicationTheme.White)
                                 .VCenter(),
 
-                            Theme.H2($"${subscription.MonthBill}")
+                            ApplicationTheme.H2($"${subscription.MonthBill}")
                                 .GridColumn(2)
                                 .VCenter()
-                                .TextColor(Theme.White)
+                                .TextColor(ApplicationTheme.White)
                                 .Margin(17)
                         )
                     )
                     .Margin(0,8)
-                    .Stroke(Theme.Grey60)
+                    .Stroke(ApplicationTheme.Grey60)
                     .StrokeThickness(1)
                     .StrokeCornerRadius(16)
                     .HeightRequest(64)
@@ -299,30 +299,30 @@ partial class HomeView : Component<HomeViewState>
                         Grid("*", "64,*,Auto",
                             Border(
                                 VStack(
-                                    Theme.BodyExtraSmall($"{subscription.StartingDate:MMM}").TextColor(Theme.Grey30),
-                                    Theme.BodyMedium($"{subscription.StartingDate:dd}").TextColor(Theme.Grey30).HCenter()
+                                    ApplicationTheme.BodyExtraSmall($"{subscription.StartingDate:MMM}").TextColor(ApplicationTheme.Grey30),
+                                    ApplicationTheme.BodyMedium($"{subscription.StartingDate:dd}").TextColor(ApplicationTheme.Grey30).HCenter()
                                     )
                                     .Center()
                                 )
                                 .Margin(12)
                                 .StrokeCornerRadius(12)
-                                .BackgroundColor(Theme.Grey70)
+                                .BackgroundColor(ApplicationTheme.Grey70)
                                     ,
 
-                            Theme.H2($"{subscription.Type.GetDisplayName()}")
+                            ApplicationTheme.H2($"{subscription.Type.GetDisplayName()}")
                                 .GridColumn(1)
-                                .TextColor(Theme.White)
+                                .TextColor(ApplicationTheme.White)
                                 .VCenter(),
 
-                            Theme.H2($"${subscription.MonthBill}")
+                            ApplicationTheme.H2($"${subscription.MonthBill}")
                                 .GridColumn(2)
                                 .VCenter()
-                                .TextColor(Theme.White)
+                                .TextColor(ApplicationTheme.White)
                                 .Margin(17)
                         )
                     )
                     .Margin(0, 8)
-                    .Stroke(Theme.Grey60)
+                    .Stroke(ApplicationTheme.Grey60)
                     .StrokeThickness(1)
                     .StrokeCornerRadius(16)
                     .HeightRequest(64)

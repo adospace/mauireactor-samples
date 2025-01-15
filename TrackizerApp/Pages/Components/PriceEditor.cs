@@ -15,18 +15,18 @@ partial class PriceEditor : Component
             OperationButton("plus.png"),
 
             VStack(
-                Theme.H1("Monthly price")
-                    .TextColor(Theme.Grey40)
+                ApplicationTheme.H1("Monthly price")
+                    .TextColor(ApplicationTheme.Grey40)
                     .HorizontalTextAlignment(TextAlignment.Center),
 
-                Theme.H4("$5.99")
+                ApplicationTheme.H4("$5.99")
                     .FontAttributes(MauiControls.FontAttributes.Bold)
                     .HorizontalTextAlignment(TextAlignment.Center)
-                    .TextColor(Theme.White),
+                    .TextColor(ApplicationTheme.White),
 
                 Border()
                     .HeightRequest(1)
-                    .BackgroundColor(Theme.Grey70)
+                    .BackgroundColor(ApplicationTheme.Grey70)
                     .WidthRequest(170)
                 )
                 .Center()
@@ -52,5 +52,5 @@ partial class PriceEditor : Component
                     new MauiControls.GradientStop(Color.FromArgb("#CFCFFC"), 0.0f),
                     new MauiControls.GradientStop(Colors.Transparent, 1.0f)
                 ], new Point(), new Point(0.5, 1.0)))
-            .BackgroundColor(Theme.Grey60);
+            .BackgroundColor(ApplicationTheme.Grey60);
 }

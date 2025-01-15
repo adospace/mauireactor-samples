@@ -35,16 +35,16 @@ partial class SignupScreen : Component
                     new RoundedPasswordEntry()
                         .LabelText("Password"),
 
-                    Theme.PrimaryButton("Get started, it’s free!", OnSignup)
+                    ApplicationTheme.PrimaryButton("Get started, it’s free!", OnSignup)
                     )
                     .VCenter(),
 
                 VStack(spacing: 20,
-                    Theme.BodyMedium("Do you have already an account?")
-                        .TextColor(Theme.White)
+                    ApplicationTheme.BodyMedium("Do you have already an account?")
+                        .TextColor(ApplicationTheme.White)
                         .HorizontalTextAlignment(TextAlignment.Center),
 
-                    Theme.Button("Sign In", OnSignin)
+                    ApplicationTheme.Button("Sign In", OnSignin)
                     )
                     .Margin(0,30)
                     .VEnd()

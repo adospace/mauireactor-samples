@@ -71,9 +71,9 @@ partial class SubscriptionSelector : Component<SubscriptionSelectorState>
                 .TranslationX(translationX);
             }),
 
-            Theme.H2()
+            ApplicationTheme.H2()
                 .Text(State.SelectedType.GetDisplayName() ?? string.Empty)
-                .TextColor(Theme.White)
+                .TextColor(ApplicationTheme.White)
                 .VEnd()
                 .HCenter()
                 .Margin(40),

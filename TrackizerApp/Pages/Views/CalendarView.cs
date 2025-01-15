@@ -45,22 +45,22 @@ class CalendarView : Component<CalendarViewState>
             TopCalendar(),
 
             Grid("Auto,Auto","*",
-                Theme.H4(new DateTime(DateTime.Now.Year, State.SelectedMonth, 1).ToString("MMMM"))
-                    .TextColor(Theme.White),
+                ApplicationTheme.H4(new DateTime(DateTime.Now.Year, State.SelectedMonth, 1).ToString("MMMM"))
+                    .TextColor(ApplicationTheme.White),
 
-                Theme.H4("$24.99")
-                    .TextColor(Theme.White)
+                ApplicationTheme.H4("$24.99")
+                    .TextColor(ApplicationTheme.White)
                     .FontAttributes(MauiControls.FontAttributes.Bold)
                     .HEnd(),
 
-                Theme.H1(new DateTime(DateTime.Now.Year, State.SelectedMonth, 1).ToString("dd.MM.yyyy"))
+                ApplicationTheme.H1(new DateTime(DateTime.Now.Year, State.SelectedMonth, 1).ToString("dd.MM.yyyy"))
                     .GridRow(1)
-                    .TextColor(Theme.Grey30),
+                    .TextColor(ApplicationTheme.Grey30),
 
-                Theme.H1("in upcoming bills")
+                ApplicationTheme.H1("in upcoming bills")
                     .GridRow(1)
                     .HEnd()
-                    .TextColor(Theme.Grey30)
+                    .TextColor(ApplicationTheme.Grey30)
             )
             .Margin(24, 410,24,0),
 
@@ -75,11 +75,11 @@ class CalendarView : Component<CalendarViewState>
                                 .HStart()
                                 .VStart(),
                             VStack(spacing: 5,
-                                Theme.H2(subscription.Type.GetDisplayName())
-                                    .TextColor(Theme.White),
-                                Theme.H4($"${subscription.MonthBill}")
+                                ApplicationTheme.H2(subscription.Type.GetDisplayName())
+                                    .TextColor(ApplicationTheme.White),
+                                ApplicationTheme.H4($"${subscription.MonthBill}")
                                     .FontAttributes(MauiControls.FontAttributes.Bold)
-                                    .TextColor(Theme.White)
+                                    .TextColor(ApplicationTheme.White)
                                 )
                                 .VEnd()
                                 .HStart()
@@ -89,7 +89,7 @@ class CalendarView : Component<CalendarViewState>
                         .HeightRequest(168)
                         .StrokeCornerRadius(16)
                         .StrokeThickness(0.5)
-                        .BackgroundColor(Theme.Grey60.WithAlpha(0.2f))
+                        .BackgroundColor(ApplicationTheme.Grey60.WithAlpha(0.2f))
                         .Stroke(new MauiControls.LinearGradientBrush(
                             [
                                 new MauiControls.GradientStop(Color.FromArgb("#CFCFFC"), 0.0f),
@@ -102,22 +102,22 @@ class CalendarView : Component<CalendarViewState>
                 .GridRow(1)
                 .VEnd()
                 .HeightRequest(90)
-                .Background(new LinearGradient(0, (Theme.Grey80, 0.7f), (Colors.Transparent, 1.0f)))
+                .Background(new LinearGradient(0, (ApplicationTheme.Grey80, 0.7f), (Colors.Transparent, 1.0f)))
         );
 
     Border TopCalendar()
         => Border(
                 Grid(
-                    Theme.H7("Subs Schedule")
-                        .TextColor(Theme.White)
+                    ApplicationTheme.H7("Subs Schedule")
+                        .TextColor(ApplicationTheme.White)
                         .Margin(24, 98)
                         .WidthRequest(184)
                         .HStart()
                         .FontAttributes(MauiControls.FontAttributes.Bold),
 
                     Grid(
-                        Theme.H2("3 subscriptions for today")
-                            .TextColor(Theme.White)
+                        ApplicationTheme.H2("3 subscriptions for today")
+                            .TextColor(ApplicationTheme.White)
                             .VCenter(),
 
                         Border(
@@ -125,7 +125,7 @@ class CalendarView : Component<CalendarViewState>
                                 Picker()
                                     .ItemsSource(_allMonths)
                                     .SelectedIndex(State.SelectedMonth - 1)
-                                    .TextColor(Theme.White)
+                                    .TextColor(ApplicationTheme.White)
                                     .OnSelectedIndexChanged(index => SetState(s => s.SelectedMonth = index + 1)),
                                 Image("arrow_down.png")
                                     .WidthRequest(12)
@@ -143,20 +143,20 @@ class CalendarView : Component<CalendarViewState>
                         .ItemsSource(State.Items, item =>
                             Border(
                                 Grid(
-                                    Theme.H4(item.Day.ToString("00"))
-                                        .TextColor(Theme.White)
+                                    ApplicationTheme.H4(item.Day.ToString("00"))
+                                        .TextColor(ApplicationTheme.White)
                                         .FontAttributes(MauiControls.FontAttributes.Bold)
                                         .HCenter()
                                         .Margin(10, 8),
-                                    Theme.H1(new DateTime(DateTime.Now.Year, State.SelectedMonth, item.Day).ToString("ddd")[..2])
-                                        .TextColor(Theme.Grey30)
+                                    ApplicationTheme.H1(new DateTime(DateTime.Now.Year, State.SelectedMonth, item.Day).ToString("ddd")[..2])
+                                        .TextColor(ApplicationTheme.Grey30)
                                         .HCenter()
                                         .Margin(10, 38),
 
                                     Ellipse()
                                         .HeightRequest(6)
                                         .WidthRequest(6)
-                                        .Fill(Theme.Accentp100)
+                                        .Fill(ApplicationTheme.Accentp100)
                                         .VEnd()
                                         .Margin(10, 16)
                                         .IsVisible(item.HasSubscriptions)
@@ -169,7 +169,7 @@ class CalendarView : Component<CalendarViewState>
                                         new MauiControls.GradientStop(Color.FromArgb("#CFCFFC"), 0.0f),
                                         new MauiControls.GradientStop(Colors.Transparent, 1.0f)
                                     ], new Point(0.0, 0.5), new Point(1.0, 1.0)))
-                                .BackgroundColor(item.Current ? Theme.Grey60 : Theme.Grey60.WithAlpha(0.2f))
+                                .BackgroundColor(item.Current ? ApplicationTheme.Grey60 : ApplicationTheme.Grey60.WithAlpha(0.2f))
                                 .WidthRequest(48)
                                 .Margin(0, 0, 8, 0)
                             )
@@ -182,5 +182,5 @@ class CalendarView : Component<CalendarViewState>
                 .StrokeCornerRadius(0, 0, 24, 24)
                 .VStart()
                 .StrokeThickness(0)
-                .BackgroundColor(Theme.Grey70);
+                .BackgroundColor(ApplicationTheme.Grey70);
 }

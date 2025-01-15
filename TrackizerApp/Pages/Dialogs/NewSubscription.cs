@@ -25,8 +25,8 @@ class NewSubscription : Component<NewSubscriptionState>
             Grid(
                 Border(
                     Grid("Auto, *", "*",
-                        Theme.H7("Add new subscription")
-                            .TextColor(Theme.White)
+                        ApplicationTheme.H7("Add new subscription")
+                            .TextColor(ApplicationTheme.White)
                             .FontAttributes(MauiControls.FontAttributes.Bold)
                             .HorizontalTextAlignment(TextAlignment.Center)
                             .Margin(0,96,0,0),
@@ -36,7 +36,7 @@ class NewSubscription : Component<NewSubscriptionState>
                             .GridRow(1)
                         )                        
                     )
-                    .BackgroundColor(Theme.Grey70)
+                    .BackgroundColor(ApplicationTheme.Grey70)
                     .StrokeCornerRadius(0, 0, 24, 24)
                     .HeightRequest(476)
                     .VStart(),
@@ -48,10 +48,10 @@ class NewSubscription : Component<NewSubscriptionState>
                     .Margin(24,32)
                     .OnTapped(OnClose),
 
-                Theme.H3("New")
+                ApplicationTheme.H3("New")
                     .VStart()
                     .HCenter()
-                    .TextColor(Theme.Grey30)
+                    .TextColor(ApplicationTheme.Grey30)
                     .Margin(23,32),
 
                 Grid("Auto,*,Auto", "*",
@@ -62,7 +62,7 @@ class NewSubscription : Component<NewSubscriptionState>
                     new PriceEditor()
                         .GridRow(1),
 
-                    Theme.PrimaryButton("Add this platform", OnAdd)
+                    ApplicationTheme.PrimaryButton("Add this platform", OnAdd)
                         .GridRow(2)
 
                 )
@@ -71,7 +71,7 @@ class NewSubscription : Component<NewSubscriptionState>
                 .VEnd()
             )
         }
-        .StatusBarColor(Theme.Grey70);
+        .StatusBarColor(ApplicationTheme.Grey70);
 
     async void OnAdd()
     {

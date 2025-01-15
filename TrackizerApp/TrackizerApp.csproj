@@ -59,13 +59,13 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reactor.Maui" Version="2.0.*" />
-    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.*" />
+    <PackageReference Include="Reactor.Maui" Version="2.0.59" />
+    <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.59" />
   </ItemGroup>
 </Project>
