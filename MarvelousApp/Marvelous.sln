@@ -5,6 +5,12 @@ VisualStudioVersion = 17.5.33326.253
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marvelous", "Marvelous\Marvelous.csproj", "{9B12250C-172C-4F80-BA20-15EAECCFCD3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiReactor", "..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj", "{6DC78C7E-7397-4297-9431-4B73C38CECD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiReactor.ScaffoldGenerator", "..\..\reactorui-maui\src\MauiReactor.ScaffoldGenerator\MauiReactor.ScaffoldGenerator.csproj", "{B79C7AF4-3E17-4A24-BBED-181BCD83199E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiReactor.Canvas", "..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj", "{4809C1B0-FC99-407F-9D60-2181DC0EB140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +23,18 @@ Global
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B12250C-172C-4F80-BA20-15EAECCFCD3C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6DC78C7E-7397-4297-9431-4B73C38CECD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DC78C7E-7397-4297-9431-4B73C38CECD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DC78C7E-7397-4297-9431-4B73C38CECD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DC78C7E-7397-4297-9431-4B73C38CECD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B79C7AF4-3E17-4A24-BBED-181BCD83199E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79C7AF4-3E17-4A24-BBED-181BCD83199E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79C7AF4-3E17-4A24-BBED-181BCD83199E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79C7AF4-3E17-4A24-BBED-181BCD83199E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4809C1B0-FC99-407F-9D60-2181DC0EB140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4809C1B0-FC99-407F-9D60-2181DC0EB140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4809C1B0-FC99-407F-9D60-2181DC0EB140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4809C1B0-FC99-407F-9D60-2181DC0EB140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -73,12 +73,12 @@ partial class WonderWiki : Component<WonderWikiState>
     }
 
     VisualNode RenderMain()
-        => Render(context =>
+        => Render<double>(context =>
         {
             var wikiConfig = Wonder.Config[_wonderType];
             var wonderConfig = Illustration.Config[_wonderType];
 
-            var scrollY = context.UseState<double>();
+            var scrollY = context.Value;
 
             return new ScrollView
             {
@@ -128,7 +128,7 @@ partial class WonderWiki : Component<WonderWikiState>
                         .VerticalTextAlignment(TextAlignment.End)
                         .HeightRequest(70),
 
-                    Separator(isOpen: scrollY.Value < 10),
+                    Separator(isOpen: scrollY < 10),
 
                     Label($"{wikiConfig.StartYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)} to {wikiConfig.EndYr} {(wikiConfig.StartYr < 0 ? Localization.yearBCE : Localization.yearCE)}")
                         .BackgroundColor(Colors.Transparent)
@@ -141,11 +141,11 @@ partial class WonderWiki : Component<WonderWikiState>
 
                     new Image($"{_wonderType.ToString().ToLower()}_photo_1.png"),
                 }
-                .Opacity(Math.Clamp((100 - scrollY.Value) / 300, 0.1, 1.0))
+                .Opacity(Math.Clamp((100 - scrollY) / 300, 0.1, 1.0))
 
             }
             .Padding(0, 300, 0, 0)
-            .OnScrolled((sender, args) => scrollY.Set(s => args.ScrollY));
+            .OnScrolled((sender, args) => context.Set(s => args.ScrollY));
         });
 
     Grid Separator(bool isOpen)

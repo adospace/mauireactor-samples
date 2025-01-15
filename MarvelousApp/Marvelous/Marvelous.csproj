@@ -71,15 +71,21 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.91" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="Reactor.Maui" Version="2.0.13-beta" />
     <PackageReference Include="Reactor.Maui.Canvas" Version="2.0.13-beta" />
     <PackageReference Include="Reactor.Maui.ScaffoldGenerator" Version="2.0.13-beta" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\reactorui-maui\src\MauiReactor.Canvas\MauiReactor.Canvas.csproj" />
+    <ProjectReference Include="..\..\..\reactorui-maui\src\MauiReactor.ScaffoldGenerator\MauiReactor.ScaffoldGenerator.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    <ProjectReference Include="..\..\..\reactorui-maui\src\MauiReactor\MauiReactor.csproj" />
   </ItemGroup>
 
   <ItemGroup>

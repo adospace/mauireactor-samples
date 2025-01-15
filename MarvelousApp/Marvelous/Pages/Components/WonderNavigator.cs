@@ -43,7 +43,7 @@ partial class WonderNavigator : Component<WonderNavigatorState>
         {
             new Box()
                 .Margin(0,20,0,0)
-                .BackgroundColor(Theme.TertiaryColor),
+                .BackgroundColor(AppTheme.TertiaryColor),
 
             new Row()
             {
@@ -56,11 +56,11 @@ partial class WonderNavigator : Component<WonderNavigatorState>
                             new Group
                             {
                                 new Ellipse()
-                                    .FillColor(Theme.TertiaryColor),
+                                    .FillColor(AppTheme.TertiaryColor),
 
                                 new Ellipse()
                                     .Margin(5)
-                                    .FillColor(Theme.DarkTertiaryColor),
+                                    .FillColor(AppTheme.DarkTertiaryColor),
                             },
 
                             new Align
@@ -126,7 +126,7 @@ partial class WonderNavigatorTab : Component
                     new Align
                     {
                         new Box()
-                            .BackgroundColor(Theme.PrimaryColor)
+                            .BackgroundColor(AppTheme.PrimaryColor)
                     }
                     .Margin(_isActive ? new ThicknessF(0,12) : new ThicknessF(12,12))
                     .WithAnimation(duration: 200)

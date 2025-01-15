@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Marvelous.Resources.Styles;
 
-static class Theme
+static class AppTheme
 {
     public static Color PrimaryColor = Color.FromArgb("e1935a");
     public static Color DarkPrimaryColor = Color.FromArgb("72492e");
