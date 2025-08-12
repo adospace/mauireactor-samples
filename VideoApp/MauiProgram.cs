@@ -14,7 +14,7 @@ public static class MauiProgram
             .UseMauiReactorApp<MainPage>()
             .UseMauiCommunityToolkitMediaElement()
 #if DEBUG
-            .EnableMauiReactorHotReload()
+            //.EnableMauiReactorHotReload()
 #endif
             .ConfigureFonts(fonts =>
             {
