@@ -25,7 +25,7 @@ public static class MauiProgram
 
         builder.Services.AddPlatformServices();
 
-        builder.Services.AddChatServices(new Uri("http://192.168.1.15:15000"));
+        builder.Services.AddChatServices(new Uri("http://10.0.2.2:15000"));
 
         return builder.Build();
     }
