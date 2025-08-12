@@ -31,7 +31,7 @@ public static class MauiProgram
                 //app.AddResource("Resources/Styles/Styles.xaml");
             })
 #if DEBUG
-            .EnableMauiReactorHotReload()
+            //.EnableMauiReactorHotReload()
 #endif
             .ConfigureFonts(fonts =>
             {
